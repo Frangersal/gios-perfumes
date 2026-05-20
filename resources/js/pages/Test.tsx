@@ -7,7 +7,7 @@ export default function Test() {
         <div className="d-flex flex-column min-vh-100">
             <Navbar />
             
-            <main className="container mt-5 flex-grow-1">
+            <main className="container mt-5 grow">
                 <h1 className="text-primary">Hello world!</h1>
                 <h2>Bienvenidos a Gio's Perfumes</h2>
                 <div className="mt-4">

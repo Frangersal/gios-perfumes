@@ -1,4 +1,5 @@
 import React from 'react';
+import CarouselItem from '../components/CarouselItem';
 
 export default function Carrusel() {
     return (
@@ -9,15 +10,19 @@ export default function Carrusel() {
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
             </div>
             <div className="carousel-inner">
-                <div className="carousel-item active">
-                    <img src="https://placehold.co/1200x400/f8f9fa/343a40?text=Descubre+Novedades" className="d-block w-100" alt="Slide 1" style={{ objectFit: 'cover', height: '400px' }} />
-                </div>
-                <div className="carousel-item">
-                    <img src="https://placehold.co/1200x400/e9ecef/495057?text=Perfumes+Exclusivos" className="d-block w-100" alt="Slide 2" style={{ objectFit: 'cover', height: '400px' }} />
-                </div>
-                <div className="carousel-item">
-                    <img src="https://placehold.co/1200x400/dee2e6/212529?text=Ofertas+Especiales" className="d-block w-100" alt="Slide 3" style={{ objectFit: 'cover', height: '400px' }} />
-                </div>
+                <CarouselItem 
+                    isActive={true} 
+                    imageUrl="https://placehold.co/1200x400/f8f9fa/343a40?text=Descubre+Novedades" 
+                    altText="Slide 1" 
+                />
+                <CarouselItem 
+                    imageUrl="https://placehold.co/1200x400/e9ecef/495057?text=Perfumes+Exclusivos" 
+                    altText="Slide 2" 
+                />
+                <CarouselItem 
+                    imageUrl="https://placehold.co/1200x400/dee2e6/212529?text=Ofertas+Especiales" 
+                    altText="Slide 3" 
+                />
             </div>
             <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                 <span className="carousel-control-prev-icon" aria-hidden="true"></span>
