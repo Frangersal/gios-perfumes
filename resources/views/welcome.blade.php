@@ -25,7 +25,7 @@
             <div class="bg-dark text-white py-2" style="font-size: 0.8rem; letter-spacing: 0.5px;">
                 <div class="container d-flex justify-content-end align-items-center gap-3">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="text-white text-decoration-none text-uppercase fw-semibold">Mi Cuenta</a>
+                        <a href="{{ url('/profile') }}" class="text-white text-decoration-none text-uppercase fw-semibold">Mi Cuenta</a>
                     @else
                         <a href="{{ route('login') }}" class="text-white text-decoration-none text-uppercase fw-semibold">Iniciar Sesión</a>
                         @if (Route::has('register'))

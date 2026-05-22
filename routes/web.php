@@ -45,6 +45,10 @@ Route::get('/checkout', function () {
     return view('welcome', ['page' => 'checkout']);
 })->name('checkout.index');
 
+Route::get('/profile', function () {
+    return view('welcome', ['page' => 'profile']);
+})->name('profile');
+
 // Las rutas de auth se pueden reescribir con las de Laravel Breeze / Jetstream en el futuro.
 Route::get('/login', function () {
     return view('welcome', ['page' => 'login']);

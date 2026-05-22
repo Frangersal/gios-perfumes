@@ -14,6 +14,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Profile from './pages/Profile';
 
 const container = document.getElementById('root');
 if (container) {
@@ -41,6 +42,8 @@ if (container) {
         root.render(<Login />);
     } else if (page === 'register') {
         root.render(<Register />);
+    } else if (page === 'profile') {
+        root.render(<Profile />);
     } else {
         root.render(<Index />);
     }
