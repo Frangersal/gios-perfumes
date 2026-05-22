@@ -1,5 +1,5 @@
 import React from 'react';
-import CarouselItem from '../components/CarouselItem';
+import CarouselItem from '../../components/Index/CarouselItem';
 
 export default function Carrusel() {
     return (
