@@ -57,6 +57,15 @@ Route::get('/faq', function () { return view('welcome', ['page' => 'faq']); })->
 Route::get('/terms', function () { return view('welcome', ['page' => 'terms']); })->name('terms');
 Route::get('/privacy', function () { return view('welcome', ['page' => 'privacy']); })->name('privacy');
 
+// Rutas Administrativas
+Route::prefix('admin')->group(function () {
+    Route::get('/login', function () { return view('welcome', ['page' => 'admin-login']); })->name('admin.login');
+    Route::get('/dashboard', function () { return view('welcome', ['page' => 'admin-dashboard']); })->name('admin.dashboard');
+    Route::get('/products', function () { return view('welcome', ['page' => 'admin-products']); })->name('admin.products');
+    Route::get('/orders', function () { return view('welcome', ['page' => 'admin-orders']); })->name('admin.orders');
+    Route::get('/customers', function () { return view('welcome', ['page' => 'admin-customers']); })->name('admin.customers');
+});
+
 // Fallback para 404
 Route::fallback(function () {
     return response()->view('welcome', ['page' => 'not-found'], 404);

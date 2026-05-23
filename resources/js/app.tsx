@@ -23,6 +23,13 @@ import FAQ from './pages/FAQ';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 
+// Admin Pages
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminProducts from './pages/AdminProducts';
+import AdminOrders from './pages/AdminOrders';
+import AdminCustomers from './pages/AdminCustomers';
+
 const container = document.getElementById('root');
 if (container) {
     const page = container.getAttribute('data-page');
@@ -63,6 +70,16 @@ if (container) {
         root.render(<Terms />);
     } else if (page === 'privacy') {
         root.render(<Privacy />);
+    } else if (page === 'admin-login') {
+        root.render(<AdminLogin />);
+    } else if (page === 'admin-dashboard') {
+        root.render(<AdminDashboard />);
+    } else if (page === 'admin-products') {
+        root.render(<AdminProducts />);
+    } else if (page === 'admin-orders') {
+        root.render(<AdminOrders />);
+    } else if (page === 'admin-customers') {
+        root.render(<AdminCustomers />);
     } else if (page === 'not-found') {
         root.render(<NotFound />);
     } else {
