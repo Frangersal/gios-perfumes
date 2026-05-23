@@ -49,6 +49,19 @@ Route::get('/profile', function () {
     return view('welcome', ['page' => 'profile']);
 })->name('profile');
 
+// Rutas informativas
+Route::get('/search', function () { return view('welcome', ['page' => 'search']); })->name('search');
+Route::get('/about', function () { return view('welcome', ['page' => 'about']); })->name('about');
+Route::get('/contact', function () { return view('welcome', ['page' => 'contact']); })->name('contact');
+Route::get('/faq', function () { return view('welcome', ['page' => 'faq']); })->name('faq');
+Route::get('/terms', function () { return view('welcome', ['page' => 'terms']); })->name('terms');
+Route::get('/privacy', function () { return view('welcome', ['page' => 'privacy']); })->name('privacy');
+
+// Fallback para 404
+Route::fallback(function () {
+    return response()->view('welcome', ['page' => 'not-found'], 404);
+});
+
 // Las rutas de auth se pueden reescribir con las de Laravel Breeze / Jetstream en el futuro.
 Route::get('/login', function () {
     return view('welcome', ['page' => 'login']);

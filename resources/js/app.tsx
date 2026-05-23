@@ -15,6 +15,13 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import Search from './pages/Search';
+import NotFound from './pages/NotFound';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
 
 const container = document.getElementById('root');
 if (container) {
@@ -44,6 +51,20 @@ if (container) {
         root.render(<Register />);
     } else if (page === 'profile') {
         root.render(<Profile />);
+    } else if (page === 'search') {
+        root.render(<Search />);
+    } else if (page === 'about') {
+        root.render(<About />);
+    } else if (page === 'contact') {
+        root.render(<Contact />);
+    } else if (page === 'faq') {
+        root.render(<FAQ />);
+    } else if (page === 'terms') {
+        root.render(<Terms />);
+    } else if (page === 'privacy') {
+        root.render(<Privacy />);
+    } else if (page === 'not-found') {
+        root.render(<NotFound />);
     } else {
         root.render(<Index />);
     }
