@@ -10,7 +10,7 @@ export default function Brands() {
             <Navbar />
             <PromoBar />
 
-            <main className="container flex-grow-1 mt-5">
+            <main className="container mt-5">
                 <BrandList />
             </main>
 

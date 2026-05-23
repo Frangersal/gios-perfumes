@@ -11,7 +11,7 @@ export default function Cart() {
             <Navbar />
             <PromoBar />
 
-            <main className="container flex-grow-1 mt-5 mb-5">
+            <main className="container mt-5 mb-5">
                 <h2 className="fw-bold mb-5 text-center">Carrito de Compras</h2>
                 
                 <div className="row g-5">

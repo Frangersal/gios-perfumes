@@ -9,7 +9,7 @@ export default function Checkout() {
         <div className="d-flex flex-column min-vh-100">
             <Navbar />
             
-            <main className="container flex-grow-1 mt-5 mb-5">
+            <main className="container mt-5 mb-5">
                 <div className="row justify-content-center">
                     <div className="col-12 mb-4 text-center">
                         <h2 className="fw-bold">Finalizar Compra</h2>

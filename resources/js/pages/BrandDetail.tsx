@@ -11,7 +11,7 @@ export default function BrandDetail() {
             <Navbar />
             <PromoBar />
 
-            <div className="flex-grow-1">
+            <div className="">
                 <BrandHeader />
                 
                 <main className="container">

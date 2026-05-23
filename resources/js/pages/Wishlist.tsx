@@ -14,7 +14,7 @@ export default function Wishlist() {
             <Navbar />
             <PromoBar />
 
-            <main className="container flex-grow-1 mt-5">
+            <main className="container mt-5">
                 <div className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
                     <h2 className="fw-bold m-0">Mi Wishlist</h2>
                     <span className="text-muted">3 perfumes guardados</span>

@@ -8,11 +8,11 @@ export default function CheckoutSummary() {
             <div className="d-flex align-items-center mb-3">
                 <div className="position-relative me-3">
                     <img src="https://placehold.co/80x80/e9ecef/212529?text=P" className="rounded border" alt="Perfume" />
-                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
+                    <span className="position-absolute top-0 translate-middle badge rounded-pill bg-dark" style={{ left: '100%' }}>
                         2
                     </span>
                 </div>
-                <div className="flex-grow-1">
+                <div className="w-100">
                     <h6 className="mb-1 fw-bold">Aqua di Mare Essenza</h6>
                     <small className="text-muted d-block">50 ml</small>
                 </div>

@@ -11,7 +11,7 @@ export default function Shop() {
             <Navbar />
             <PromoBar />
 
-            <div className="container mt-5 flex-grow-1">
+            <div className="container mt-5">
                 <div className="row">
                     <div className="col-md-3">
                         <ShopSidebar />

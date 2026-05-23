@@ -14,7 +14,7 @@ export default function Category() {
 
             <CategoryHeader />
 
-            <main className="container flex-grow-1">
+            <main className="container">
                 <div className="row">
                     <div className="col-md-3">
                         <CategorySidebar />

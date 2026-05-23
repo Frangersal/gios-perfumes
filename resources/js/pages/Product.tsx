@@ -14,7 +14,7 @@ export default function Product() {
             <Navbar />
             <PromoBar />
 
-            <main className="container mt-5 flex-grow-1">
+            <main className="container mt-5">
                 <div className="row mb-5">
                     {/* Columna Izquierda: Galería */}
                     <div className="col-lg-6 mb-4 mb-lg-0">

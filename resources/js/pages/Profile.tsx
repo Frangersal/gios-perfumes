@@ -39,7 +39,7 @@ export default function Profile() {
                 </div>
             </div>
 
-            <main className="container flex-grow-1 mb-5 pb-5">
+            <main className="container mb-5 pb-5">
                 <div className="row g-5">
                     {/* Barra Lateral / Navegación */}
                     <div className="col-lg-3">

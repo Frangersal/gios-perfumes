@@ -41,7 +41,7 @@ export default function ProductInfo() {
                     <input type="text" className="form-control text-center font-weight-bold" value={quantity} readOnly />
                     <button className="btn btn-outline-secondary px-3" type="button" onClick={() => setQuantity(quantity + 1)}>+</button>
                 </div>
-                <button className="btn btn-primary flex-grow-1 fw-bold text-uppercase">Añadir al carrito</button>
+                <button className="btn btn-primary w-100 fw-bold text-uppercase">Añadir al carrito</button>
             </div>
         </div>
     );
