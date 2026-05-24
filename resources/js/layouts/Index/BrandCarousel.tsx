@@ -1,5 +1,5 @@
 import React from 'react';
-import BrandItem, { Brand } from '../components/BrandItem';
+import BrandItem, { Brand } from '../../components/Index/BrandItem';
 
 const BRANDS_DATA: Brand[] = [
     {
@@ -41,19 +41,31 @@ const BRANDS_DATA: Brand[] = [
 ];
 
 export default function BrandCarousel() {
-    const infiniteBrands = [...BRANDS_DATA, ...BRANDS_DATA];
+    // Creamos un grupo de Marcas asegurando ser más ancho que la pantalla.
+    const brandGroup = [...BRANDS_DATA, ...BRANDS_DATA];
 
     return (
         <section className="my-5 overflow-hidden">
             <h3 className="text-center mb-4 text-uppercase fw-bold">Marcas Exclusivas</h3>
             
             <div className="brand-carousel-container">
-                <div className="brand-carousel-track d-flex gap-4 py-3">
-                    {infiniteBrands.map((brand, index) => (
-                        <div key={`${brand.id}-${index}`} style={{ minWidth: '260px' }}>
-                            <BrandItem brand={brand} />
-                        </div>
-                    ))}
+                <div className="brand-carousel-track py-3">
+                    {/* Grupo 1 */}
+                    <div className="brand-group">
+                        {brandGroup.map((brand, index) => (
+                            <div key={`g1-${brand.id}-${index}`} style={{ minWidth: '260px' }}>
+                                <BrandItem brand={brand} />
+                            </div>
+                        ))}
+                    </div>
+                    {/* Grupo 2 (Copia idéntica para hacer el ciclo infinito sin saltos) */}
+                    <div className="brand-group">
+                        {brandGroup.map((brand, index) => (
+                            <div key={`g2-${brand.id}-${index}`} style={{ minWidth: '260px' }}>
+                                <BrandItem brand={brand} />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
 
@@ -75,14 +87,15 @@ export default function BrandCarousel() {
                     animation-play-state: paused;
                 }
 
+                .brand-group {
+                    display: flex;
+                    gap: 1.5rem;   /* Bootstrap gap-4 = 1.5rem */
+                    padding-right: 1.5rem; /* El mismo gap al final para el empalme perfecto */
+                }
+
                 @keyframes scroll-brands {
-                    0% {
-                        transform: translateX(0);
-                    }
-                    100% {
-                        /* Desplazamos exactamente la mitad (una lista de marcas completa) */
-                        transform: translateX(calc(-50% - 1rem)); 
-                    }
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); } 
                 }
                 `}
             </style>

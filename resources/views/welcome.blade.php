@@ -22,25 +22,22 @@
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
         @if (Route::has('login'))
-            <nav class="flex justify-end p-6">
-                @auth
-                    <a href="{{ url('/dashboard') }}" class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                        Dashboard
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                        Log in
-                    </a>
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                            Register
-                        </a>
-                    @endif
-                @endauth
-            </nav>
+            <div class="bg-dark text-white py-2" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                <div class="container d-flex justify-content-end align-items-center gap-3">
+                    @auth
+                        <a href="{{ url('/profile') }}" class="text-white text-decoration-none text-uppercase fw-semibold">Mi Cuenta</a>
+                    @else
+                        <a href="{{ route('login') }}" class="text-white text-decoration-none text-uppercase fw-semibold">Iniciar Sesión</a>
+                        @if (Route::has('register'))
+                            <span class="text-white-50">|</span>
+                            <a href="{{ route('register') }}" class="text-white text-decoration-none text-uppercase fw-semibold">Registrarse</a>
+                        @endif
+                    @endauth
+                </div>
+            </div>
         @endif
 
-        <div id="root">
+        <div id="root" data-page="{{ $page ?? 'index' }}">
             <!-- React montará su componente aquí --> 
         </div>
     </body>
