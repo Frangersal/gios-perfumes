@@ -1,81 +1,83 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\AuthController;
 
-Route::get('/', function () {
-    // Más adelante puedes mover esto a un HomeController@index
-    return view('welcome', ['page' => 'index']);
-})->name('home');
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\BrandController as AdminBrandController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
-Route::get('/shop', function () {
-    // Más adelante puedes mover esto a un ShopController@index
-    return view('welcome', ['page' => 'shop']);
-})->name('shop');
+// --- FRONTEND ---
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+Route::get('/product/{id?}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/categoria/{slug?}', [CategoryController::class, 'show'])->name('category.show');
 
-Route::get('/product/{id?}', function () {
-    // Más adelante puedes mover esto a un ProductController@show
-    return view('welcome', ['page' => 'product']);
-})->name('product.show');
+Route::get('/marcas', [BrandController::class, 'index'])->name('brands.index');
+Route::get('/marcas/{slug}', [BrandController::class, 'show'])->name('brands.show');
 
-Route::get('/categoria/{slug?}', function () {
-    // Más adelante puedes mover esto a un CategoryController@show
-    return view('welcome', ['page' => 'category']);
-})->name('category.show');
-
-Route::get('/marcas', function () {
-    // Listado general de marcas (BrandController@index)
-    return view('welcome', ['page' => 'brands']);
-})->name('brands.index');
-
-Route::get('/marcas/{slug}', function () {
-    // Vista individual de una marca (BrandController@show)
-    return view('welcome', ['page' => 'brand-detail']);
-})->name('brands.show');
-
-Route::get('/wishlist', function () {
-    // Listado de favoritos del usuario (WishlistController@index)
-    return view('welcome', ['page' => 'wishlist']);
-})->name('wishlist.index');
-
-Route::get('/cart', function () {
-    return view('welcome', ['page' => 'cart']);
-})->name('cart.index');
-
-Route::get('/checkout', function () {
-    return view('welcome', ['page' => 'checkout']);
-})->name('checkout.index');
-
-Route::get('/profile', function () {
-    return view('welcome', ['page' => 'profile']);
-})->name('profile');
+// --- RUTAS PROTEGIDAS DEL CLIENTE ---
+// Todo lo de adentro requerirá que el usuario haya iniciado sesión
+Route::middleware('auth')->group(function () {
+    Route::resource('wishlist', WishlistController::class);
+    Route::resource('cart', CartController::class);
+    Route::resource('checkout', CheckoutController::class);
+    Route::resource('profile', ProfileController::class);
+});
 
 // Rutas informativas
-Route::get('/search', function () { return view('welcome', ['page' => 'search']); })->name('search');
-Route::get('/about', function () { return view('welcome', ['page' => 'about']); })->name('about');
-Route::get('/contact', function () { return view('welcome', ['page' => 'contact']); })->name('contact');
-Route::get('/faq', function () { return view('welcome', ['page' => 'faq']); })->name('faq');
-Route::get('/terms', function () { return view('welcome', ['page' => 'terms']); })->name('terms');
-Route::get('/privacy', function () { return view('welcome', ['page' => 'privacy']); })->name('privacy');
+Route::get('/search', [PageController::class, 'search'])->name('search');
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+Route::get('/faq', [PageController::class, 'faq'])->name('faq');
+Route::get('/terms', [PageController::class, 'terms'])->name('terms');
+Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
 
-// Rutas Administrativas
-Route::prefix('admin')->group(function () {
-    Route::get('/login', function () { return view('welcome', ['page' => 'admin-login']); })->name('admin.login');
-    Route::get('/dashboard', function () { return view('welcome', ['page' => 'admin-dashboard']); })->name('admin.dashboard');
-    Route::get('/products', function () { return view('welcome', ['page' => 'admin-products']); })->name('admin.products');
-    Route::get('/orders', function () { return view('welcome', ['page' => 'admin-orders']); })->name('admin.orders');
-    Route::get('/customers', function () { return view('welcome', ['page' => 'admin-customers']); })->name('admin.customers');
+
+// --- DASHBOARD ADMINISTRATIVO ---
+Route::prefix('admin')->name('admin.')->group(function () {
+    
+    // Auth de administradores
+    Route::get('/login', [AdminAuthController::class, 'login'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('login.post');
+    
+    // ZONA PROTEGIDA DE ADMINISTRADORES
+    Route::middleware('auth')->group(function () {
+        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        
+        // Rutas tipo Resource para los CRUDS administrativos completos
+        Route::resource('products', AdminProductController::class);
+        Route::resource('orders', AdminOrderController::class);
+        Route::resource('customers', AdminCustomerController::class);
+        Route::resource('categories', AdminCategoryController::class);
+        Route::resource('brands', AdminBrandController::class);
+    });
 });
+
+// --- AUTENTICACIÓN USUARIOS FRONTEND ---
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login.post');
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'store'])->name('register.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 // Fallback para 404
 Route::fallback(function () {
     return response()->view('welcome', ['page' => 'not-found'], 404);
 });
-
-// Las rutas de auth se pueden reescribir con las de Laravel Breeze / Jetstream en el futuro.
-Route::get('/login', function () {
-    return view('welcome', ['page' => 'login']);
-})->name('login');
-
-Route::get('/register', function () {
-    return view('welcome', ['page' => 'register']);
-})->name('register');

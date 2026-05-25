@@ -1,11 +1,26 @@
-import React from 'react';
+﻿import React from 'react';
+import axios from 'axios';
 
 export default function Dashboard({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
+    
+    const handleLogout = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        try {
+            await axios.post('logout', {}, {
+                headers: { 'Accept': 'application/json' }
+            });
+            window.location.href = 'login';
+        } catch (error) {
+            console.error('Error al cerrar sesión', error);
+            window.location.href = 'login';
+        }
+    };
+
     return (
         <div>
             <h3 className="fw-bold mb-4">Dashboard</h3>
             <p className="fs-5">
-                Hola <span className="fw-bold text-dark">Usuario</span> (¿no eres tú? <a href="#" className="text-danger fw-semibold text-decoration-none border-bottom border-danger">Cerrar sesión</a>)
+                Hola <span className="fw-bold text-dark">Usuario</span> (¿no eres tú? <a href="#" onClick={handleLogout} className="text-danger fw-semibold text-decoration-none border-bottom border-danger">Cerrar sesión</a>)
             </p>
             <p className="text-muted mb-4">
                 Desde el panel de control de tu cuenta, puedes ver tus pedidos recientes, gestionar tus direcciones de envío y facturación, y editar tu contraseña junto con los detalles de tu cuenta.

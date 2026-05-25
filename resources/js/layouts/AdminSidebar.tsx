@@ -1,6 +1,20 @@
-import React from 'react';
+﻿import React from 'react';
+import axios from 'axios';
 
 export default function AdminSidebar() {
+    const handleLogout = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        try {
+            await axios.post('logout', {}, {
+                headers: { 'Accept': 'application/json' }
+            });
+            window.location.href = 'login';
+        } catch (error) {
+            console.error('Error al cerrar sesión', error);
+            window.location.href = 'login';
+        }
+    };
+
     return (
         <div className="d-flex flex-column flex-shrink-0 p-3 bg-dark text-white" style={{ width: '280px', minHeight: '100vh' }}>
             <a href="/admin/dashboard" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
@@ -49,7 +63,7 @@ export default function AdminSidebar() {
                     <li><a className="dropdown-item" href="/admin/settings">Ajustes</a></li>
                     <li><a className="dropdown-item" href="/admin/profile">Perfil</a></li>
                     <li><hr className="dropdown-divider" /></li>
-                    <li><a className="dropdown-item" href="/admin/login">Cerrar Sesión</a></li>
+                    <li><a className="dropdown-item" href="#" onClick={handleLogout}>Cerrar Sesión</a></li>
                 </ul>
             </div>
         </div>
