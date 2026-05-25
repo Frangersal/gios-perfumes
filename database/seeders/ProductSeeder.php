@@ -14,17 +14,17 @@ class ProductSeeder extends Seeder
             'id' => 1,
             'brand_id' => 1,
             'category_id' => 5, // Amaderados
-            'nombre' => '212 VIP Black',
+            'name' => '212 VIP Black',
             'slug' => Str::slug('212 VIP Black'),
-            'descripcion' => 'Un perfume explosivo de Carolina Herrera.',
-            'precio' => 120.00,
+            'description' => 'Un perfume explosivo de Carolina Herrera.',
+            'price' => 120.00,
             'sku' => 'CH-212VB',
-            'genero' => 'Hombre',
-            'familia_olfativa' => 'Fougère Amaderada',
-            'concentracion' => 'Eau de Parfum',
-            'anio' => 2017,
-            'pais_origen' => 'España',
-            'estado' => 'publicado',
+            'gender' => 'Hombre',
+            'olfactory_family' => 'Fougère Amaderada',
+            'concentration' => 'Eau de Parfum',
+            'year' => 2017,
+            'country_of_origin' => 'España',
+            'status' => 'publicado',
             'video_url' => 'https://youtube.com/watch?v=demo',
             'meta_title' => '212 VIP Black Carolina Herrera | Gio\'s Perfumes',
             'meta_description' => 'Compra el perfume 212 VIP Black para Hombre. Descubre sus notas olfativas.',
@@ -34,14 +34,14 @@ class ProductSeeder extends Seeder
         ]);
 
         DB::table('product_variants')->insert([
-            ['product_id' => $productId, 'volumen' => '50ml', 'precio' => 90.00, 'stock' => 15, 'stock_minimo' => 5, 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'volumen' => '100ml', 'precio' => 120.00, 'stock' => 20, 'stock_minimo' => 5, 'created_at' => now(), 'updated_at' => now()]
+            ['product_id' => $productId, 'volume' => '50ml', 'price' => 90.00, 'stock' => 15, 'min_stock' => 5, 'created_at' => now(), 'updated_at' => now()],
+            ['product_id' => $productId, 'volume' => '100ml', 'price' => 120.00, 'stock' => 20, 'min_stock' => 5, 'created_at' => now(), 'updated_at' => now()]
         ]);
 
         DB::table('notes')->insert([
-            ['product_id' => $productId, 'tipo' => 'Nota Alta', 'nota' => 'Absenta, Anís e Hinojo', 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'tipo' => 'Nota Media', 'nota' => 'Lavanda', 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'tipo' => 'Nota de Base', 'nota' => 'Almizcle, Vainilla negra', 'created_at' => now(), 'updated_at' => now()],
+            ['product_id' => $productId, 'type' => 'Nota Alta', 'note' => 'Absenta, Anís e Hinojo', 'created_at' => now(), 'updated_at' => now()],
+            ['product_id' => $productId, 'type' => 'Nota Media', 'note' => 'Lavanda', 'created_at' => now(), 'updated_at' => now()],
+            ['product_id' => $productId, 'type' => 'Nota de Base', 'note' => 'Almizcle, Vainilla negra', 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         DB::table('product_tags')->insert([

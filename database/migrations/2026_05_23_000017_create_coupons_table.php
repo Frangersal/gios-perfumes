@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo', 100)->unique();
-            $table->string('tipo', 50);
-            $table->decimal('valor', 10, 2);
-            $table->date('fecha_inicio')->nullable();
-            $table->date('fecha_fin')->nullable();
-            $table->boolean('activo')->default(true);
+            $table->string('code', 100)->unique();
+            $table->string('type', 50);
+            $table->decimal('value', 10, 2);
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

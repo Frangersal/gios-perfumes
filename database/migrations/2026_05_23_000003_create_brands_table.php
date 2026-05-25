@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 150);
+            $table->string('name', 150);
             $table->string('logo', 255)->nullable();
-            $table->text('descripcion')->nullable();
+            $table->text('description')->nullable();
             $table->string('banner', 255)->nullable();
-            $table->string('pais_origen', 100)->nullable();
+            $table->string('country_of_origin', 100)->nullable();
             $table->timestamps();
         });
     }

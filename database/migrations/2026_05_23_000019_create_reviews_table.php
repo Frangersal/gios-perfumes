@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->integer('calificacion');
-            $table->text('comentario')->nullable();
-            $table->boolean('aprobado')->default(false);
+            $table->integer('rating');
+            $table->text('comment')->nullable();
+            $table->boolean('approved')->default(false);
             $table->timestamps();
         });
     }

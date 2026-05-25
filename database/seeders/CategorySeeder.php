@@ -11,41 +11,41 @@ class CategorySeeder extends Seeder
     {
         $catHombreId = DB::table('categories')->insertGetId([
             'id' => 1,
-            'nombre' => 'Hombre',
-            'descripcion' => 'Perfumes para caballero',
+            'name' => 'Hombre',
+            'description' => 'Perfumes para caballero',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         $catMujerId = DB::table('categories')->insertGetId([
             'id' => 2,
-            'nombre' => 'Mujer',
-            'descripcion' => 'Perfumes para dama',
+            'name' => 'Mujer',
+            'description' => 'Perfumes para dama',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         $catUnisexId = DB::table('categories')->insertGetId([
             'id' => 3,
-            'nombre' => 'Unisex',
-            'descripcion' => 'Perfumes para todos',
+            'name' => 'Unisex',
+            'description' => 'Perfumes para todos',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         $catArabesId = DB::table('categories')->insertGetId([
             'id' => 4,
-            'nombre' => 'Árabes',
-            'descripcion' => 'Fragancias orientales exclusivas',
+            'name' => 'Árabes',
+            'description' => 'Fragancias orientales exclusivas',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         DB::table('categories')->insert([
             'id' => 5,
-            'nombre' => 'Amaderados',
+            'name' => 'Amaderados',
             'parent_id' => $catHombreId,
-            'descripcion' => 'Fragancias con notas de madera',
+            'description' => 'Fragancias con notas de madera',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

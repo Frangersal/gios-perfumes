@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin Gios',
             'email' => 'admin@giosperfumes.com',
             'password' => Hash::make('password'),
-            'telefono' => '+1234567890',
+            'phone' => '+1234567890',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'name' => 'Cliente Demo',
             'email' => 'cliente@demo.com',
             'password' => Hash::make('password'),
-            'telefono' => '+0987654321',
+            'phone' => '+0987654321',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

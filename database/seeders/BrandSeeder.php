@@ -11,10 +11,10 @@ class BrandSeeder extends Seeder
     {
         DB::table('brands')->insert([
             'id' => 1,
-            'nombre' => 'Carolina Herrera',
+            'name' => 'Carolina Herrera',
             'logo' => 'carolina_herrera_logo.png',
-            'descripcion' => 'Marca de lujo reconocida mundialmente.',
-            'pais_origen' => 'Estados Unidos',
+            'description' => 'Marca de lujo reconocida mundialmente.',
+            'country_of_origin' => 'Estados Unidos',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

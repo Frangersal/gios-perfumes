@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_variant_id')->constrained('product_variants')->onDelete('cascade');
-            $table->string('tipo', 50);
-            $table->integer('cantidad');
-            $table->text('descripcion')->nullable();
+            $table->string('type', 50);
+            $table->integer('quantity');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

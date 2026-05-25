@@ -2,292 +2,292 @@ CREATE DATABASE `db_gios_perfumes`;
 
 USE `db_gios_perfumes`;
 
-CREATE TABLE roles (
+CREATE TABLE ROLES (
     id BIGINT PRIMARY KEY,
-    nombre VARCHAR(100),
-    descripcion TEXT
+    name VARCHAR(255),
+    description VARCHAR(255)
 );
 
-CREATE TABLE users (
+CREATE TABLE USERS (
     id BIGINT PRIMARY KEY,
-    nombre VARCHAR(150),
-    email VARCHAR(150),
+    name VARCHAR(255),
+    email VARCHAR(255),
     password VARCHAR(255),
-    telefono VARCHAR(30),
+    phone VARCHAR(255),
     created_at TIMESTAMP
 );
 
 -- Tabla pivote: Relación de muchos a muchos (N:M) entre usuarios y roles.
 -- Un usuario puede tener múltiples roles, y un rol pertenecer a múltiples usuarios.
-CREATE TABLE user_roles (
+CREATE TABLE USER_ROLES (
     id BIGINT PRIMARY KEY,
     user_id BIGINT,
     role_id BIGINT,
     
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (role_id) REFERENCES roles(id)
+    FOREIGN KEY (user_id) REFERENCES USERS(id),
+    FOREIGN KEY (role_id) REFERENCES ROLES(id)
 );
 
-CREATE TABLE brands (
+CREATE TABLE BRANDS (
     id BIGINT PRIMARY KEY,
-    nombre VARCHAR(150),
+    name VARCHAR(255),
     logo VARCHAR(255),
-    descripcion TEXT,
+    description TEXT,
     banner VARCHAR(255),
-    pais_origen VARCHAR(100)
+    country_of_origin VARCHAR(255)
 );
 
 -- Categorías de los productos. 
 -- Utiliza una relación recursiva (parent_id referenciando id) para permitir
 -- subcategorías anidadas ilimitadas (ej. Perfumes -> Hombre -> Amaderados).
-CREATE TABLE categories (
+CREATE TABLE CATEGORIES (
     id BIGINT PRIMARY KEY,
-    nombre VARCHAR(150),
-    descripcion TEXT,
-    imagen VARCHAR(255),
+    name VARCHAR(255),
+    description TEXT,
+    image VARCHAR(255),
     parent_id BIGINT,
+
+    FOREIGN KEY (parent_id) REFERENCES CATEGORIES(id)
+);
 
 -- Tabla base de productos.
 -- category_id (1:N): Cada producto se asocia fuertemente a una categoría.
 -- brand_id (1:N): Cada producto pertenece a una marca que lo produce.
-    FOREIGN KEY (parent_id) REFERENCES categories(id)
-);
-
-CREATE TABLE products (
+CREATE TABLE PRODUCTS (
     id BIGINT PRIMARY KEY,
     brand_id BIGINT,
     category_id BIGINT,
 
-    nombre VARCHAR(200),
+    name VARCHAR(255),
     slug VARCHAR(255),
-    descripcion TEXT,
+    description TEXT,
 
-    precio DECIMAL(10,2),
-    precio_descuento DECIMAL(10,2),
-    costo DECIMAL(10,2),
+    price DECIMAL(10,2),
+    discount_price DECIMAL(10,2),
+    cost DECIMAL(10,2),
 
-    sku VARCHAR(100),
-    genero VARCHAR(50),
-    familia_olfativa VARCHAR(100),
-    concentracion VARCHAR(50),
+    sku VARCHAR(255),
+    gender VARCHAR(255),
+    olfactory_family VARCHAR(255),
+    concentration VARCHAR(255),
 
-    anio INT,
-    pais_origen VARCHAR(100),
+    year INT,
+    country_of_origin VARCHAR(255),
 
-    estado VARCHAR(50),
-    porcentaje_descuento INT,
+    status VARCHAR(255),
+    discount_percentage INT,
 
     created_at TIMESTAMP,
 
-    FOREIGN KEY (brand_id) REFERENCES brands(id),
+    FOREIGN KEY (brand_id) REFERENCES BRANDS(id),
+    FOREIGN KEY (category_id) REFERENCES CATEGORIES(id)
+);
+
 -- Variantes de productos. Relación de 1 a muchísimos (1:N) con products.
 -- Crucial para perfumería: El mismo perfume se agrupa bajo 'products',
 -- pero vende en distintas presentaciones ('volumen' como 50ml, 100ml)
 -- y cada variante tiene su propio stock y precio individual.
-    FOREIGN KEY (category_id) REFERENCES categories(id)
-);
-
-CREATE TABLE product_variants (
+CREATE TABLE PRODUCT_VARIANTS (
     id BIGINT PRIMARY KEY,
     product_id BIGINT,
 
-    volumen VARCHAR(50),
-    precio DECIMAL(10,2),
+    volume VARCHAR(255),
+    price DECIMAL(10,2),
 
     stock INT,
-    stock_minimo INT,
--- Imágenes asociadas al producto. Relación 1:N.
--- Permite tener múltiples ángulos del empaque. Una debe marcarse como 'principal'.
+    min_stock INT,
 
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    FOREIGN KEY (product_id) REFERENCES PRODUCTS(id)
 );
 
-CREATE TABLE product_images (
+-- Imágenes asociadas al producto. Relación 1:N.
+-- Permite tener múltiples ángulos del empaque. Una debe marcarse como 'principal'.
+CREATE TABLE PRODUCT_IMAGES (
     id BIGINT PRIMARY KEY,
     product_id BIGINT,
 
-    imagen VARCHAR(255),
-    principal BOOLEAN,
+    image VARCHAR(255),
+    is_main BOOLEAN,
 
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    FOREIGN KEY (product_id) REFERENCES PRODUCTS(id)
 );
+
 -- Tabla pivote entre productos y etiquetas. Relación muchos a muchos (N:M).
 -- Permite agrupar productos bajo características libres (ej. "Novedad", "Descontinuados").
-
-CREATE TABLE tags (
+CREATE TABLE TAGS (
     id BIGINT PRIMARY KEY,
-    nombre VARCHAR(100)
+    name VARCHAR(255)
 );
 
-CREATE TABLE product_tags (
+CREATE TABLE PRODUCT_TAGS (
     id BIGINT PRIMARY KEY,
     product_id BIGINT,
     tag_id BIGINT,
 
--- Notas ofaltivas. Relación 1:N con products.
--- Almacena las especificaciones aromáticas (ej. tipo 'Salida', nota 'Bergamota' / tipo 'Corazón', nota 'Jazmín').
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    FOREIGN KEY (tag_id) REFERENCES tags(id)
+    FOREIGN KEY (product_id) REFERENCES PRODUCTS(id),
+    FOREIGN KEY (tag_id) REFERENCES TAGS(id)
 );
 
-CREATE TABLE notes (
+-- Notas ofaltivas. Relación 1:N con products.
+-- Almacena las especificaciones aromáticas (ej. tipo 'Salida', nota 'Bergamota' / tipo 'Corazón', nota 'Jazmín').
+CREATE TABLE NOTES (
     id BIGINT PRIMARY KEY,
     product_id BIGINT,
 
-    tipo VARCHAR(50),
-    nota VARCHAR(100),
--- Carrito de compras. Relación 1:1 o 1:N con users.
--- Asocia un contenedor temporal (carrito) en sesión con un usuario antes de la orden definitiva.
+    type VARCHAR(255),
+    note VARCHAR(255),
 
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    FOREIGN KEY (product_id) REFERENCES PRODUCTS(id)
 );
 
-CREATE TABLE carts (
--- Elementos del carrito. Relación de muchos a 1 (N:1) hacia carts.
--- Ojo que apunta a `product_variants` porque el usuario no compra un producto genérico, 
--- sino una presentación específica de este (ej: frasco de 100ml).
+-- Carrito de compras. Relación 1:1 o 1:N con users.
+-- Asocia un contenedor temporal (carrito) en sesión con un usuario antes de la orden definitiva.
+CREATE TABLE CARTS (
     id BIGINT PRIMARY KEY,
     user_id BIGINT,
 
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES USERS(id)
 );
 
-CREATE TABLE cart_items (
+-- Elementos del carrito. Relación de muchos a 1 (N:1) hacia carts.
+-- Ojo que apunta a `product_variants` porque el usuario no compra un producto genérico, 
+-- sino una presentación específica de este (ej: frasco de 100ml).
+CREATE TABLE CART_ITEMS (
     id BIGINT PRIMARY KEY,
     cart_id BIGINT,
     product_variant_id BIGINT,
 
--- Lista de deseos (Favoritos). 
--- Funciona como una tabla intermedia para una relación N:M entre `users` y `products`.
-    cantidad INT,
-    precio DECIMAL(10,2),
+    quantity INT,
+    price DECIMAL(10,2),
 
-    FOREIGN KEY (cart_id) REFERENCES carts(id),
-    FOREIGN KEY (product_variant_id) REFERENCES product_variants(id)
+    FOREIGN KEY (cart_id) REFERENCES CARTS(id),
+    FOREIGN KEY (product_variant_id) REFERENCES PRODUCT_VARIANTS(id)
 );
 
-CREATE TABLE wishlists (
+-- Lista de deseos (Favoritos). 
+-- Funciona como una tabla intermedia para una relación N:M entre `users` y `products`.
+CREATE TABLE WISHLISTS (
     id BIGINT PRIMARY KEY,
--- Libreta de direcciones. Relación 1:N vinculada a users.
--- Un comprador puede tener guardadas varias direcciones (facturación, oficina, hogar).
     user_id BIGINT,
     product_id BIGINT,
 
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    FOREIGN KEY (user_id) REFERENCES USERS(id),
+    FOREIGN KEY (product_id) REFERENCES PRODUCTS(id)
 );
 
-CREATE TABLE addresses (
+-- Libreta de direcciones. Relación 1:N vinculada a users.
+-- Un comprador puede tener guardadas varias direcciones (facturación, oficina, hogar).
+CREATE TABLE ADDRESSES (
     id BIGINT PRIMARY KEY,
     user_id BIGINT,
 
-    pais VARCHAR(100),
+    country VARCHAR(255),
+    region VARCHAR(255),
+    city VARCHAR(255),
+    postal_code VARCHAR(255),
+    address VARCHAR(255),
+    type VARCHAR(255),
+
+    FOREIGN KEY (user_id) REFERENCES USERS(id)
+);
+
 -- Órdenes y pedidos finalizados. Relación 1:N con users.
 -- El usuario conserva un historial de todos los pedidos emitidos a lo largo del tiempo.
-    region VARCHAR(100),
-    ciudad VARCHAR(100),
-    codigo_postal VARCHAR(20),
-    direccion TEXT,
-    tipo VARCHAR(50),
-
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
-CREATE TABLE orders (
+CREATE TABLE ORDERS (
     id BIGINT PRIMARY KEY,
     user_id BIGINT,
 
-    estado VARCHAR(50),
+    status VARCHAR(255),
 
     subtotal DECIMAL(10,2),
-    envio DECIMAL(10,2),
+    shipping DECIMAL(10,2),
     total DECIMAL(10,2),
--- Detalle de compra por pedido. Relación 1:N con 'orders'.
--- Apunta a la variante exacta y hace una 'fotografía' (snapshot) del precio y el total 
--- al momento de la compra, ya que este en el catálogo podría variar futuro.
 
-    metodo_pago VARCHAR(100),
-    guia_envio VARCHAR(100),
+    payment_method VARCHAR(255),
+    tracking_number VARCHAR(255),
 
     created_at TIMESTAMP,
 
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES USERS(id)
 );
 
-CREATE TABLE order_items (
+-- Detalle de compra por pedido. Relación 1:N con 'orders'.
+-- Apunta a la variante exacta y hace una 'fotografía' (snapshot) del precio y el total 
+-- al momento de la compra, ya que este en el catálogo podría variar futuro.
+CREATE TABLE ORDER_ITEMS (
     id BIGINT PRIMARY KEY,
     order_id BIGINT,
     product_variant_id BIGINT,
 
-    cantidad INT,
-    precio DECIMAL(10,2),
+    quantity INT,
+    price DECIMAL(10,2),
     total DECIMAL(10,2),
 
-    FOREIGN KEY (order_id) REFERENCES orders(id),
-    FOREIGN KEY (product_variant_id) REFERENCES product_variants(id)
+    FOREIGN KEY (order_id) REFERENCES ORDERS(id),
+    FOREIGN KEY (product_variant_id) REFERENCES PRODUCT_VARIANTS(id)
 );
 
-CREATE TABLE coupons (
+CREATE TABLE COUPONS (
     id BIGINT PRIMARY KEY,
-    codigo VARCHAR(100),
+    code VARCHAR(255),
+    type VARCHAR(255),
+    value DECIMAL(10,2),
+
+    start_date DATE,
+    end_date DATE,
+
+    active BOOLEAN
+);
+
 -- Relación N:M entre órdenes y cupones. 
 -- Sirve para guardar registro exacto de qué cupones (y más de uno si permitieran stack) aplican a qué compra.
-    tipo VARCHAR(50),
-    valor DECIMAL(10,2),
-
-    fecha_inicio DATE,
-    fecha_fin DATE,
-
-    activo BOOLEAN
--- Reseñas y calificaciones. Tabla intermedia (N:M) de interacciones entre el usuario y un producto específico.
-);
-
-CREATE TABLE order_coupons (
+CREATE TABLE ORDER_COUPONS (
     id BIGINT PRIMARY KEY,
     order_id BIGINT,
     coupon_id BIGINT,
 
-    FOREIGN KEY (order_id) REFERENCES orders(id),
-    FOREIGN KEY (coupon_id) REFERENCES coupons(id)
+    FOREIGN KEY (order_id) REFERENCES ORDERS(id),
+    FOREIGN KEY (coupon_id) REFERENCES COUPONS(id)
 );
 
-CREATE TABLE reviews (
+-- Reseñas y calificaciones. Tabla intermedia (N:M) de interacciones entre el usuario y un producto específico.
+CREATE TABLE REVIEWS (
     id BIGINT PRIMARY KEY,
     user_id BIGINT,
     product_id BIGINT,
 
-    calificacion INT,
--- Historial de kardex / movimientos de almacén. Relación 1:N con product_variants.
--- Garantiza trazabilidad de por qué incrementó o bajó el stock físico (compras, ajustes, mermas).
-    comentario TEXT,
+    rating INT,
+    comment TEXT,
 
-    aprobado BOOLEAN,
+    approved BOOLEAN,
 
     created_at TIMESTAMP,
 
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    FOREIGN KEY (user_id) REFERENCES USERS(id),
+    FOREIGN KEY (product_id) REFERENCES PRODUCTS(id)
 );
 
-CREATE TABLE inventory_movements (
+-- Historial de kardex / movimientos de almacén. Relación 1:N con product_variants.
+-- Garantiza trazabilidad de por qué incrementó o bajó el stock físico (compras, ajustes, mermas).
+CREATE TABLE INVENTORY_MOVEMENTS (
     id BIGINT PRIMARY KEY,
     product_variant_id BIGINT,
 
-    tipo VARCHAR(50),
-    cantidad INT,
-    descripcion TEXT,
+    type VARCHAR(255),
+    quantity INT,
+    description TEXT,
 
     created_at TIMESTAMP,
 
-    FOREIGN KEY (product_variant_id) REFERENCES product_variants(id)
+    FOREIGN KEY (product_variant_id) REFERENCES PRODUCT_VARIANTS(id)
 );
 
-CREATE TABLE banners (
+CREATE TABLE BANNERS (
     id BIGINT PRIMARY KEY,
 
-    titulo VARCHAR(200),
-    imagen VARCHAR(255),
+    title VARCHAR(255),
+    image VARCHAR(255),
     link VARCHAR(255),
 
-    activo BOOLEAN
+    active BOOLEAN
 );

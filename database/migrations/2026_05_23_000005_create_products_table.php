@@ -12,20 +12,20 @@ return new class extends Migration
             $table->id();
             $table->foreignId('brand_id')->constrained('brands');
             $table->foreignId('category_id')->constrained('categories');
-            $table->string('nombre', 200);
+            $table->string('name', 200);
             $table->string('slug', 191)->unique();
-            $table->text('descripcion')->nullable();
-            $table->decimal('precio', 10, 2);
-            $table->decimal('precio_descuento', 10, 2)->nullable();
-            $table->decimal('costo', 10, 2)->nullable();
+            $table->text('description')->nullable();
+            $table->decimal('price', 10, 2);
+            $table->decimal('discount_price', 10, 2)->nullable();
+            $table->decimal('cost', 10, 2)->nullable();
             $table->string('sku', 100)->unique();
-            $table->string('genero', 50)->nullable();
-            $table->string('familia_olfativa', 100)->nullable();
-            $table->string('concentracion', 50)->nullable();
-            $table->integer('anio')->nullable();
-            $table->string('pais_origen', 100)->nullable();
-            $table->string('estado', 50)->default('publicado');
-            $table->integer('porcentaje_descuento')->nullable();
+            $table->string('gender', 50)->nullable();
+            $table->string('olfactory_family', 100)->nullable();
+            $table->string('concentration', 50)->nullable();
+            $table->integer('year')->nullable();
+            $table->string('country_of_origin', 100)->nullable();
+            $table->string('status', 50)->default('publicado');
+            $table->integer('discount_percentage')->nullable();
             
             // SEO y Multimedia
             $table->string('video_url', 255)->nullable();

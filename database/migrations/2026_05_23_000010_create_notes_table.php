@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->string('tipo', 50);
-            $table->string('nota', 100);
+            $table->string('type', 50);
+            $table->string('note', 100);
             $table->timestamps();
         });
     }

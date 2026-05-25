@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo', 200);
-            $table->string('imagen', 255);
+            $table->string('title', 200);
+            $table->string('image', 255);
             $table->string('link', 255)->nullable();
-            $table->boolean('activo')->default(true);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
