@@ -53,7 +53,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     
     // Auth de administradores
     Route::get('/login', [AdminAuthController::class, 'login'])->name('login');
-    Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('login.post');
+    Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('login.post')->middleware('throttle:10,600');
     
     // ZONA PROTEGIDA DE ADMINISTRADORES
     // Requiere login y acceso mínimo al dashboard (Vendedor, Almacenista, Soporte o Super admin)
@@ -76,7 +76,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // --- AUTENTICACIÓN USUARIOS FRONTEND ---
 Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'authenticate'])->name('login.post');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login.post')->middleware('throttle:10,600');
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'store'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
