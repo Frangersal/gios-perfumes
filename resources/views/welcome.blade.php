@@ -22,7 +22,9 @@
         @endif
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-        @if (Route::has('login'))
+        @php($isAdminPage = \Illuminate\Support\Str::startsWith($page ?? '', 'admin-'))
+
+        @if (Route::has('login') && !$isAdminPage)
             <div class="bg-dark text-white py-2" style="font-size: 0.8rem; letter-spacing: 0.5px;">
                 <div class="container d-flex justify-content-end align-items-center gap-3">
                     @auth
@@ -38,8 +40,11 @@
             </div>
         @endif
 
-        <div id="root" data-page="{{ $page ?? 'index' }}" data-user-role="{{ $userRole ?? ' }}" data-user-name="{{ $userName ?? ' }}">
-            <!-- React montarÃ¡ su componente aquÃ­ --> 
+        <div id="root" 
+            data-page="{{ $page ?? 'index' }}" 
+            data-user-role="{{ $userRole ?? '' }}" 
+            data-user-name="{{ $userName ?? '' }}"             data-resource-id="{{ $resourceId ?? '' }}"            data-base-url="{{ url('/') }}">
+            <!-- React montará su componente aquí­ --> 
         </div>
     </body>
 </html>

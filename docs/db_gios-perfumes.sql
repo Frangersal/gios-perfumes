@@ -128,16 +128,35 @@ CREATE TABLE PRODUCT_TAGS (
     FOREIGN KEY (tag_id) REFERENCES TAGS(id)
 );
 
--- Notas ofaltivas. Relación 1:N con products.
--- Almacena las especificaciones aromáticas (ej. tipo 'Salida', nota 'Bergamota' / tipo 'Corazón', nota 'Jazmín').
+-- Catálogo global de notas olfativas.
+-- Se normaliza para evitar duplicación (ej. "Bergamota" se reutiliza en muchos productos).
 CREATE TABLE NOTES (
     id BIGINT PRIMARY KEY,
+    name VARCHAR(255),
+    slug VARCHAR(255),
+    image VARCHAR(255)
+);
+
+-- Catálogo de tipos de nota (Salida, Corazón, Fondo).
+CREATE TABLE NOTE_TYPES (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(255),
+    slug VARCHAR(255)
+);
+
+-- Tabla pivote N:M entre productos y notas.
+-- Permite indicar tipo de nota y orden/intensidad dentro de la pirámide olfativa.
+CREATE TABLE PRODUCT_NOTES (
+    id BIGINT PRIMARY KEY,
     product_id BIGINT,
+    note_id BIGINT,
+    note_type_id BIGINT,
+    position INT,
+    intensity INT,
 
-    type VARCHAR(255),
-    note VARCHAR(255),
-
-    FOREIGN KEY (product_id) REFERENCES PRODUCTS(id)
+    FOREIGN KEY (product_id) REFERENCES PRODUCTS(id),
+    FOREIGN KEY (note_id) REFERENCES NOTES(id),
+    FOREIGN KEY (note_type_id) REFERENCES NOTE_TYPES(id)
 );
 
 -- Carrito de compras. Relación 1:1 o 1:N con users.

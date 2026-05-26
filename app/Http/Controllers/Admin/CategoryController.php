@@ -10,9 +10,12 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(\App\Models\Category::all());
+        }
+        return view('welcome', ['page' => 'admin-categories']);
     }
 
     /**

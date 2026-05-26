@@ -62,6 +62,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         
         // Rutas de Catálogo
+        Route::get('products/{product}/details', [AdminProductController::class, 'details'])
+            ->name('products.details')
+            ->middleware('can:manage-catalog');
+        Route::get('products-note-metadata', [AdminProductController::class, 'noteMetadata'])
+            ->name('products.note-metadata')
+            ->middleware('can:manage-catalog');
         Route::resource('products', AdminProductController::class)->middleware('can:manage-catalog');
         Route::resource('categories', AdminCategoryController::class)->middleware('can:manage-catalog');
         Route::resource('brands', AdminBrandController::class)->middleware('can:manage-catalog');
@@ -80,6 +86,10 @@ Route::post('/login', [AuthController::class, 'authenticate'])->name('login.post
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'store'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/resources/img/products/{filename}', [AdminProductController::class, 'serveProductImage'])
+    ->where('filename', '[^/]+')
+    ->name('products.images.show');
 
 
 // Fallback para 404

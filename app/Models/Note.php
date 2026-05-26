@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Note extends Model
 {
-    protected $fillable = ['product_id', 'type', 'note'];
+    protected $fillable = ['name', 'slug', 'image'];
 
-    public function product() { return $this->belongsTo(Product::class); }
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_notes')
+            ->withPivot(['note_type_id', 'position', 'intensity'])
+            ->withTimestamps();
+    }
+
+    public function productNotes() { return $this->hasMany(ProductNote::class); }
 }
