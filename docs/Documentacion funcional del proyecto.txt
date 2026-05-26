@@ -1,0 +1,323 @@
+GIO’S PERFUMES: DOCUMENTACIÓN FUNCIONAL DEL PROYECTO
+Gio’s Perfumes
+1. Introducción
+El proyecto Gio’s Perfumes surge como un emprendimiento enfocado en la comercialización de perfumes originales a precios competitivos, aprovechando una red de contactos estratégicos que permite adquirir una amplia variedad de fragancias con descuentos atractivos.
+Con el objetivo de expandir el negocio y fortalecer su presencia digital, se propone el desarrollo de una plataforma ecommerce moderna, elegante y escalable, diseñada para ofrecer una experiencia de compra intuitiva tanto para visitantes como para clientes registrados.
+La plataforma permitirá la visualización pública del catálogo de productos, la gestión de compras mediante carrito interactivo, autenticación de usuarios, administración avanzada de inventario y un dashboard administrativo completo para el control operativo de la tienda.
+________________________________________
+2. Objetivo General
+Desarrollar una plataforma ecommerce especializada en la venta de perfumes que permita gestionar productos, clientes, pedidos, inventario y operaciones administrativas mediante una interfaz moderna, segura y escalable.
+________________________________________
+3. Objetivos Específicos
+•	Permitir a los usuarios navegar libremente por el catálogo de perfumes. 
+•	Implementar un sistema de carrito de compras dinámico e interactivo. 
+•	Integrar autenticación de usuarios mediante inicio de sesión y registro. 
+•	Desarrollar un sistema de perfiles para compradores y personal administrativo. 
+•	Gestionar productos, inventario, variantes y promociones desde un dashboard administrativo. 
+•	Implementar métricas y herramientas de análisis para el monitoreo de ventas. 
+•	Facilitar la administración del contenido visual de la tienda mediante banners y campañas promocionales. 
+________________________________________
+4. Alcance del Proyecto
+La plataforma estará compuesta por dos áreas principales:
+4.1 Frontend Público
+Orientado a compradores y visitantes de la tienda.
+4.2 Dashboard Administrativo
+Orientado al personal encargado de la gestión operativa del ecommerce.
+________________________________________
+5. Requerimientos Funcionales
+5.1 Catálogo Público
+Cualquier visitante podrá acceder libremente al catálogo de perfumes disponibles sin necesidad de iniciar sesión.
+Cada producto contará con:
+•	Imagen principal 
+•	Nombre del perfume 
+•	Marca 
+•	Precio 
+•	Descuento aplicado 
+•	Botón de favoritos 
+•	Botón “Agregar al carrito” 
+•	Botón “Ver producto” 
+La plataforma permitirá marcar productos como favoritos mediante un icono de corazón.
+________________________________________
+5.2 Vista de Producto
+Al seleccionar un producto, el usuario será redirigido a la página de detalle del perfume.
+La vista mostrará:
+•	Nombre del perfume 
+•	Información general 
+•	Marca y diseñador 
+•	Precio 
+•	Volumen en mililitros 
+•	Categorías y etiquetas 
+•	SKU 
+•	Porcentaje de descuento 
+•	Familia olfativa 
+•	Concentración (EDT, EDP o Parfum) 
+•	Año y país de origen 
+•	Notas olfativas: 
+o	Notas Altas 
+o	Notas Medias 
+o	Notas de Base 
+Asimismo, la página incluirá:
+•	Selector de cantidad 
+•	Botón “Añadir al carrito” 
+•	Botón “Comprar” 
+________________________________________
+5.3 Carrito de Compras
+La plataforma contará con una vista de carrito interactiva que permitirá gestionar los productos seleccionados.
+Cada artículo mostrará:
+•	Imagen del producto 
+•	Nombre 
+•	Cantidad seleccionada 
+•	Precio individual 
+•	Precio total 
+•	Selector para modificar cantidades 
+•	Botón para eliminar el producto 
+La sección de totales incluirá:
+•	Subtotal 
+•	Cálculo de envío 
+•	Total general 
+El cálculo de envío desplegará campos para:
+•	País 
+•	Región 
+•	Ciudad 
+•	Código postal 
+________________________________________
+5.4 Checkout
+El proceso de compra requerirá autenticación obligatoria del comprador.
+En caso de no haber iniciado sesión, el sistema mostrará:
+•	Formulario de inicio de sesión 
+•	Formulario de registro 
+El checkout estará compuesto por:
+1.	Autenticación 
+2.	Configuración de envío 
+3.	Revisión de la orden 
+4.	Pasarela de pago 
+________________________________________
+5.5 Perfil del Cliente
+Los usuarios registrados dispondrán de una sección de perfil para administrar su información personal.
+El perfil estará dividido en:
+•	Inicio 
+•	Pedidos 
+•	Direcciones 
+•	Detalles de la cuenta 
+•	Cerrar sesión 
+Pedidos
+El historial mostrará:
+•	Número de pedido 
+•	Fecha 
+•	Estado 
+•	Total 
+•	Botón “Volver a comprar” 
+Direcciones
+Permitirá administrar:
+•	Dirección de envío 
+•	Dirección de facturación 
+Detalles de la cuenta
+Permitirá actualizar:
+•	Nombre 
+•	Correo electrónico 
+•	Teléfono 
+•	Contraseña 
+________________________________________
+6. Dashboard Administrativo
+El personal administrativo accederá mediante una página exclusiva de administración.
+Tras autenticarse, el sistema redirigirá al usuario al dashboard principal.
+La interfaz estará diseñada bajo una estética:
+•	Moderna 
+•	Minimalista 
+•	Elegante 
+•	En tonos oscuros, negro, gris grafito, blanco y dorado suave 
+La navegación se realizará mediante un sidebar lateral compacto.
+________________________________________
+7. Módulos del Sistema
+7.1 Overview / Dashboard
+La pantalla principal mostrará:
+•	Ventas del día 
+•	Ventas del mes 
+•	Total de pedidos 
+•	Usuarios nuevos 
+•	Ingresos totales 
+•	Porcentaje de crecimiento 
+Asimismo, incluirá:
+•	Gráficos de líneas 
+•	Gráficos de barras 
+•	Productos con poco stock 
+•	Pedidos recientes 
+________________________________________
+7.2 Productos
+Permitirá:
+•	Crear productos 
+•	Editar productos 
+•	Eliminar productos 
+•	Activar o desactivar productos 
+Cada perfume almacenará:
+•	Nombre 
+•	Slug 
+•	Descripción 
+•	Marca 
+•	Diseñador 
+•	Género 
+•	Familia olfativa 
+•	Concentración 
+•	Año 
+•	País 
+•	Notas olfativas 
+Información de precios
+•	Precio normal 
+•	Precio de descuento 
+•	Costo 
+•	Margen de ganancia 
+Multimedia
+•	Imagen principal 
+•	Galería de imágenes 
+•	Video opcional 
+SEO
+•	Meta title 
+•	Meta description 
+•	Keywords 
+Estado
+•	Publicado 
+•	Borrador 
+•	Agotado 
+________________________________________
+7.3 Inventario y Variantes
+El sistema permitirá administrar variantes por volumen:
+•	50ml 
+•	100ml 
+•	200ml 
+Cada variante contará con:
+•	Precio independiente 
+•	Stock actual 
+•	Stock mínimo 
+Asimismo, existirá:
+•	Historial de movimientos 
+•	Registro de entradas y salidas 
+•	Alertas automáticas de desabasto 
+________________________________________
+7.4 Categorías
+Permitirá gestionar:
+•	Categorías 
+•	Subcategorías 
+•	Descripciones 
+•	Imágenes 
+Ejemplos:
+•	Hombre 
+•	Mujer 
+•	Unisex 
+•	Árabes 
+________________________________________
+7.5 Marcas
+Permitirá administrar:
+•	Nombre de la marca 
+•	Logo 
+•	Banner 
+•	Descripción 
+•	País de origen 
+________________________________________
+7.6 Pedidos
+Mostrará:
+•	Estado del pedido 
+•	Cliente asociado 
+•	Total 
+•	Fecha 
+Estados disponibles:
+•	Pendiente 
+•	Pagado 
+•	Enviado 
+•	Entregado 
+•	Cancelado 
+Cada pedido incluirá:
+•	Productos comprados 
+•	Dirección 
+•	Método de pago 
+•	Guía de envío 
+•	Línea de tiempo del proceso 
+________________________________________
+7.7 Clientes
+El módulo almacenará:
+•	Nombre 
+•	Correo electrónico 
+•	Teléfono 
+•	Dirección 
+•	Historial de compras 
+•	Wishlist 
+También permitirá:
+•	Segmentación de clientes frecuentes 
+•	Identificación de clientes VIP 
+________________________________________
+7.8 Cupones y Promociones
+Permitirá crear:
+•	Descuentos temporales 
+•	Envío gratis 
+•	Promociones 2x1 
+•	Campañas promocionales 
+________________________________________
+7.9 Reseñas
+Permitirá moderar:
+•	Comentarios 
+•	Calificaciones 
+•	Opiniones de clientes 
+El administrador podrá aprobar o rechazar reseñas.
+________________________________________
+7.10 Analytics y Estadísticas
+El sistema incluirá herramientas avanzadas de análisis mediante:
+•	Gráficos lineales 
+•	Gráficos de pastel 
+•	Mapas de calor 
+Las métricas analizarán:
+•	Ventas diarias 
+•	Marcas más vendidas 
+•	Tasa de conversión 
+•	Ticket promedio 
+________________________________________
+7.11 Configuración
+Permitirá administrar:
+•	Logo 
+•	Banners 
+•	Redes sociales 
+•	Pasarelas de pago 
+•	Zonas de envío 
+•	Monedas 
+•	Impuestos 
+________________________________________
+7.12 Usuarios y Roles
+El sistema contará con control de accesos y permisos.
+Roles disponibles:
+•	Super Admin 
+•	Vendedor 
+•	Almacenista 
+•	Soporte 
+Cada rol tendrá permisos específicos dentro de la plataforma.
+________________________________________
+7.13 Banners y Home
+Permitirá actualizar dinámicamente:
+•	Hero banners 
+•	Sliders 
+•	Campañas promocionales 
+•	Contenido principal del homepage 
+________________________________________
+8. Requerimientos No Funcionales
+La plataforma deberá cumplir con:
+•	Diseño responsive 
+•	Interfaz moderna y minimalista 
+•	Seguridad en autenticación y sesiones 
+•	Optimización SEO 
+•	Escalabilidad 
+•	Buen rendimiento 
+•	Navegación intuitiva 
+•	Compatibilidad multidispositivo 
+________________________________________
+9. Tecnologías Propuestas
+Backend
+•	Laravel 
+Frontend
+•	React 
+Base de Datos
+•	MySQL 
+Arquitectura
+•	API REST 
+•	SPA (Single Page Application) 
+________________________________________
+10. Conclusión
+Gio’s Perfumes busca consolidarse como una plataforma ecommerce moderna y escalable especializada en la venta de perfumes originales. El sistema combinará una experiencia de usuario elegante e intuitiva con herramientas administrativas avanzadas que permitirán gestionar de manera eficiente productos, inventario, clientes, pedidos y métricas del negocio.
+El proyecto está diseñado con una visión de crecimiento a largo plazo, permitiendo futuras integraciones, expansión del catálogo y escalabilidad operativa conforme aumenten las necesidades del negocio.
+

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -37,8 +38,9 @@
             </div>
         @endif
 
-        <div id="root" data-page="{{ $page ?? 'index' }}">
-            <!-- React montará su componente aquí --> 
+        <div id="root" data-page="{{ $page ?? 'index' }}" data-user-role="{{ $userRole ?? ' }}" data-user-name="{{ $userName ?? ' }}">
+            <!-- React montarÃ¡ su componente aquÃ­ --> 
         </div>
     </body>
 </html>
+

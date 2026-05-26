@@ -1,4 +1,5 @@
-import React from 'react';
+﻿import React from 'react';
+import axios from 'axios';
 
 interface Props {
     activeTab: string;
@@ -14,6 +15,19 @@ export default function ProfileSidebar({ activeTab, setActiveTab }: Props) {
         { id: 'password', label: 'Cambiar Contraseña' },
     ];
 
+    const handleLogout = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        try {
+            await axios.post('logout', {}, {
+                headers: { 'Accept': 'application/json' }
+            });
+            window.location.href = 'login';
+        } catch (error) {
+            console.error('Error al cerrar sesión', error);
+            window.location.href = 'login';
+        }
+    };
+
     return (
         <div className="card border-0 shadow-sm rounded-4">
             <div className="card-body p-0">
@@ -28,7 +42,7 @@ export default function ProfileSidebar({ activeTab, setActiveTab }: Props) {
                             {tab.label}
                         </button>
                     ))}
-                    <button className="list-group-item list-group-item-action py-3 px-4 fw-semibold text-danger border-0">
+                    <button onClick={handleLogout} className="list-group-item list-group-item-action py-3 px-4 fw-semibold text-danger border-0">
                         Cerrar Sesión
                     </button>
                 </div>

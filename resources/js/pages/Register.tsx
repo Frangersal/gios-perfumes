@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Navbar from '../layouts/Navbar';
 import Footer from '../layouts/Footer';
 import RegisterForm from '../layouts/Auth/RegisterForm';
@@ -13,7 +13,7 @@ export default function Register() {
                     <div className="card-body p-5">
                         <div className="text-center mb-4">
                             <h2 className="fw-bold">Crear una cuenta</h2>
-                            <p className="text-muted">Únete a nuestra comunidad exclusiva</p>
+                            <p className="text-muted">Ãšnete a nuestra comunidad exclusiva</p>
                         </div>
                         
                         <RegisterForm />
@@ -25,3 +25,4 @@ export default function Register() {
         </div>
     );
 }
+
