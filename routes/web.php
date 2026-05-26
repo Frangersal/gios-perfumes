@@ -31,8 +31,8 @@ Route::get('/marcas', [BrandController::class, 'index'])->name('brands.index');
 Route::get('/marcas/{slug}', [BrandController::class, 'show'])->name('brands.show');
 
 // --- RUTAS PROTEGIDAS DEL CLIENTE ---
-// Todo lo de adentro requerirá que el usuario haya iniciado sesión
-Route::middleware('auth')->group(function () {
+// Requiere login y tener el rol de 'Cliente'
+Route::middleware(['auth', 'can:is-customer'])->group(function () {
     Route::resource('wishlist', WishlistController::class);
     Route::resource('cart', CartController::class);
     Route::resource('checkout', CheckoutController::class);
@@ -56,16 +56,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('login.post');
     
     // ZONA PROTEGIDA DE ADMINISTRADORES
-    Route::middleware('auth')->group(function () {
+    // Requiere login y acceso mínimo al dashboard (Vendedor, Almacenista, Soporte o Super admin)
+    Route::middleware(['auth', 'can:view-admin-dashboard'])->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         
-        // Rutas tipo Resource para los CRUDS administrativos completos
-        Route::resource('products', AdminProductController::class);
-        Route::resource('orders', AdminOrderController::class);
-        Route::resource('customers', AdminCustomerController::class);
-        Route::resource('categories', AdminCategoryController::class);
-        Route::resource('brands', AdminBrandController::class);
+        // Rutas de Catálogo
+        Route::resource('products', AdminProductController::class)->middleware('can:manage-catalog');
+        Route::resource('categories', AdminCategoryController::class)->middleware('can:manage-catalog');
+        Route::resource('brands', AdminBrandController::class)->middleware('can:manage-catalog');
+        
+        // Rutas de Pedidos
+        Route::resource('orders', AdminOrderController::class)->middleware('can:manage-orders');
+        
+        // Rutas de Clientes / Soporte
+        Route::resource('customers', AdminCustomerController::class)->middleware('can:manage-customers');
     });
 });
 

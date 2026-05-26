@@ -38,8 +38,9 @@
             </div>
         @endif
 
-        <div id="root" data-page="{{ $page ?? 'index' }}">
-            <!-- React montará su componente aquí --> 
+        <div id="root" data-page="{{ $page ?? 'index' }}" data-user-role="{{ $userRole ?? ' }}" data-user-name="{{ $userName ?? ' }}">
+            <!-- React montarÃ¡ su componente aquÃ­ --> 
         </div>
     </body>
 </html>
+

@@ -27,8 +27,21 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        // Aquí más adelante se puede incluir la validación de Roles (ej. user->roles->contains('admin'))
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::validate($credentials)) {
+            
+            $user = Auth::getProvider()->retrieveByCredentials($credentials);
+
+            // Verificar que el usuario tenga un rol administrativo ANTES de loguear
+            if (!$user->hasRole(['Super admin', 'Vendedor', 'Almacenista', 'Soporte'])) {
+                if ($request->wantsJson()) {
+                    return response()->json(['message' => 'Las credenciales proporcionadas no son correctas.'], 401);
+                }
+                throw ValidationException::withMessages([
+                    'email' => 'Las credenciales proporcionadas no son correctas.',
+                ]);
+            }
+
+            Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
 
             if ($request->wantsJson()) {
@@ -43,7 +56,7 @@ class AuthController extends Controller
         }
 
         throw ValidationException::withMessages([
-            'email' => 'Las credenciales proporcionadas o los permisos no son correctos.',
+            'email' => 'Las credenciales proporcionadas no son correctas.',
         ]);
     }
 

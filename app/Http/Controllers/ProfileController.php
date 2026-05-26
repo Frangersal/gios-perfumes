@@ -11,7 +11,15 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        return view('welcome', ['page' => 'profile']);
+        $role = \Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->roles->first() 
+                ? \Illuminate\Support\Facades\Auth::user()->roles->first()->name 
+                : 'Usuario Autenticado';
+
+        return view('welcome', [
+            'page' => 'profile',
+            'userRole' => $role,
+            'userName' => \Illuminate\Support\Facades\Auth::user()->name ?? 'Usuario'
+        ]);
     }
 
     /**
@@ -62,4 +70,5 @@ class ProfileController extends Controller
         //
     }
 }
+
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import Navbar from '../layouts/Navbar';
 import Footer from '../layouts/Footer';
 import ProfileSidebar from '../layouts/Profile/ProfileSidebar';
@@ -9,13 +9,22 @@ import AccountDetails from '../layouts/Profile/AccountDetails';
 import ChangePassword from '../layouts/Profile/ChangePassword';
 
 export default function Profile() {
-    // Controla la pestaña activa en el sidebar izquierdo
     const [activeTab, setActiveTab] = useState('dashboard');
+    const [userRole, setUserRole] = useState('...');
+    const [userName, setUserName] = useState('...');
+
+    useEffect(() => {
+        const root = document.getElementById('root');
+        if (root) {
+            setUserRole(root.getAttribute('data-user-role') || 'Usuario Estándar');
+            setUserName(root.getAttribute('data-user-name') || 'Usuario');
+        }
+    }, []);
 
     const renderContent = () => {
         switch (activeTab) {
             case 'dashboard':
-                return <Dashboard setActiveTab={setActiveTab} />;
+                return <Dashboard setActiveTab={setActiveTab} userRole={userRole} userName={userName} />;
             case 'orders':
                 return <Orders />;
             case 'addresses':
@@ -25,7 +34,7 @@ export default function Profile() {
             case 'password':
                 return <ChangePassword />;
             default:
-                return <Dashboard setActiveTab={setActiveTab} />;
+                return <Dashboard setActiveTab={setActiveTab} userRole={userRole} userName={userName} />;
         }
     };
 
@@ -41,12 +50,10 @@ export default function Profile() {
 
             <main className="container mb-5 pb-5">
                 <div className="row g-5">
-                    {/* Barra Lateral / Navegación */}
                     <div className="col-lg-3">
                         <ProfileSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
                     </div>
                     
-                    {/* Contenido Principal */}
                     <div className="col-lg-9">
                         <div className="card shadow-sm border-0 rounded-4 h-100 bg-white">
                             <div className="card-body p-4 p-md-5">

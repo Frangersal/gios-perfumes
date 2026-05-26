@@ -48,6 +48,18 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Check if user has a specific role or any of the given roles
+     */
+    public function hasRole(string|array $roles): bool
+    {
+        if (is_string($roles)) {
+            return $this->roles->contains('name', $roles);
+        }
+        
+        return $this->roles->whereIn('name', $roles)->isNotEmpty();
+    }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'user_roles');
@@ -75,6 +87,7 @@ class User extends Authenticatable
 
     public function reviews()
     {
+        // Si no tienes este modelo aún, podrías quitarlo, pero lo dejo como estaba
         return $this->hasMany(Review::class);
     }
 }

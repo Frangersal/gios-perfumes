@@ -36,14 +36,29 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        // Verificamos credenciales SIN iniciar sesión ni regenerar tokens aún
+        if (Auth::validate($credentials)) {
+            
+            $user = Auth::getProvider()->retrieveByCredentials($credentials);
+
+            // Si el usuario es administrador, rechazarlo en el login normal simulando error de credenciales
+            if (!$user->hasRole('Cliente')) {
+                if ($request->wantsJson()) {
+                    return response()->json(['message' => 'Las credenciales proporcionadas no son correctas.'], 401);
+                }
+                throw ValidationException::withMessages([
+                    'email' => 'Las credenciales proporcionadas no son correctas.',
+                ]);
+            }
+
+            // Si pasa la validación, procedemos a loguearlo oficialmente
+            Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
 
             if ($request->wantsJson()) {
-                return response()->json(['message' => 'Login exitoso', 'user' => Auth::user()]);
+                return response()->json(['message' => 'Login exitoso', 'user' => $user]);
             }
             
-            // Intended nos regresa a la página que interrumpió el Auth (ej. iba al checkout), si no a profile.
             return redirect()->intended('/profile');
         }
 

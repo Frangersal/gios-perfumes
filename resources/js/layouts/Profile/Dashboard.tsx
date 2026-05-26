@@ -1,7 +1,13 @@
 ﻿import React from 'react';
 import axios from 'axios';
 
-export default function Dashboard({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
+interface DashboardProps {
+    setActiveTab: (tab: string) => void;
+    userRole?: string;
+    userName?: string;
+}
+
+export default function Dashboard({ setActiveTab, userRole, userName }: DashboardProps) {
     
     const handleLogout = async (e: React.MouseEvent) => {
         e.preventDefault();
@@ -18,9 +24,17 @@ export default function Dashboard({ setActiveTab }: { setActiveTab: (tab: string
 
     return (
         <div>
-            <h3 className="fw-bold mb-4">Dashboard</h3>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h3 className="fw-bold mb-0">Dashboard</h3>
+                {userRole && (
+                    <span className="badge bg-primary px-3 py-2 rounded-pill shadow-sm">
+                        Rol actual: {userRole}
+                    </span>
+                )}
+            </div>
+            
             <p className="fs-5">
-                Hola <span className="fw-bold text-dark">Usuario</span> (¿no eres tú? <a href="#" onClick={handleLogout} className="text-danger fw-semibold text-decoration-none border-bottom border-danger">Cerrar sesión</a>)
+                Hola <span className="fw-bold text-dark">{userName || 'Usuario'}</span> (¿no eres tú? <a href="#" onClick={handleLogout} className="text-danger fw-semibold text-decoration-none border-bottom border-danger">Cerrar sesión</a>)
             </p>
             <p className="text-muted mb-4">
                 Desde el panel de control de tu cuenta, puedes ver tus pedidos recientes, gestionar tus direcciones de envío y facturación, y editar tu contraseña junto con los detalles de tu cuenta.
