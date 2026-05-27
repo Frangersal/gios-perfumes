@@ -68,6 +68,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('products-note-metadata', [AdminProductController::class, 'noteMetadata'])
             ->name('products.note-metadata')
             ->middleware('can:manage-catalog');
+        Route::get('categories/{category}/details', [AdminCategoryController::class, 'details'])
+            ->name('categories.details')
+            ->middleware('can:manage-catalog');
+        Route::get('brands/{brand}/details', [AdminBrandController::class, 'details'])
+            ->name('brands.details')
+            ->middleware('can:manage-catalog');
         Route::resource('products', AdminProductController::class)->middleware('can:manage-catalog');
         Route::resource('categories', AdminCategoryController::class)->middleware('can:manage-catalog');
         Route::resource('brands', AdminBrandController::class)->middleware('can:manage-catalog');
@@ -90,6 +96,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/resources/img/products/{filename}', [AdminProductController::class, 'serveProductImage'])
     ->where('filename', '[^/]+')
     ->name('products.images.show');
+
+Route::get('/resources/img/brands/{filename}', [AdminBrandController::class, 'serveBrandLogo'])
+    ->where('filename', '[^/]+')
+    ->name('brands.logos.show');
 
 
 // Fallback para 404
