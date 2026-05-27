@@ -27,8 +27,23 @@ import Privacy from './pages/Privacy';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminProducts from './pages/AdminProducts';
+import AdminProductForm from './pages/AdminProductForm';
+import AdminProductDetails from './pages/AdminProductDetails';
 import AdminOrders from './pages/AdminOrders';
+import AdminOrderForm from './pages/AdminOrderForm';
+import AdminOrderDetails from './pages/AdminOrderDetails';
 import AdminCustomers from './pages/AdminCustomers';
+import AdminCustomerForm from './pages/AdminCustomerForm';
+import AdminCustomerDetails from './pages/AdminCustomerDetails';
+import AdminCategories from './pages/AdminCategories';
+import AdminCategoryForm from './pages/AdminCategoryForm';
+import AdminCategoryDetails from './pages/AdminCategoryDetails';
+import AdminBrands from './pages/AdminBrands';
+import AdminBrandForm from './pages/AdminBrandForm';
+import AdminBrandDetails from './pages/AdminBrandDetails';
+import AdminNotes from './pages/AdminNotes';
+import AdminNoteForm from './pages/AdminNoteForm';
+import AdminNoteDetails from './pages/AdminNoteDetails';
 
 const container = document.getElementById('root');
 if (container) {
@@ -76,10 +91,40 @@ if (container) {
         root.render(<AdminDashboard />);
     } else if (page === 'admin-products') {
         root.render(<AdminProducts />);
+    } else if (page === 'admin-product-create' || page === 'admin-product-edit') {
+        root.render(<AdminProductForm />);
+    } else if (page === 'admin-product-details') {
+        root.render(<AdminProductDetails />);
+    } else if (page === 'admin-categories') {
+        root.render(<AdminCategories />);
+    } else if (page === 'admin-category-create' || page === 'admin-category-edit') {
+        root.render(<AdminCategoryForm />);
+    } else if (page === 'admin-category-details') {
+        root.render(<AdminCategoryDetails />);
+    } else if (page === 'admin-brands') {
+        root.render(<AdminBrands />);
+    } else if (page === 'admin-brand-create' || page === 'admin-brand-edit') {
+        root.render(<AdminBrandForm />);
+    } else if (page === 'admin-brand-details') {
+        root.render(<AdminBrandDetails />);
+    } else if (page === 'admin-notes') {
+        root.render(<AdminNotes />);
+    } else if (page === 'admin-note-create' || page === 'admin-note-edit') {
+        root.render(<AdminNoteForm />);
+    } else if (page === 'admin-note-details') {
+        root.render(<AdminNoteDetails />);
     } else if (page === 'admin-orders') {
         root.render(<AdminOrders />);
+    } else if (page === 'admin-order-edit' || page === 'admin-order-create') {
+        root.render(<AdminOrderForm />);
+    } else if (page === 'admin-order-details') {
+        root.render(<AdminOrderDetails />);
     } else if (page === 'admin-customers') {
         root.render(<AdminCustomers />);
+    } else if (page === 'admin-customer-create' || page === 'admin-customer-edit') {
+        root.render(<AdminCustomerForm />);
+    } else if (page === 'admin-customer-details') {
+        root.render(<AdminCustomerDetails />);
     } else if (page === 'not-found') {
         root.render(<NotFound />);
     } else {

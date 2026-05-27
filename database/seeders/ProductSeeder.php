@@ -10,6 +10,27 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
+        $noteTypeSalidaId = DB::table('note_types')->insertGetId([
+            'name' => 'Salida',
+            'slug' => 'salida',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $noteTypeCorazonId = DB::table('note_types')->insertGetId([
+            'name' => 'Corazon',
+            'slug' => 'corazon',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $noteTypeFondoId = DB::table('note_types')->insertGetId([
+            'name' => 'Fondo',
+            'slug' => 'fondo',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         $productId = DB::table('products')->insertGetId([
             'id' => 1,
             'brand_id' => 1,
@@ -38,10 +59,55 @@ class ProductSeeder extends Seeder
             ['product_id' => $productId, 'volume' => '100ml', 'price' => 120.00, 'stock' => 20, 'min_stock' => 5, 'created_at' => now(), 'updated_at' => now()]
         ]);
 
-        DB::table('notes')->insert([
-            ['product_id' => $productId, 'type' => 'Nota Alta', 'note' => 'Absenta, Anís e Hinojo', 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'type' => 'Nota Media', 'note' => 'Lavanda', 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'type' => 'Nota de Base', 'note' => 'Almizcle, Vainilla negra', 'created_at' => now(), 'updated_at' => now()],
+        $absentaId = DB::table('notes')->insertGetId([
+            'name' => 'Absenta',
+            'slug' => 'absenta',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $anisId = DB::table('notes')->insertGetId([
+            'name' => 'Anis',
+            'slug' => 'anis',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $hinojoId = DB::table('notes')->insertGetId([
+            'name' => 'Hinojo',
+            'slug' => 'hinojo',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $lavandaId = DB::table('notes')->insertGetId([
+            'name' => 'Lavanda',
+            'slug' => 'lavanda',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $almizcleId = DB::table('notes')->insertGetId([
+            'name' => 'Almizcle',
+            'slug' => 'almizcle',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $vainillaNegraId = DB::table('notes')->insertGetId([
+            'name' => 'Vainilla negra',
+            'slug' => 'vainilla-negra',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('product_notes')->insert([
+            ['product_id' => $productId, 'note_id' => $absentaId, 'note_type_id' => $noteTypeSalidaId, 'position' => 1, 'intensity' => 8, 'created_at' => now(), 'updated_at' => now()],
+            ['product_id' => $productId, 'note_id' => $anisId, 'note_type_id' => $noteTypeSalidaId, 'position' => 2, 'intensity' => 7, 'created_at' => now(), 'updated_at' => now()],
+            ['product_id' => $productId, 'note_id' => $hinojoId, 'note_type_id' => $noteTypeSalidaId, 'position' => 3, 'intensity' => 6, 'created_at' => now(), 'updated_at' => now()],
+            ['product_id' => $productId, 'note_id' => $lavandaId, 'note_type_id' => $noteTypeCorazonId, 'position' => 1, 'intensity' => 7, 'created_at' => now(), 'updated_at' => now()],
+            ['product_id' => $productId, 'note_id' => $almizcleId, 'note_type_id' => $noteTypeFondoId, 'position' => 1, 'intensity' => 9, 'created_at' => now(), 'updated_at' => now()],
+            ['product_id' => $productId, 'note_id' => $vainillaNegraId, 'note_type_id' => $noteTypeFondoId, 'position' => 2, 'intensity' => 8, 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         DB::table('product_tags')->insert([

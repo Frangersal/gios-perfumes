@@ -2,80 +2,73 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AdminLayout from '../layouts/AdminLayout';
 
-type Customer = {
+type Category = {
     id: number;
     name: string;
-    email: string;
-    phone?: string | null;
-    orders_count?: number;
-    addresses_count?: number;
-    total_spent?: number | string | null;
-    created_at?: string;
+    description?: string | null;
+    image?: string | null;
+    parent_id?: number | null;
+    parent?: { id: number; name: string } | null;
+    products_count?: number;
 };
 
-export default function AdminCustomers() {
+export default function AdminCategories() {
     const baseUrl = document.getElementById('root')?.getAttribute('data-base-url') || '';
-    const [customers, setCustomers] = useState<Customer[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
+    const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
     const [deleting, setDeleting] = useState(false);
 
     useEffect(() => {
-        const loadCustomers = async () => {
+        const loadCategories = async () => {
             try {
-                const res = await axios.get(`${baseUrl}/admin/customers`, {
+                const res = await axios.get(`${baseUrl}/admin/categories`, {
                     headers: { Accept: 'application/json' }
                 });
-                setCustomers(res.data || []);
+                setCategories(res.data || []);
             } catch (error) {
-                console.error('Error cargando clientes', error);
+                console.error('Error cargando categorías', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        loadCustomers();
+        loadCategories();
     }, [baseUrl]);
 
-    const openDeleteModal = (customer: Customer) => {
-        setCustomerToDelete(customer);
+    const openDeleteModal = (category: Category) => {
+        setCategoryToDelete(category);
         setShowDeleteModal(true);
     };
 
     const closeDeleteModal = () => {
         if (deleting) return;
         setShowDeleteModal(false);
-        setCustomerToDelete(null);
+        setCategoryToDelete(null);
     };
 
     const forceCloseDeleteModal = () => {
         setShowDeleteModal(false);
-        setCustomerToDelete(null);
+        setCategoryToDelete(null);
     };
 
     const confirmDelete = async () => {
-        if (!customerToDelete?.id) return;
+        if (!categoryToDelete?.id) return;
 
         setDeleting(true);
         try {
-            await axios.delete(`${baseUrl}/admin/customers/${customerToDelete.id}`, {
+            await axios.delete(`${baseUrl}/admin/categories/${categoryToDelete.id}`, {
                 headers: { Accept: 'application/json' }
             });
-            setCustomers(customers.filter((item) => item.id !== customerToDelete.id));
+            setCategories(categories.filter((item) => item.id !== categoryToDelete.id));
             forceCloseDeleteModal();
         } catch (error: any) {
-            console.error('Error eliminando cliente', error);
-            alert(error?.response?.data?.message || 'No se pudo eliminar el cliente.');
+            console.error('Error eliminando categoría', error);
+            alert(error?.response?.data?.message || 'No se pudo eliminar la categoría.');
         } finally {
             setDeleting(false);
         }
-    };
-
-    const formatMoney = (value?: number | string | null) => {
-        const parsed = typeof value === 'number' ? value : parseFloat(String(value || 0));
-        if (Number.isNaN(parsed)) return '$0.00';
-        return `$${parsed.toFixed(2)}`;
     };
 
     return (
@@ -85,51 +78,45 @@ export default function AdminCustomers() {
                     <li className="breadcrumb-item">
                         <a href={`${baseUrl}/admin/dashboard`} className="text-decoration-none text-muted">Dashboard</a>
                     </li>
-                    <li className="breadcrumb-item active fw-semibold" aria-current="page">Clientes</li>
+                    <li className="breadcrumb-item active fw-semibold" aria-current="page">Categorías</li>
                 </ol>
             </nav>
 
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="fw-bold mb-0">Directorio de Clientes</h2>
-                <a href={`${baseUrl}/admin/customers/create`} className="btn btn-dark">Nuevo Cliente</a>
+                <h2 className="fw-bold mb-0">Gestión de Categorías</h2>
+                <a href={`${baseUrl}/admin/categories/create`} className="btn btn-dark">Nueva Categoría</a>
             </div>
 
             <div className="card border-0 shadow-sm">
                 <div className="card-body p-0">
                     {loading ? (
-                        <div className="p-4 text-center text-muted">Cargando clientes...</div>
-                    ) : customers.length === 0 ? (
-                        <div className="p-4 text-center text-muted">No hay clientes registrados.</div>
+                        <div className="p-4 text-center text-muted">Cargando categorías...</div>
+                    ) : categories.length === 0 ? (
+                        <div className="p-4 text-center text-muted">No hay categorías registradas.</div>
                     ) : (
                         <div className="table-responsive">
                             <table className="table table-hover align-middle mb-0">
                                 <thead className="table-light">
                                     <tr>
-                                        <th className="ps-4">Cliente</th>
-                                        <th>Email</th>
-                                        <th>Teléfono</th>
-                                        <th>Pedidos</th>
-                                        <th>Total Gastado</th>
-                                        <th>Registro</th>
+                                        <th className="ps-4">Categoría</th>
+                                        <th>Padre</th>
+                                        <th>Productos</th>
                                         <th className="pe-4 text-end">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {customers.map((customer) => (
-                                        <tr key={customer.id}>
+                                    {categories.map((category) => (
+                                        <tr key={category.id}>
                                             <td className="ps-4">
-                                                <strong>{customer.name}</strong>
-                                                <small className="text-muted d-block">ID: {customer.id}</small>
+                                                <strong>{category.name}</strong>
+                                                <small className="text-muted d-block">ID: {category.id}</small>
                                             </td>
-                                            <td>{customer.email}</td>
-                                            <td>{customer.phone || '-'}</td>
-                                            <td>{customer.orders_count ?? 0}</td>
-                                            <td>{formatMoney(customer.total_spent)}</td>
-                                            <td>{customer.created_at ? new Date(customer.created_at).toLocaleDateString() : '-'}</td>
+                                            <td>{category.parent?.name || '-'}</td>
+                                            <td>{category.products_count ?? 0}</td>
                                             <td className="pe-4 text-end">
-                                                <a href={`${baseUrl}/admin/customers/${customer.id}/details`} className="btn btn-sm btn-outline-dark me-2">Ver detalle</a>
-                                                <a href={`${baseUrl}/admin/customers/${customer.id}/edit`} className="btn btn-sm btn-outline-secondary me-2">Editar</a>
-                                                <button onClick={() => openDeleteModal(customer)} className="btn btn-sm btn-outline-danger">Eliminar</button>
+                                                <a href={`${baseUrl}/admin/categories/${category.id}/details`} className="btn btn-sm btn-outline-dark me-2">Ver detalle</a>
+                                                <a href={`${baseUrl}/admin/categories/${category.id}/edit`} className="btn btn-sm btn-outline-secondary me-2">Editar</a>
+                                                <button onClick={() => openDeleteModal(category)} className="btn btn-sm btn-outline-danger">Eliminar</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -146,7 +133,7 @@ export default function AdminCustomers() {
                         <div className="modal-dialog modal-dialog-centered" role="document">
                             <div className="modal-content border-0 shadow">
                                 <div className="modal-header bg-danger text-white">
-                                    <h5 className="modal-title fw-bold">Eliminar cliente permanentemente</h5>
+                                    <h5 className="modal-title fw-bold">Eliminar categoría permanentemente</h5>
                                     <button
                                         type="button"
                                         className="btn-close btn-close-white"
@@ -159,11 +146,15 @@ export default function AdminCustomers() {
                                     <div className="alert alert-warning d-flex align-items-start mb-3" role="alert">
                                         <span className="me-2 fw-bold">!</span>
                                         <div>
-                                            Esta accion es irreversible y eliminara el cliente de forma permanente.
+                                            Esta accion es irreversible y eliminara la categoría de forma permanente.
                                         </div>
                                     </div>
+
+                                    <p className="mb-2">
+                                        Vas a eliminar: <strong>{categoryToDelete?.name || 'Categoría sin nombre'}</strong>
+                                    </p>
                                     <p className="mb-0 text-muted small">
-                                        Si tiene pedidos asociados, la eliminación será bloqueada por seguridad.
+                                        Si la categoría tiene productos asociados, la eliminación será bloqueada por seguridad.
                                     </p>
                                 </div>
                                 <div className="modal-footer">

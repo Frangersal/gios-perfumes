@@ -8,17 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create('note_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->unique();
-            $table->string('slug', 120)->unique();
-            $table->string('image', 255)->nullable();
+            $table->string('name', 50)->unique();
+            $table->string('slug', 60)->unique();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('notes');
+        Schema::dropIfExists('note_types');
     }
 };
