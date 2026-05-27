@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
+use App\Http\Controllers\Admin\NoteController as AdminNoteController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
 // --- FRONTEND ---
@@ -74,9 +75,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('brands/{brand}/details', [AdminBrandController::class, 'details'])
             ->name('brands.details')
             ->middleware('can:manage-catalog');
+        Route::get('notes/{note}/details', [AdminNoteController::class, 'details'])
+            ->name('notes.details')
+            ->middleware('can:manage-catalog');
         Route::resource('products', AdminProductController::class)->middleware('can:manage-catalog');
         Route::resource('categories', AdminCategoryController::class)->middleware('can:manage-catalog');
         Route::resource('brands', AdminBrandController::class)->middleware('can:manage-catalog');
+        Route::resource('notes', AdminNoteController::class)->middleware('can:manage-catalog');
         
         // Rutas de Pedidos
         Route::resource('orders', AdminOrderController::class)->middleware('can:manage-orders');
@@ -100,6 +105,10 @@ Route::get('/resources/img/products/{filename}', [AdminProductController::class,
 Route::get('/resources/img/brands/{filename}', [AdminBrandController::class, 'serveBrandLogo'])
     ->where('filename', '[^/]+')
     ->name('brands.logos.show');
+
+Route::get('/resources/img/notes/{filename}', [AdminNoteController::class, 'serveNoteImage'])
+    ->where('filename', '[^/]+')
+    ->name('notes.images.show');
 
 
 // Fallback para 404

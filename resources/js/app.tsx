@@ -37,6 +37,9 @@ import AdminCategoryDetails from './pages/AdminCategoryDetails';
 import AdminBrands from './pages/AdminBrands';
 import AdminBrandForm from './pages/AdminBrandForm';
 import AdminBrandDetails from './pages/AdminBrandDetails';
+import AdminNotes from './pages/AdminNotes';
+import AdminNoteForm from './pages/AdminNoteForm';
+import AdminNoteDetails from './pages/AdminNoteDetails';
 
 const container = document.getElementById('root');
 if (container) {
@@ -100,6 +103,12 @@ if (container) {
         root.render(<AdminBrandForm />);
     } else if (page === 'admin-brand-details') {
         root.render(<AdminBrandDetails />);
+    } else if (page === 'admin-notes') {
+        root.render(<AdminNotes />);
+    } else if (page === 'admin-note-create' || page === 'admin-note-edit') {
+        root.render(<AdminNoteForm />);
+    } else if (page === 'admin-note-details') {
+        root.render(<AdminNoteDetails />);
     } else if (page === 'admin-orders') {
         root.render(<AdminOrders />);
     } else if (page === 'admin-customers') {
