@@ -78,6 +78,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('notes/{note}/details', [AdminNoteController::class, 'details'])
             ->name('notes.details')
             ->middleware('can:manage-catalog');
+        Route::get('orders/{order}/details', [AdminOrderController::class, 'details'])
+            ->name('orders.details')
+            ->middleware('can:manage-orders');
         Route::resource('products', AdminProductController::class)->middleware('can:manage-catalog');
         Route::resource('categories', AdminCategoryController::class)->middleware('can:manage-catalog');
         Route::resource('brands', AdminBrandController::class)->middleware('can:manage-catalog');
