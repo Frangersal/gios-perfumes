@@ -33,6 +33,8 @@ import AdminOrders from './pages/AdminOrders';
 import AdminOrderForm from './pages/AdminOrderForm';
 import AdminOrderDetails from './pages/AdminOrderDetails';
 import AdminCustomers from './pages/AdminCustomers';
+import AdminCustomerForm from './pages/AdminCustomerForm';
+import AdminCustomerDetails from './pages/AdminCustomerDetails';
 import AdminCategories from './pages/AdminCategories';
 import AdminCategoryForm from './pages/AdminCategoryForm';
 import AdminCategoryDetails from './pages/AdminCategoryDetails';
@@ -119,6 +121,10 @@ if (container) {
         root.render(<AdminOrderDetails />);
     } else if (page === 'admin-customers') {
         root.render(<AdminCustomers />);
+    } else if (page === 'admin-customer-create' || page === 'admin-customer-edit') {
+        root.render(<AdminCustomerForm />);
+    } else if (page === 'admin-customer-details') {
+        root.render(<AdminCustomerDetails />);
     } else if (page === 'not-found') {
         root.render(<NotFound />);
     } else {
