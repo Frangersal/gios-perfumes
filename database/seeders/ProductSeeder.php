@@ -62,6 +62,7 @@ class ProductSeeder extends Seeder
 
         $products = [
             [
+                'id' => 1001,
                 'name' => '212 VIP Black',
                 'brand_name' => 'Carolina Herrera',
                 'category_id' => 5,
@@ -77,6 +78,7 @@ class ProductSeeder extends Seeder
                 'discount_percentage' => 10,
             ],
             [
+                'id' => 1002,
                 'name' => 'Sauvage Elixir',
                 'brand_name' => 'Dior',
                 'category_id' => 1,
@@ -92,6 +94,7 @@ class ProductSeeder extends Seeder
                 'discount_percentage' => null,
             ],
             [
+                'id' => 1003,
                 'name' => 'Coco Mademoiselle',
                 'brand_name' => 'Chanel',
                 'category_id' => 2,
@@ -107,6 +110,7 @@ class ProductSeeder extends Seeder
                 'discount_percentage' => 6,
             ],
             [
+                'id' => 1004,
                 'name' => 'Eros Flame',
                 'brand_name' => 'Versace',
                 'category_id' => 1,
@@ -122,6 +126,7 @@ class ProductSeeder extends Seeder
                 'discount_percentage' => null,
             ],
             [
+                'id' => 1005,
                 'name' => '1 Million Lucky',
                 'brand_name' => 'Paco Rabanne',
                 'category_id' => 1,
@@ -137,6 +142,7 @@ class ProductSeeder extends Seeder
                 'discount_percentage' => 16,
             ],
             [
+                'id' => 1006,
                 'name' => 'Khamrah',
                 'brand_name' => 'Lattafa',
                 'category_id' => 4,
@@ -152,6 +158,7 @@ class ProductSeeder extends Seeder
                 'discount_percentage' => null,
             ],
             [
+                'id' => 1007,
                 'name' => 'Libre Intense',
                 'brand_name' => 'Yves Saint Laurent',
                 'category_id' => 2,
@@ -167,6 +174,7 @@ class ProductSeeder extends Seeder
                 'discount_percentage' => 10,
             ],
             [
+                'id' => 1008,
                 'name' => 'Le Beau Le Parfum',
                 'brand_name' => 'Jean Paul Gaultier',
                 'category_id' => 1,
@@ -182,6 +190,7 @@ class ProductSeeder extends Seeder
                 'discount_percentage' => null,
             ],
             [
+                'id' => 1009,
                 'name' => 'Acqua di Gio Profondo',
                 'brand_name' => 'Giorgio Armani',
                 'category_id' => 1,
@@ -197,6 +206,7 @@ class ProductSeeder extends Seeder
                 'discount_percentage' => 10,
             ],
             [
+                'id' => 1010,
                 'name' => 'Porto Neroli',
                 'brand_name' => 'Maison Alhambra',
                 'category_id' => 3,
@@ -220,32 +230,45 @@ class ProductSeeder extends Seeder
                 continue;
             }
 
-            DB::table('products')->updateOrInsert(
-                ['sku' => $product['sku']],
-                [
-                    'brand_id' => $brandId,
-                    'category_id' => $product['category_id'],
-                    'name' => $product['name'],
-                    'slug' => Str::slug($product['name'] . ' ' . $product['brand_name']),
-                    'description' => 'Fragancia de prueba para catalogo: ' . $product['name'] . '.',
-                    'price' => $product['price'],
-                    'discount_price' => $product['discount_price'],
-                    'cost' => $product['cost'],
-                    'gender' => $product['gender'],
-                    'olfactory_family' => $product['olfactory_family'],
-                    'concentration' => $product['concentration'],
-                    'year' => $product['year'],
-                    'country_of_origin' => $product['country_of_origin'],
-                    'status' => 'publicado',
-                    'discount_percentage' => $product['discount_percentage'],
-                    'video_url' => 'https://www.youtube.com/watch?v=demo',
-                    'meta_title' => $product['name'] . ' | Gio\'s Perfumes',
-                    'meta_description' => 'Compra ' . $product['name'] . ' en Gio\'s Perfumes.',
-                    'meta_keywords' => implode(', ', [$product['name'], $product['brand_name'], $product['gender'], 'perfume']),
-                    'created_at' => $now,
+            $payload = [
+                'brand_id' => $brandId,
+                'category_id' => $product['category_id'],
+                'name' => $product['name'],
+                'slug' => Str::slug($product['name'] . ' ' . $product['brand_name']),
+                'description' => 'Fragancia de prueba para catalogo: ' . $product['name'] . '.',
+                'price' => $product['price'],
+                'discount_price' => $product['discount_price'],
+                'cost' => $product['cost'],
+                'sku' => $product['sku'],
+                'gender' => $product['gender'],
+                'olfactory_family' => $product['olfactory_family'],
+                'concentration' => $product['concentration'],
+                'year' => $product['year'],
+                'country_of_origin' => $product['country_of_origin'],
+                'status' => 'publicado',
+                'discount_percentage' => $product['discount_percentage'],
+                'video_url' => 'https://www.youtube.com/watch?v=demo',
+                'meta_title' => $product['name'] . ' | Gio\'s Perfumes',
+                'meta_description' => 'Compra ' . $product['name'] . ' en Gio\'s Perfumes.',
+                'meta_keywords' => implode(', ', [$product['name'], $product['brand_name'], $product['gender'], 'perfume']),
+            ];
+
+            $existingId = DB::table('products')->where('sku', $product['sku'])->value('id');
+
+            if ($existingId) {
+                DB::table('products')->where('id', $existingId)->update([
+                    ...$payload,
                     'updated_at' => $now,
-                ]
-            );
+                ]);
+                continue;
+            }
+
+            DB::table('products')->insert([
+                'id' => $product['id'],
+                ...$payload,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
         }
 
         $productIds = DB::table('products')
