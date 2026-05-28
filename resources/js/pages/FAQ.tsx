@@ -1,11 +1,13 @@
 import React from 'react';
 import Navbar from '../layouts/Navbar';
+import SearchBar from '../layouts/SearchBar';
 import Footer from '../layouts/Footer';
 
 export default function FAQ() {
     return (
         <div className="d-flex flex-column min-vh-100 bg-white">
             <Navbar />
+            <SearchBar />
             
             <main className="container my-5 pb-5" style={{ maxWidth: '800px' }}>
                 <h1 className="fw-bold text-center mb-3">Preguntas Frecuentes</h1>

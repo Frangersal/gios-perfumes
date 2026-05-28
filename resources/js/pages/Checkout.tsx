@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from '../layouts/Navbar';
+import SearchBar from '../layouts/SearchBar';
 import Footer from '../layouts/Footer';
 import CheckoutForm from '../layouts/Checkout/CheckoutForm';
 import CheckoutSummary from '../layouts/Checkout/CheckoutSummary';
@@ -8,6 +9,7 @@ export default function Checkout() {
     return (
         <div className="d-flex flex-column min-vh-100">
             <Navbar />
+            <SearchBar />
             
             <main className="container mt-5 mb-5">
                 <div className="row justify-content-center">

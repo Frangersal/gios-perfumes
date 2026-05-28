@@ -27,7 +27,7 @@ export default function BrandCarousel() {
 
     return (
         <section className="my-5 overflow-hidden">
-            <h3 className="text-center mb-4 text-uppercase fw-bold">Marcas</h3>
+            <h3 className="text-center mb-4 text-uppercase">Marcas</h3>
 
             <div className="brand-carousel-container">
                 <div className="brand-carousel-track py-3">

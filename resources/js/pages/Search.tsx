@@ -1,11 +1,13 @@
 import React from 'react';
 import Navbar from '../layouts/Navbar';
+import SearchBar from '../layouts/SearchBar';
 import Footer from '../layouts/Footer';
 
 export default function Search() {
     return (
         <div className="d-flex flex-column min-vh-100 bg-light">
             <Navbar />
+            <SearchBar />
             
             <main className="container my-5 pb-5">
                 <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">

@@ -17,7 +17,7 @@ export default function Card({
     name = 'Perfume Especial',
     rating = 4.5,
     currentPrice = '$2,450.00',
-    oldPrice = '$2,890.00',
+    oldPrice,
     image = defaultImage,
     wishlistActive = false,
 }: CardProps) {
@@ -54,7 +54,7 @@ export default function Card({
                 <h5 className="card-title fw-bold mb-0">{name}</h5>
 
                 <div className="d-flex flex-column align-items-start gap-1">
-                    <span className="text-muted text-decoration-line-through small">{oldPrice}</span>
+                    {oldPrice && <span className="text-muted text-decoration-line-through small">{oldPrice}</span>}
                     <span className="text-dark fw-bold fs-6">{currentPrice}</span>
                 </div>
 
