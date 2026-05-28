@@ -25,12 +25,14 @@ class ProductImageSeeder extends Seeder
             'MA-PN' => 'porto-neroli.png',
         ];
 
+        $reusableImages = array_values(array_unique(array_values($imageMapBySku)));
+
         $products = DB::table('products')
-            ->whereIn('sku', array_keys($imageMapBySku))
+            ->orderBy('id')
             ->get(['id', 'sku']);
 
-        foreach ($products as $product) {
-            $filename = $imageMapBySku[$product->sku] ?? null;
+        foreach ($products as $index => $product) {
+            $filename = $imageMapBySku[$product->sku] ?? ($reusableImages[$index % count($reusableImages)] ?? null);
 
             if (!$filename) {
                 continue;

@@ -36,24 +36,126 @@ export default function CategorySidebar() {
             </div>
 
             <div className="mb-4">
-                <h6 className="fw-bold">Familia Olfativa</h6>
+                <h6 className="fw-bold">Género</h6>
                 <ul className="list-unstyled">
                     <li>
                         <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="olfAmaderada" />
-                            <label className="form-check-label" htmlFor="olfAmaderada">Amaderada</label>
+                            <input className="form-check-input" type="checkbox" value="" id="genderHombre" />
+                            <label className="form-check-label" htmlFor="genderHombre">Hombre</label>
                         </div>
                     </li>
                     <li>
                         <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="olfCitrica" />
-                            <label className="form-check-label" htmlFor="olfCitrica">Cítrica</label>
+                            <input className="form-check-input" type="checkbox" value="" id="genderMujer" />
+                            <label className="form-check-label" htmlFor="genderMujer">Mujer</label>
                         </div>
                     </li>
                     <li>
                         <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="olfAromatica" />
-                            <label className="form-check-label" htmlFor="olfAromatica">Aromática</label>
+                            <input className="form-check-input" type="checkbox" value="" id="genderArabe" />
+                            <label className="form-check-label" htmlFor="genderArabe">Árabe</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="genderUnisex" />
+                            <label className="form-check-label" htmlFor="genderUnisex">Unisex</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div className="mb-4">
+                <h6 className="fw-bold">País</h6>
+                <ul className="list-unstyled">
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="countryFrancia" />
+                            <label className="form-check-label" htmlFor="countryFrancia">Francia</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="countryItalia" />
+                            <label className="form-check-label" htmlFor="countryItalia">Italia</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="countryEspana" />
+                            <label className="form-check-label" htmlFor="countryEspana">España</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="countryEau" />
+                            <label className="form-check-label" htmlFor="countryEau">Emiratos Árabes Unidos</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="countryUsa" />
+                            <label className="form-check-label" htmlFor="countryUsa">Estados Unidos</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div className="mb-4">
+                <h6 className="fw-bold">Notas de olor</h6>
+                <ul className="list-unstyled">
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="noteVainilla" />
+                            <label className="form-check-label" htmlFor="noteVainilla">Vainilla</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="noteOud" />
+                            <label className="form-check-label" htmlFor="noteOud">Oud</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="noteRosa" />
+                            <label className="form-check-label" htmlFor="noteRosa">Rosa</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="noteBergamota" />
+                            <label className="form-check-label" htmlFor="noteBergamota">Bergamota</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div className="mb-4">
+                <h6 className="fw-bold">Tags</h6>
+                <ul className="list-unstyled">
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="tagLargaDuracion" />
+                            <label className="form-check-label" htmlFor="tagLargaDuracion">Larga duración</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="tagProyeccionAlta" />
+                            <label className="form-check-label" htmlFor="tagProyeccionAlta">Proyección alta</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="tagNovedad" />
+                            <label className="form-check-label" htmlFor="tagNovedad">Novedad</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="tagOferta" />
+                            <label className="form-check-label" htmlFor="tagOferta">Oferta</label>
                         </div>
                     </li>
                 </ul>

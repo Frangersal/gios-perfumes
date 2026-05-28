@@ -223,6 +223,56 @@ class ProductSeeder extends Seeder
             ],
         ];
 
+        $namePrefixes = ['Noir', 'Amber', 'Velvet', 'Royal', 'Urban', 'Mystic', 'Oud', 'Silver', 'Golden', 'Night'];
+        $nameCore = ['Essence', 'Elixir', 'Rush', 'Aura', 'Bloom', 'Code', 'Spirit', 'Flame', 'Touch', 'Pulse'];
+        $nameSuffixes = ['Intense', 'Absolu', 'Signature', 'Edition', 'Reserve', 'Prime', 'Classic', 'Nuit'];
+        $genders = ['Hombre', 'Mujer', 'Unisex', 'Arabe'];
+        $families = ['Amaderada', 'Ambar Especiada', 'Citrica', 'Floral', 'Aromatica', 'Oriental'];
+        $concentrations = ['Eau de Toilette', 'Eau de Parfum', 'Parfum', 'Extrait de Parfum'];
+
+        $availableCategoryIds = DB::table('categories')->pluck('id')->values()->all();
+        $availableBrands = DB::table('brands')->select(['name', 'country_of_origin'])->get()->keyBy('name');
+
+        $extraProducts = [];
+        for ($i = 1; $i <= 24; $i++) {
+            if ($availableBrands->isEmpty() || empty($availableCategoryIds)) {
+                break;
+            }
+
+            $brandName = $availableBrands->keys()->random();
+            $brandData = $availableBrands->get($brandName);
+            $price = random_int(58, 220);
+            $hasDiscount = random_int(0, 100) <= 55;
+            $discountPercentage = $hasDiscount ? random_int(5, 25) : null;
+            $discountPrice = $hasDiscount ? round($price * (1 - ($discountPercentage / 100)), 2) : null;
+
+            $generatedName = sprintf(
+                '%s %s %s %02d',
+                $namePrefixes[array_rand($namePrefixes)],
+                $nameCore[array_rand($nameCore)],
+                $nameSuffixes[array_rand($nameSuffixes)],
+                $i
+            );
+
+            $extraProducts[] = [
+                'name' => $generatedName,
+                'brand_name' => $brandName,
+                'category_id' => $availableCategoryIds[array_rand($availableCategoryIds)],
+                'price' => $price,
+                'discount_price' => $discountPrice,
+                'cost' => round($price * random_int(50, 75) / 100, 2),
+                'sku' => sprintf('AUTO-RND-%03d', $i),
+                'gender' => $genders[array_rand($genders)],
+                'olfactory_family' => $families[array_rand($families)],
+                'concentration' => $concentrations[array_rand($concentrations)],
+                'year' => random_int(2008, 2026),
+                'country_of_origin' => $brandData->country_of_origin ?? 'Francia',
+                'discount_percentage' => $discountPercentage,
+            ];
+        }
+
+        $products = array_merge($products, $extraProducts);
+
         foreach ($products as $product) {
             $brandId = $brandIds[$product['brand_name']] ?? null;
 
@@ -234,7 +284,7 @@ class ProductSeeder extends Seeder
                 'brand_id' => $brandId,
                 'category_id' => $product['category_id'],
                 'name' => $product['name'],
-                'slug' => Str::slug($product['name'] . ' ' . $product['brand_name']),
+                'slug' => Str::slug($product['name'] . ' ' . $product['brand_name'] . ' ' . $product['sku']),
                 'description' => 'Fragancia de prueba para catalogo: ' . $product['name'] . '.',
                 'price' => $product['price'],
                 'discount_price' => $product['discount_price'],
@@ -263,12 +313,17 @@ class ProductSeeder extends Seeder
                 continue;
             }
 
-            DB::table('products')->insert([
-                'id' => $product['id'],
+            $insertPayload = [
                 ...$payload,
                 'created_at' => $now,
                 'updated_at' => $now,
-            ]);
+            ];
+
+            if (isset($product['id'])) {
+                $insertPayload['id'] = $product['id'];
+            }
+
+            DB::table('products')->insert($insertPayload);
         }
 
         $productIds = DB::table('products')
@@ -307,41 +362,46 @@ class ProductSeeder extends Seeder
             ];
         }
 
-        DB::table('product_variants')->insert($variants);
+        if (!empty($variants)) {
+            DB::table('product_variants')->insert($variants);
+        }
 
+        $tagIds = DB::table('tags')->pluck('id')->values()->all();
         $tagAssignments = [];
-        foreach ($products as $index => $product) {
+        foreach ($products as $product) {
             $productId = $productIds[$product['sku']] ?? null;
 
             if (!$productId) {
                 continue;
             }
 
-            $tagAssignments[] = [
-                'product_id' => $productId,
-                'tag_id' => $index < 5 ? 1 : 2,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ];
+            if (empty($tagIds)) {
+                continue;
+            }
+
+            $maxTags = min(3, count($tagIds));
+            $tagsForProduct = collect($tagIds)
+                ->shuffle()
+                ->take(random_int(1, $maxTags))
+                ->values()
+                ->all();
+
+            foreach ($tagsForProduct as $tagId) {
+                $tagAssignments[] = [
+                    'product_id' => $productId,
+                    'tag_id' => $tagId,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
         }
 
-        DB::table('product_tags')->insert($tagAssignments);
+        if (!empty($tagAssignments)) {
+            DB::table('product_tags')->insert($tagAssignments);
+        }
 
         $noteTypeIds = DB::table('note_types')->pluck('id', 'slug');
         $noteIds = DB::table('notes')->pluck('id', 'slug');
-
-        $noteProfiles = [
-            ['salida' => ['bergamota'], 'corazon' => ['lavanda'], 'fondo' => ['vainilla-negra']],
-            ['salida' => ['pimienta-negra'], 'corazon' => ['ambroxan'], 'fondo' => ['vetiver']],
-            ['salida' => ['bergamota'], 'corazon' => ['jazmin'], 'fondo' => ['almizcle']],
-            ['salida' => ['limon'], 'corazon' => ['rosa'], 'fondo' => ['ambar']],
-            ['salida' => ['bergamota'], 'corazon' => ['haba-tonka'], 'fondo' => ['vetiver']],
-            ['salida' => ['canela'], 'corazon' => ['oud'], 'fondo' => ['ambar']],
-            ['salida' => ['pera'], 'corazon' => ['jazmin'], 'fondo' => ['vainilla-negra']],
-            ['salida' => ['bergamota'], 'corazon' => ['coco'], 'fondo' => ['haba-tonka']],
-            ['salida' => ['bergamota'], 'corazon' => ['incienso'], 'fondo' => ['almizcle']],
-            ['salida' => ['limon'], 'corazon' => ['jazmin'], 'fondo' => ['ambar']],
-        ];
 
         $extraNotes = [
             ['name' => 'Canela', 'slug' => 'canela'],
@@ -360,9 +420,10 @@ class ProductSeeder extends Seeder
         }
 
         $noteIds = DB::table('notes')->pluck('id', 'slug');
+        $noteSlugs = $noteIds->keys()->values()->all();
 
         $productNotes = [];
-        foreach ($products as $index => $product) {
+        foreach ($products as $product) {
             $productId = $productIds[$product['sku']] ?? null;
 
             if (!$productId) {
@@ -370,13 +431,19 @@ class ProductSeeder extends Seeder
             }
 
             foreach (['salida', 'corazon', 'fondo'] as $typeSlug) {
-                foreach ($noteProfiles[$index][$typeSlug] as $position => $noteSlug) {
+                $notesPerType = collect($noteSlugs)
+                    ->shuffle()
+                    ->take(random_int(1, 2))
+                    ->values()
+                    ->all();
+
+                foreach ($notesPerType as $position => $noteSlug) {
                     $productNotes[] = [
                         'product_id' => $productId,
                         'note_id' => $noteIds[$noteSlug],
                         'note_type_id' => $noteTypeIds[$typeSlug],
                         'position' => $position + 1,
-                        'intensity' => 6 + $position,
+                        'intensity' => random_int(5, 9),
                         'created_at' => $now,
                         'updated_at' => $now,
                     ];
@@ -384,6 +451,8 @@ class ProductSeeder extends Seeder
             }
         }
 
-        DB::table('product_notes')->insert($productNotes);
+        if (!empty($productNotes)) {
+            DB::table('product_notes')->insert($productNotes);
+        }
     }
 }

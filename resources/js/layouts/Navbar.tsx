@@ -40,6 +40,9 @@ export default function Navbar() {
                         <a className="btn btn-outline-light" href={`${baseUrl}/login`}>
                             Usuario
                         </a>
+                        <a className="btn btn-outline-light" href={`${baseUrl}/wishlist`}>
+                            Wishlist
+                        </a>
                         <a className="btn btn-light" href={`${baseUrl}/cart`}>
                             Carrito
                         </a>
