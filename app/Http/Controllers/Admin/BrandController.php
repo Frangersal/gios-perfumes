@@ -47,8 +47,8 @@ class BrandController extends Controller
             'country_of_origin' => $validated['country_of_origin'] ?? null,
             'logo' => null,
         ]);
+        $brand->id ??= Brand::generateCreationBasedId();
 
-        $brand->id = $this->generateCreationBasedBrandId();
         try {
             $brand->logo = $this->resolveLogoPath(
                 $request,
@@ -188,16 +188,6 @@ class BrandController extends Controller
         if (!$converted) {
             throw new \RuntimeException('No se pudo convertir el logotipo a formato WebP.');
         }
-    }
-
-    private function generateCreationBasedBrandId(): int
-    {
-        // 15 digitos: yyMMddHHmmss (12) + 3 aleatorios.
-        do {
-            $candidate = (int) (now()->format('ymdHis') . str_pad((string) random_int(0, 999), 3, '0', STR_PAD_LEFT));
-        } while (Brand::whereKey($candidate)->exists());
-
-        return $candidate;
     }
 
     public function serveBrandLogo(string $filename)

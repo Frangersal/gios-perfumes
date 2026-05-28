@@ -10,108 +10,357 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $noteTypeSalidaId = DB::table('note_types')->insertGetId([
-            'name' => 'Salida',
-            'slug' => 'salida',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $now = now();
 
-        $noteTypeCorazonId = DB::table('note_types')->insertGetId([
-            'name' => 'Corazon',
-            'slug' => 'corazon',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $noteTypes = [
+            ['name' => 'Salida', 'slug' => 'salida'],
+            ['name' => 'Corazon', 'slug' => 'corazon'],
+            ['name' => 'Fondo', 'slug' => 'fondo'],
+        ];
 
-        $noteTypeFondoId = DB::table('note_types')->insertGetId([
-            'name' => 'Fondo',
-            'slug' => 'fondo',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        foreach ($noteTypes as $noteType) {
+            DB::table('note_types')->updateOrInsert(
+                ['slug' => $noteType['slug']],
+                [
+                    'name' => $noteType['name'],
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]
+            );
+        }
 
-        $productId = DB::table('products')->insertGetId([
-            'id' => 1,
-            'brand_id' => 1,
-            'category_id' => 5, // Amaderados
-            'name' => '212 VIP Black',
-            'slug' => Str::slug('212 VIP Black'),
-            'description' => 'Un perfume explosivo de Carolina Herrera.',
-            'price' => 120.00,
-            'sku' => 'CH-212VB',
-            'gender' => 'Hombre',
-            'olfactory_family' => 'Fougère Amaderada',
-            'concentration' => 'Eau de Parfum',
-            'year' => 2017,
-            'country_of_origin' => 'España',
-            'status' => 'publicado',
-            'video_url' => 'https://youtube.com/watch?v=demo',
-            'meta_title' => '212 VIP Black Carolina Herrera | Gio\'s Perfumes',
-            'meta_description' => 'Compra el perfume 212 VIP Black para Hombre. Descubre sus notas olfativas.',
-            'meta_keywords' => '212 VIP Black, Carolina Herrera, Perfume Hombre',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $notes = [
+            ['name' => 'Bergamota', 'slug' => 'bergamota'],
+            ['name' => 'Pimienta negra', 'slug' => 'pimienta-negra'],
+            ['name' => 'Lavanda', 'slug' => 'lavanda'],
+            ['name' => 'Ambroxan', 'slug' => 'ambroxan'],
+            ['name' => 'Vainilla negra', 'slug' => 'vainilla-negra'],
+            ['name' => 'Jazmin', 'slug' => 'jazmin'],
+            ['name' => 'Rosa', 'slug' => 'rosa'],
+            ['name' => 'Almizcle', 'slug' => 'almizcle'],
+            ['name' => 'Oud', 'slug' => 'oud'],
+            ['name' => 'Ambar', 'slug' => 'ambar'],
+            ['name' => 'Haba tonka', 'slug' => 'haba-tonka'],
+            ['name' => 'Limon', 'slug' => 'limon'],
+            ['name' => 'Incienso', 'slug' => 'incienso'],
+            ['name' => 'Vetiver', 'slug' => 'vetiver'],
+            ['name' => 'Pera', 'slug' => 'pera'],
+        ];
 
-        DB::table('product_variants')->insert([
-            ['product_id' => $productId, 'volume' => '50ml', 'price' => 90.00, 'stock' => 15, 'min_stock' => 5, 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'volume' => '100ml', 'price' => 120.00, 'stock' => 20, 'min_stock' => 5, 'created_at' => now(), 'updated_at' => now()]
-        ]);
+        foreach ($notes as $note) {
+            DB::table('notes')->updateOrInsert(
+                ['slug' => $note['slug']],
+                [
+                    'name' => $note['name'],
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]
+            );
+        }
 
-        $absentaId = DB::table('notes')->insertGetId([
-            'name' => 'Absenta',
-            'slug' => 'absenta',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $brandIds = DB::table('brands')->pluck('id', 'name');
 
-        $anisId = DB::table('notes')->insertGetId([
-            'name' => 'Anis',
-            'slug' => 'anis',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $products = [
+            [
+                'name' => '212 VIP Black',
+                'brand_name' => 'Carolina Herrera',
+                'category_id' => 5,
+                'price' => 120.00,
+                'discount_price' => 108.00,
+                'cost' => 72.00,
+                'sku' => 'CH-212VB',
+                'gender' => 'Hombre',
+                'olfactory_family' => 'Fougere Amaderada',
+                'concentration' => 'Eau de Parfum',
+                'year' => 2017,
+                'country_of_origin' => 'Estados Unidos',
+                'discount_percentage' => 10,
+            ],
+            [
+                'name' => 'Sauvage Elixir',
+                'brand_name' => 'Dior',
+                'category_id' => 1,
+                'price' => 165.00,
+                'discount_price' => null,
+                'cost' => 99.00,
+                'sku' => 'DIOR-SE',
+                'gender' => 'Hombre',
+                'olfactory_family' => 'Aromatica',
+                'concentration' => 'Parfum',
+                'year' => 2021,
+                'country_of_origin' => 'Francia',
+                'discount_percentage' => null,
+            ],
+            [
+                'name' => 'Coco Mademoiselle',
+                'brand_name' => 'Chanel',
+                'category_id' => 2,
+                'price' => 155.00,
+                'discount_price' => 145.00,
+                'cost' => 93.00,
+                'sku' => 'CHA-CM',
+                'gender' => 'Mujer',
+                'olfactory_family' => 'Ambar Floral',
+                'concentration' => 'Eau de Parfum',
+                'year' => 2001,
+                'country_of_origin' => 'Francia',
+                'discount_percentage' => 6,
+            ],
+            [
+                'name' => 'Eros Flame',
+                'brand_name' => 'Versace',
+                'category_id' => 1,
+                'price' => 110.00,
+                'discount_price' => null,
+                'cost' => 66.00,
+                'sku' => 'VER-EF',
+                'gender' => 'Hombre',
+                'olfactory_family' => 'Amaderada Especiada',
+                'concentration' => 'Eau de Parfum',
+                'year' => 2018,
+                'country_of_origin' => 'Italia',
+                'discount_percentage' => null,
+            ],
+            [
+                'name' => '1 Million Lucky',
+                'brand_name' => 'Paco Rabanne',
+                'category_id' => 1,
+                'price' => 118.00,
+                'discount_price' => 99.00,
+                'cost' => 70.80,
+                'sku' => 'PR-1ML',
+                'gender' => 'Hombre',
+                'olfactory_family' => 'Amaderada Dulce',
+                'concentration' => 'Eau de Toilette',
+                'year' => 2018,
+                'country_of_origin' => 'España',
+                'discount_percentage' => 16,
+            ],
+            [
+                'name' => 'Khamrah',
+                'brand_name' => 'Lattafa',
+                'category_id' => 4,
+                'price' => 78.00,
+                'discount_price' => null,
+                'cost' => 46.80,
+                'sku' => 'LAT-KHA',
+                'gender' => 'Unisex',
+                'olfactory_family' => 'Ambar Especiada',
+                'concentration' => 'Eau de Parfum',
+                'year' => 2022,
+                'country_of_origin' => 'Emiratos Árabes Unidos',
+                'discount_percentage' => null,
+            ],
+            [
+                'name' => 'Libre Intense',
+                'brand_name' => 'Yves Saint Laurent',
+                'category_id' => 2,
+                'price' => 142.00,
+                'discount_price' => 128.00,
+                'cost' => 85.20,
+                'sku' => 'YSL-LI',
+                'gender' => 'Mujer',
+                'olfactory_family' => 'Ambar Floral',
+                'concentration' => 'Eau de Parfum Intense',
+                'year' => 2020,
+                'country_of_origin' => 'Francia',
+                'discount_percentage' => 10,
+            ],
+            [
+                'name' => 'Le Beau Le Parfum',
+                'brand_name' => 'Jean Paul Gaultier',
+                'category_id' => 1,
+                'price' => 135.00,
+                'discount_price' => null,
+                'cost' => 81.00,
+                'sku' => 'JPG-LBLP',
+                'gender' => 'Hombre',
+                'olfactory_family' => 'Ambar Amaderada',
+                'concentration' => 'Parfum',
+                'year' => 2022,
+                'country_of_origin' => 'Francia',
+                'discount_percentage' => null,
+            ],
+            [
+                'name' => 'Acqua di Gio Profondo',
+                'brand_name' => 'Giorgio Armani',
+                'category_id' => 1,
+                'price' => 130.00,
+                'discount_price' => 117.00,
+                'cost' => 78.00,
+                'sku' => 'GA-ADGP',
+                'gender' => 'Hombre',
+                'olfactory_family' => 'Aromatica Acuatica',
+                'concentration' => 'Eau de Parfum',
+                'year' => 2020,
+                'country_of_origin' => 'Italia',
+                'discount_percentage' => 10,
+            ],
+            [
+                'name' => 'Porto Neroli',
+                'brand_name' => 'Maison Alhambra',
+                'category_id' => 3,
+                'price' => 62.00,
+                'discount_price' => null,
+                'cost' => 37.20,
+                'sku' => 'MA-PN',
+                'gender' => 'Unisex',
+                'olfactory_family' => 'Citrica Floral',
+                'concentration' => 'Eau de Parfum',
+                'year' => 2023,
+                'country_of_origin' => 'Emiratos Árabes Unidos',
+                'discount_percentage' => null,
+            ],
+        ];
 
-        $hinojoId = DB::table('notes')->insertGetId([
-            'name' => 'Hinojo',
-            'slug' => 'hinojo',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        foreach ($products as $product) {
+            $brandId = $brandIds[$product['brand_name']] ?? null;
 
-        $lavandaId = DB::table('notes')->insertGetId([
-            'name' => 'Lavanda',
-            'slug' => 'lavanda',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+            if (!$brandId) {
+                continue;
+            }
 
-        $almizcleId = DB::table('notes')->insertGetId([
-            'name' => 'Almizcle',
-            'slug' => 'almizcle',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+            DB::table('products')->updateOrInsert(
+                ['sku' => $product['sku']],
+                [
+                    'brand_id' => $brandId,
+                    'category_id' => $product['category_id'],
+                    'name' => $product['name'],
+                    'slug' => Str::slug($product['name'] . ' ' . $product['brand_name']),
+                    'description' => 'Fragancia de prueba para catalogo: ' . $product['name'] . '.',
+                    'price' => $product['price'],
+                    'discount_price' => $product['discount_price'],
+                    'cost' => $product['cost'],
+                    'gender' => $product['gender'],
+                    'olfactory_family' => $product['olfactory_family'],
+                    'concentration' => $product['concentration'],
+                    'year' => $product['year'],
+                    'country_of_origin' => $product['country_of_origin'],
+                    'status' => 'publicado',
+                    'discount_percentage' => $product['discount_percentage'],
+                    'video_url' => 'https://www.youtube.com/watch?v=demo',
+                    'meta_title' => $product['name'] . ' | Gio\'s Perfumes',
+                    'meta_description' => 'Compra ' . $product['name'] . ' en Gio\'s Perfumes.',
+                    'meta_keywords' => implode(', ', [$product['name'], $product['brand_name'], $product['gender'], 'perfume']),
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]
+            );
+        }
 
-        $vainillaNegraId = DB::table('notes')->insertGetId([
-            'name' => 'Vainilla negra',
-            'slug' => 'vainilla-negra',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $productIds = DB::table('products')
+            ->whereIn('sku', array_column($products, 'sku'))
+            ->pluck('id', 'sku');
 
-        DB::table('product_notes')->insert([
-            ['product_id' => $productId, 'note_id' => $absentaId, 'note_type_id' => $noteTypeSalidaId, 'position' => 1, 'intensity' => 8, 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'note_id' => $anisId, 'note_type_id' => $noteTypeSalidaId, 'position' => 2, 'intensity' => 7, 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'note_id' => $hinojoId, 'note_type_id' => $noteTypeSalidaId, 'position' => 3, 'intensity' => 6, 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'note_id' => $lavandaId, 'note_type_id' => $noteTypeCorazonId, 'position' => 1, 'intensity' => 7, 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'note_id' => $almizcleId, 'note_type_id' => $noteTypeFondoId, 'position' => 1, 'intensity' => 9, 'created_at' => now(), 'updated_at' => now()],
-            ['product_id' => $productId, 'note_id' => $vainillaNegraId, 'note_type_id' => $noteTypeFondoId, 'position' => 2, 'intensity' => 8, 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        DB::table('product_variants')->whereIn('product_id', $productIds->values())->delete();
+        DB::table('product_notes')->whereIn('product_id', $productIds->values())->delete();
+        DB::table('product_tags')->whereIn('product_id', $productIds->values())->delete();
 
-        DB::table('product_tags')->insert([
-            ['product_id' => $productId, 'tag_id' => 1, 'created_at' => now(), 'updated_at' => now()] // Novedad id: 1
-        ]);
+        $variants = [];
+        foreach ($products as $index => $product) {
+            $productId = $productIds[$product['sku']] ?? null;
+
+            if (!$productId) {
+                continue;
+            }
+
+            $variants[] = [
+                'product_id' => $productId,
+                'volume' => '50ml',
+                'price' => round($product['price'] * 0.78, 2),
+                'stock' => 12 + $index,
+                'min_stock' => 4,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+            $variants[] = [
+                'product_id' => $productId,
+                'volume' => '100ml',
+                'price' => $product['price'],
+                'stock' => 18 + $index,
+                'min_stock' => 5,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        DB::table('product_variants')->insert($variants);
+
+        $tagAssignments = [];
+        foreach ($products as $index => $product) {
+            $productId = $productIds[$product['sku']] ?? null;
+
+            if (!$productId) {
+                continue;
+            }
+
+            $tagAssignments[] = [
+                'product_id' => $productId,
+                'tag_id' => $index < 5 ? 1 : 2,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        DB::table('product_tags')->insert($tagAssignments);
+
+        $noteTypeIds = DB::table('note_types')->pluck('id', 'slug');
+        $noteIds = DB::table('notes')->pluck('id', 'slug');
+
+        $noteProfiles = [
+            ['salida' => ['bergamota'], 'corazon' => ['lavanda'], 'fondo' => ['vainilla-negra']],
+            ['salida' => ['pimienta-negra'], 'corazon' => ['ambroxan'], 'fondo' => ['vetiver']],
+            ['salida' => ['bergamota'], 'corazon' => ['jazmin'], 'fondo' => ['almizcle']],
+            ['salida' => ['limon'], 'corazon' => ['rosa'], 'fondo' => ['ambar']],
+            ['salida' => ['bergamota'], 'corazon' => ['haba-tonka'], 'fondo' => ['vetiver']],
+            ['salida' => ['canela'], 'corazon' => ['oud'], 'fondo' => ['ambar']],
+            ['salida' => ['pera'], 'corazon' => ['jazmin'], 'fondo' => ['vainilla-negra']],
+            ['salida' => ['bergamota'], 'corazon' => ['coco'], 'fondo' => ['haba-tonka']],
+            ['salida' => ['bergamota'], 'corazon' => ['incienso'], 'fondo' => ['almizcle']],
+            ['salida' => ['limon'], 'corazon' => ['jazmin'], 'fondo' => ['ambar']],
+        ];
+
+        $extraNotes = [
+            ['name' => 'Canela', 'slug' => 'canela'],
+            ['name' => 'Coco', 'slug' => 'coco'],
+        ];
+
+        foreach ($extraNotes as $note) {
+            DB::table('notes')->updateOrInsert(
+                ['slug' => $note['slug']],
+                [
+                    'name' => $note['name'],
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]
+            );
+        }
+
+        $noteIds = DB::table('notes')->pluck('id', 'slug');
+
+        $productNotes = [];
+        foreach ($products as $index => $product) {
+            $productId = $productIds[$product['sku']] ?? null;
+
+            if (!$productId) {
+                continue;
+            }
+
+            foreach (['salida', 'corazon', 'fondo'] as $typeSlug) {
+                foreach ($noteProfiles[$index][$typeSlug] as $position => $noteSlug) {
+                    $productNotes[] = [
+                        'product_id' => $productId,
+                        'note_id' => $noteIds[$noteSlug],
+                        'note_type_id' => $noteTypeIds[$typeSlug],
+                        'position' => $position + 1,
+                        'intensity' => 6 + $position,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                }
+            }
+        }
+
+        DB::table('product_notes')->insert($productNotes);
     }
 }
