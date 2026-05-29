@@ -31,6 +31,7 @@ Route::get('/categoria/{slug?}', [CategoryController::class, 'show'])->name('cat
 
 Route::get('/marcas', [BrandController::class, 'index'])->name('brands.index');
 Route::get('/marcas/{slug}', [BrandController::class, 'show'])->name('brands.show');
+Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add');
 
 // --- RUTAS PROTEGIDAS DEL CLIENTE ---
 // Requiere login y tener el rol de 'Cliente'

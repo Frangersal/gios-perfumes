@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 interface ProductVariant {
     id: number;
@@ -16,6 +17,7 @@ interface ProductInfoProps {
         description?: string;
         brand?: { name?: string };
         category?: { name?: string };
+        images?: Array<{ image: string; is_main?: boolean }>;
         variants?: ProductVariant[];
     };
     baseUrl: string;
@@ -24,6 +26,8 @@ interface ProductInfoProps {
 export default function ProductInfo({ product, baseUrl }: ProductInfoProps) {
     const [quantity, setQuantity] = useState(1);
     const [selectedVariant, setSelectedVariant] = useState<number>(0);
+    const [isAdding, setIsAdding] = useState(false);
+    const [cartFeedback, setCartFeedback] = useState('');
 
     const variants: ProductVariant[] = product.variants ?? [];
 
@@ -36,6 +40,69 @@ export default function ProductInfo({ product, baseUrl }: ProductInfoProps) {
     const displayPrice = hasDiscount ? discountedPrice : regularPrice;
 
     const totalStock = variants.reduce((sum, v) => sum + (v.stock ?? 0), 0);
+
+    const activeVariant = variants[selectedVariant] ?? variants[0] ?? null;
+
+    const productMainImage = (() => {
+        const images = Array.isArray(product.images) ? product.images : [];
+        const main = images.find((img) => img?.is_main) || images[0];
+        return main?.image || '';
+    })();
+
+    const handleAddToCart = async () => {
+        if (!activeVariant) {
+            setCartFeedback('No hay variante disponible para agregar.');
+            return;
+        }
+
+        setIsAdding(true);
+        setCartFeedback('');
+
+        try {
+            const localCartId = window.localStorage.getItem('gios_cart_id');
+
+            const response = await axios.post(`${baseUrl}/cart/add`, {
+                product_variant_id: activeVariant.id,
+                quantity,
+                cart_id: localCartId ? Number(localCartId) : null,
+            }, {
+                headers: { Accept: 'application/json' },
+            });
+
+            const dbCartId = response.data?.cart_id;
+            if (dbCartId) {
+                window.localStorage.setItem('gios_cart_id', String(dbCartId));
+            }
+
+            const currentItems = JSON.parse(window.localStorage.getItem('gios_cart_items') || '[]');
+            const existingIndex = currentItems.findIndex((item: any) => item.product_variant_id === activeVariant.id);
+
+            if (existingIndex >= 0) {
+                currentItems[existingIndex].quantity += quantity;
+                if (!currentItems[existingIndex].image_url && productMainImage) {
+                    currentItems[existingIndex].image_url = productMainImage;
+                }
+            } else {
+                currentItems.push({
+                    product_id: product.id,
+                    product_name: product.name,
+                    product_variant_id: activeVariant.id,
+                    variant_volume: activeVariant.volume,
+                    price: Number(activeVariant.price || displayPrice),
+                    quantity,
+                    image_url: productMainImage,
+                });
+            }
+
+            window.localStorage.setItem('gios_cart_items', JSON.stringify(currentItems));
+            setCartFeedback('Producto agregado al carrito.');
+        } catch (error) {
+            console.error('Error agregando al carrito', error);
+            setCartFeedback('No se pudo agregar al carrito.');
+        } finally {
+            setIsAdding(false);
+        }
+    };
 
     return (
         <div>
@@ -102,7 +169,7 @@ export default function ProductInfo({ product, baseUrl }: ProductInfoProps) {
                 </div>
             )}
 
-            <div className="d-flex gap-3 mb-5 align-items-center flex-wrap">
+            <div className="d-flex gap-3 mb-2 align-items-center flex-wrap">
                 <div className="input-group" style={{ width: '130px' }}>
                     <button className="btn btn-outline-secondary px-3" type="button"
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
@@ -110,10 +177,21 @@ export default function ProductInfo({ product, baseUrl }: ProductInfoProps) {
                     <button className="btn btn-outline-secondary px-3" type="button"
                         onClick={() => setQuantity(quantity + 1)}>+</button>
                 </div>
-                <button className="btn btn-dark btn-sm fw-bold text-uppercase px-3 py-2 flex-shrink-0">
-                    Añadir al carrito
+                <button
+                    type="button"
+                    className="btn btn-dark btn-sm fw-bold text-uppercase px-3 py-2 shrink-0"
+                    onClick={handleAddToCart}
+                    disabled={isAdding || !activeVariant || totalStock <= 0}
+                >
+                    {isAdding ? 'Agregando...' : 'Añadir al carrito'}
                 </button>
             </div>
+
+            {cartFeedback && (
+                <p className={`small mb-4 ${cartFeedback.includes('No se pudo') ? 'text-danger' : 'text-success'}`}>
+                    {cartFeedback}
+                </p>
+            )}
         </div>
     );
 }
