@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/product/{id?}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/product/{id}/related', [ProductController::class, 'related'])->name('product.related');
 Route::get('/categoria/{slug?}', [CategoryController::class, 'show'])->name('category.show');
 
 Route::get('/marcas', [BrandController::class, 'index'])->name('brands.index');

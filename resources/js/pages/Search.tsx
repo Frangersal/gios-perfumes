@@ -23,7 +23,7 @@ export default function Search() {
                             <div className="card-body text-center p-4">
                                 <h6 className="card-title fw-bold text-uppercase mb-1">Good Girl</h6>
                                 <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$3,200.00 MXN</p>
+                                <p className="fw-bold text-primary mb-0">$3,200.00</p>
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@ export default function Search() {
                             <div className="card-body text-center p-4">
                                 <h6 className="card-title fw-bold text-uppercase mb-1">Bad Boy</h6>
                                 <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$2,900.00 MXN</p>
+                                <p className="fw-bold text-primary mb-0">$2,900.00</p>
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@ export default function Search() {
                             <div className="card-body text-center p-4">
                                 <h6 className="card-title fw-bold text-uppercase mb-1">212 VIP</h6>
                                 <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$2,650.00 MXN</p>
+                                <p className="fw-bold text-primary mb-0">$2,650.00</p>
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@ export default function Search() {
                             <div className="card-body text-center p-4">
                                 <h6 className="card-title fw-bold text-uppercase mb-1">CH Men</h6>
                                 <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$2,450.00 MXN</p>
+                                <p className="fw-bold text-primary mb-0">$2,450.00</p>
                             </div>
                         </div>
                     </div>

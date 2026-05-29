@@ -90,6 +90,7 @@ export default function ProductsGrid() {
                                     currentPrice={formatPrice(hasDiscount ? discountedPrice : regularPrice)}
                                     oldPrice={hasDiscount ? formatPrice(regularPrice) : undefined}
                                     image={getMainImage(product)}
+                                    productId={product.id}
                                 />
                             </div>
                         );

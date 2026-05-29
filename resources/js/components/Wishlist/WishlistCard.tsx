@@ -15,7 +15,7 @@ export default function WishlistCard() {
             <img src="https://placehold.co/300x300/e9ecef/212529?text=Perfume+Favorito" className="card-img-top" alt="Perfume" />
             <div className="card-body d-flex flex-column text-center">
                 <h5 className="card-title fw-bold">Aqua di Mare Essenza</h5>
-                <p className="card-text text-primary fw-bold mb-3">$2,450.00 MXN</p>
+                <p className="card-text text-primary fw-bold mb-3">$2,450.00</p>
                 <div className="mt-auto">
                     <button className="btn btn-primary w-100 text-uppercase fw-bold">Añadir al carrito</button>
                 </div>

@@ -130,6 +130,7 @@ export default function CategoryGrid() {
                                     currentPrice={formatPrice(hasDiscount ? discountedPrice : regularPrice)}
                                     oldPrice={hasDiscount ? formatPrice(regularPrice) : undefined}
                                     image={getMainImage(product)}
+                                    productId={product.id}
                                 />
                             </div>
                         );

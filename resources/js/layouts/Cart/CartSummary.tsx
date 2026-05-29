@@ -19,7 +19,7 @@ export default function CartSummary() {
                 
                 <div className="d-flex justify-content-between mb-4">
                     <span className="fw-bold fs-5">Total</span>
-                    <span className="fw-bold fs-5 text-primary">$4,900.00 <small className="text-muted fs-6">MXN</small></span>
+                    <span className="fw-bold fs-5 text-primary">$4,900.00</span>
                 </div>
                 
                 <a href="/checkout" className="btn btn-dark w-100 py-3 text-uppercase fw-bold">
