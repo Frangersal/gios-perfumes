@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 interface CardProps {
     brand?: string;
@@ -11,7 +12,32 @@ interface CardProps {
     productId?: number | string;
 }
 
+interface WishlistStorageItem {
+    product_id: number;
+    name: string;
+    brand: string;
+    image: string;
+    current_price: string;
+    old_price?: string;
+}
+
 const defaultImage = 'https://placehold.co/640x640/f4f1ec/212529?text=Perfume';
+const WISHLIST_KEY = 'gios_wishlist_items';
+
+const readWishlist = (): WishlistStorageItem[] => {
+    try {
+        const raw = window.localStorage.getItem(WISHLIST_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+};
+
+const writeWishlist = (items: WishlistStorageItem[]) => {
+    window.localStorage.setItem(WISHLIST_KEY, JSON.stringify(items));
+    window.dispatchEvent(new CustomEvent('wishlist:changed'));
+};
 
 export default function Card({
     brand = 'Gio\'s Selection',
@@ -23,21 +49,79 @@ export default function Card({
     wishlistActive = false,
     productId,
 }: CardProps) {
-    const baseUrl = document.getElementById('root')?.getAttribute('data-base-url') || '';
+    const root = document.getElementById('root');
+    const baseUrl = root?.getAttribute('data-base-url') || '';
+    const userRole = root?.getAttribute('data-user-role') || '';
+    const isAuthed = userRole.trim() !== '';
     const productUrl = productId ? `${baseUrl}/product/${productId}` : '#';
+    const numericId = productId !== undefined ? Number(productId) : null;
+
+    const [active, setActive] = useState<boolean>(wishlistActive);
+
+    useEffect(() => {
+        if (numericId === null) return;
+        const items = readWishlist();
+        setActive(items.some((it) => it.product_id === numericId));
+
+        const handleChange = () => {
+            const fresh = readWishlist();
+            setActive(fresh.some((it) => it.product_id === numericId));
+        };
+        window.addEventListener('wishlist:changed', handleChange);
+        return () => window.removeEventListener('wishlist:changed', handleChange);
+    }, [numericId]);
+
+    const handleToggleWishlist = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (numericId === null) return;
+
+        const items = readWishlist();
+        const exists = items.some((it) => it.product_id === numericId);
+
+        let nextItems: WishlistStorageItem[];
+        if (exists) {
+            nextItems = items.filter((it) => it.product_id !== numericId);
+        } else {
+            nextItems = [
+                ...items,
+                {
+                    product_id: numericId,
+                    name,
+                    brand,
+                    image,
+                    current_price: currentPrice,
+                    old_price: oldPrice,
+                },
+            ];
+        }
+        writeWishlist(nextItems);
+        setActive(!exists);
+
+        if (isAuthed) {
+            try {
+                await axios.post(`${baseUrl.replace(/\/$/, '')}/wishlist`, {
+                    product_id: numericId,
+                });
+            } catch (err) {
+                // si falla la sincro al servidor, no revertimos la UI; el localStorage queda como verdad
+                console.warn('No se pudo sincronizar la wishlist con el servidor', err);
+            }
+        }
+    };
 
     return (
         <div className="card h-100 shadow-sm border-0 position-relative overflow-hidden" style={{ width: '18rem' }}>
             <button
                 type="button"
                 className="btn btn-light position-absolute rounded-circle shadow-sm d-flex align-items-center justify-content-center p-0"
-                aria-label={wishlistActive ? 'Quitar de wishlist' : 'Agregar a wishlist'}
-                title={wishlistActive ? 'Quitar de wishlist' : 'Agregar a wishlist'}
+                aria-label={active ? 'Quitar de wishlist' : 'Agregar a wishlist'}
+                title={active ? 'Quitar de wishlist' : 'Agregar a wishlist'}
                 style={{ top: '12px', right: '12px', width: '38px', height: '38px', zIndex: 2 }}
-                onClick={(e) => e.stopPropagation()}
+                onClick={handleToggleWishlist}
             >
-                <span className={wishlistActive ? 'text-danger fs-4' : 'text-secondary fs-4'}>
-                    {wishlistActive ? '♥' : '♡'}
+                <span className={active ? 'text-danger fs-4' : 'text-secondary fs-4'}>
+                    {active ? '♥' : '♡'}
                 </span>
             </button>
 
