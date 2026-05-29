@@ -69,19 +69,53 @@ export default function Cart() {
         [items]
     );
 
-    const shipping = itemCount > 0 ? 0 : 0;
-    const total = subtotal + shipping;
+    const total = subtotal;
+
+    const handleClearCart = () => {
+        if (items.length === 0) return;
+        if (window.confirm('¿Vaciar todo el carrito?')) {
+            persistItems([]);
+        }
+    };
 
     return (
-        <div className="d-flex flex-column min-vh-100">
+        <div className="d-flex flex-column min-vh-100 bg-body-tertiary">
             <Navbar />
             <SearchBar />
             <PromoBar />
 
-            <main className="container mt-5 mb-5">
-                <h2 className="fw-bold mb-5 text-center">Carrito de Compras</h2>
-                
-                <div className="row g-5">
+            <main className="container my-5">
+                {/* Breadcrumb */}
+                <nav aria-label="breadcrumb" className="mb-3">
+                    <ol className="breadcrumb small mb-0">
+                        <li className="breadcrumb-item"><a href="/" className="text-decoration-none text-muted">Inicio</a></li>
+                        <li className="breadcrumb-item active" aria-current="page">Carrito</li>
+                    </ol>
+                </nav>
+
+                {/* Header */}
+                <div className="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-3">
+                    <div>
+                        <h1 className="fw-bold mb-1">
+                            Carrito de compras
+                            {itemCount > 0 && (
+                                <span className="badge bg-dark ms-2 align-middle fs-6">{itemCount}</span>
+                            )}
+                        </h1>
+                        <p className="text-muted mb-0">Revisa tus productos antes de continuar con el pago.</p>
+                    </div>
+                    {items.length > 0 && (
+                        <button
+                            type="button"
+                            className="btn btn-outline-danger btn-sm"
+                            onClick={handleClearCart}
+                        >
+                            <i className="bi bi-trash3 me-1"></i> Vaciar carrito
+                        </button>
+                    )}
+                </div>
+
+                <div className="row g-4">
                     <div className="col-lg-7 col-xl-8">
                         <CartList
                             items={items}
@@ -91,7 +125,9 @@ export default function Cart() {
                         />
                     </div>
                     <div className="col-lg-5 col-xl-4">
-                        <CartSummary itemCount={itemCount} subtotal={subtotal} shipping={shipping} total={total} />
+                        <div className="sticky-lg-top" style={{ top: '90px' }}>
+                            <CartSummary itemCount={itemCount} subtotal={subtotal} total={total} />
+                        </div>
                     </div>
                 </div>
             </main>

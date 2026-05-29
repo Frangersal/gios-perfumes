@@ -21,34 +21,47 @@ interface CartListProps {
 export default function CartList({ items, onIncrease, onDecrease, onRemove }: CartListProps) {
     const totalItems = items.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
 
-    return (
-        <div>
-            <div className="d-flex justify-content-between align-items-end border-bottom pb-3 mb-4">
-                <h4 className="fw-bold mb-0">Tus Productos</h4>
-                <p className="mb-0 text-muted">{totalItems} artículo{totalItems === 1 ? '' : 's'}</p>
-            </div>
-
-            {items.length === 0 ? (
-                <div className="card border-0 shadow-sm">
-                    <div className="card-body py-5 text-center text-muted">
-                        Tu carrito está vacío. Agrega productos desde la página de producto.
-                    </div>
+    if (items.length === 0) {
+        return (
+            <div className="card border-0 shadow-sm">
+                <div className="card-body py-5 text-center">
+                    <div className="display-3 mb-3">🛒</div>
+                    <h4 className="fw-bold mb-2">Tu carrito está vacío</h4>
+                    <p className="text-muted mb-4">Descubre nuestras fragancias y agrega tus favoritas.</p>
+                    <a href="/shop" className="btn btn-dark px-4 fw-semibold">Ir a la tienda</a>
                 </div>
-            ) : (
-                items.map((item) => (
-                    <CartItem
-                        key={item.product_variant_id}
-                        productName={item.product_name}
-                        variantVolume={item.variant_volume}
-                        imageUrl={item.image_url}
-                        unitPrice={Number(item.price || 0)}
-                        quantity={Number(item.quantity || 1)}
-                        onIncrease={() => onIncrease(item.product_variant_id)}
-                        onDecrease={() => onDecrease(item.product_variant_id)}
-                        onRemove={() => onRemove(item.product_variant_id)}
-                    />
-                ))
-            )}
+            </div>
+        );
+    }
+
+    return (
+        <div className="card border-0 shadow-sm">
+            <div className="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+                <h5 className="fw-bold mb-0">Tus productos</h5>
+                <span className="badge bg-light text-dark border">{totalItems} artículo{totalItems === 1 ? '' : 's'}</span>
+            </div>
+            <ul className="list-group list-group-flush">
+                {items.map((item) => (
+                    <li key={item.product_variant_id} className="list-group-item p-3">
+                        <CartItem
+                            productName={item.product_name}
+                            variantVolume={item.variant_volume}
+                            imageUrl={item.image_url}
+                            unitPrice={Number(item.price || 0)}
+                            quantity={Number(item.quantity || 1)}
+                            onIncrease={() => onIncrease(item.product_variant_id)}
+                            onDecrease={() => onDecrease(item.product_variant_id)}
+                            onRemove={() => onRemove(item.product_variant_id)}
+                        />
+                    </li>
+                ))}
+            </ul>
+            <div className="card-footer bg-white border-0 d-flex justify-content-between align-items-center py-3">
+                <a href="/shop" className="text-decoration-none text-muted small">
+                    ← Seguir comprando
+                </a>
+                <span className="text-muted small">Los precios incluyen IVA</span>
+            </div>
         </div>
     );
 }
