@@ -17,8 +17,24 @@ interface CartStorageItem {
 
 const STORAGE_KEY = 'gios_cart_items';
 
+type StepKey = 'contact' | 'address' | 'shipping' | 'payment';
+
+const STEPS: { key: StepKey; label: string }[] = [
+    { key: 'contact', label: 'Contacto' },
+    { key: 'address', label: 'Dirección' },
+    { key: 'shipping', label: 'Envío' },
+    { key: 'payment', label: 'Pago' },
+];
+
 export default function Checkout() {
     const [items, setItems] = useState<CartStorageItem[]>([]);
+    const [activeStep, setActiveStep] = useState<StepKey>('contact');
+    const [completedSteps, setCompletedSteps] = useState<Record<StepKey, boolean>>({
+        contact: false,
+        address: false,
+        shipping: false,
+        payment: false,
+    });
 
     useEffect(() => {
         try {
@@ -27,6 +43,106 @@ export default function Checkout() {
         } catch {
             setItems([]);
         }
+    }, []);
+
+    // Observa las secciones del formulario y resalta el paso activo según el scroll
+    useEffect(() => {
+        const computeActive = () => {
+            const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-step]'));
+            if (sections.length === 0) return;
+
+            // Si llegamos cerca del fondo, forzamos el último paso (Pago)
+            const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 120;
+            if (nearBottom) {
+                setActiveStep('payment');
+                return;
+            }
+
+            // El paso activo es la última sección cuyo top ya cruzó la línea de activación
+            const triggerY = 200; // px desde el top del viewport
+            let current: StepKey = 'contact';
+            for (const sec of sections) {
+                const top = sec.getBoundingClientRect().top;
+                if (top <= triggerY) {
+                    const step = sec.getAttribute('data-step') as StepKey | null;
+                    if (step) current = step;
+                } else {
+                    break;
+                }
+            }
+            setActiveStep(current);
+        };
+
+        computeActive();
+        window.addEventListener('scroll', computeActive, { passive: true });
+        window.addEventListener('resize', computeActive);
+        return () => {
+            window.removeEventListener('scroll', computeActive);
+            window.removeEventListener('resize', computeActive);
+        };
+    }, []);
+
+    // Valida cada paso revisando que sus inputs requeridos estén llenos
+    useEffect(() => {
+        const checkAll = () => {
+            const next: Record<StepKey, boolean> = {
+                contact: false,
+                address: false,
+                shipping: false,
+                payment: false,
+            };
+
+            // 1. Contacto
+            next.contact = ['email', 'phone'].every((id) => {
+                const el = document.getElementById(id) as HTMLInputElement | null;
+                return !!el && el.value.trim() !== '';
+            });
+
+            // 2. Dirección
+            next.address = ['firstName', 'lastName', 'address', 'zip', 'city', 'state'].every((id) => {
+                const el = document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
+                return !!el && el.value.trim() !== '';
+            });
+
+            // 3. Método de envío seleccionado
+            next.shipping = !!document.querySelector('input[name="shipping"]:checked');
+
+            // 4. Pago + términos
+            const cardChecked = (document.getElementById('pm-card') as HTMLInputElement | null)?.checked;
+            let paymentFieldsOk = false;
+            if (cardChecked) {
+                paymentFieldsOk = ['cardName', 'cardNumber', 'cardExpiry', 'cardCvc'].every((id) => {
+                    const el = document.getElementById(id) as HTMLInputElement | null;
+                    return !!el && el.value.trim() !== '';
+                });
+            } else {
+                paymentFieldsOk = !!document.querySelector('input[name="paymentMethod"]:checked');
+            }
+            const termsOk = !!(document.getElementById('terms') as HTMLInputElement | null)?.checked;
+            next.payment = paymentFieldsOk && termsOk;
+
+            setCompletedSteps((prev) => {
+                if (
+                    prev.contact === next.contact &&
+                    prev.address === next.address &&
+                    prev.shipping === next.shipping &&
+                    prev.payment === next.payment
+                ) {
+                    return prev;
+                }
+                return next;
+            });
+        };
+
+        // Listeners globales en document (capturan inputs sin importar cuándo se monten)
+        document.addEventListener('input', checkAll);
+        document.addEventListener('change', checkAll);
+        checkAll();
+
+        return () => {
+            document.removeEventListener('input', checkAll);
+            document.removeEventListener('change', checkAll);
+        };
     }, []);
 
     const itemCount = useMemo(
@@ -40,6 +156,20 @@ export default function Checkout() {
     );
 
     const total = subtotal;
+
+    const handleStepClick = (key: StepKey) => {
+        const targets: Record<StepKey, string> = {
+            contact: 'step-contact',
+            address: 'step-address',
+            shipping: 'step-shipping',
+            payment: 'step-payment',
+        };
+        const el = document.getElementById(targets[key]);
+        if (el) {
+            const top = el.getBoundingClientRect().top + window.scrollY - 140;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
+    };
 
     return (
         <div className="d-flex flex-column min-vh-100 bg-body-tertiary">
@@ -70,30 +200,61 @@ export default function Checkout() {
                 </div>
 
                 {/* Pasos */}
-                <ul className="nav nav-pills nav-fill bg-white border rounded-3 p-2 mb-4 shadow-sm">
-                    <li className="nav-item">
-                        <span className="nav-link active bg-dark text-white d-flex align-items-center justify-content-center gap-2">
-                            <span className="badge rounded-pill bg-white text-dark">1</span>
-                            <span className="d-none d-sm-inline">Información</span>
-                        </span>
-                    </li>
-                    <li className="nav-item">
-                        <span className="nav-link text-muted d-flex align-items-center justify-content-center gap-2">
-                            <span className="badge rounded-pill bg-light text-muted border">2</span>
-                            <span className="d-none d-sm-inline">Pago</span>
-                        </span>
-                    </li>
-                    <li className="nav-item">
-                        <span className="nav-link text-muted d-flex align-items-center justify-content-center gap-2">
-                            <span className="badge rounded-pill bg-light text-muted border">3</span>
-                            <span className="d-none d-sm-inline">Confirmación</span>
-                        </span>
-                    </li>
-                </ul>
+                <div className="sticky-top bg-body-tertiary py-2 mb-4" style={{ top: '4rem', zIndex: 1020 }}>
+                    <ul className="nav nav-pills nav-fill bg-white border rounded-3 p-2 shadow-sm mb-2">
+                        {STEPS.map((step, idx) => {
+                            const isActive = step.key === activeStep;
+                            const isDone = completedSteps[step.key];
+                            return (
+                                <li className="nav-item" key={step.key}>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleStepClick(step.key)}
+                                        className={`nav-link w-100 border-0 d-flex align-items-center justify-content-center gap-2 ${
+                                            isActive
+                                                ? 'active bg-dark text-white'
+                                                : isDone
+                                                    ? 'text-dark'
+                                                    : 'text-muted'
+                                        }`}
+                                    >
+                                        <span
+                                            className={`badge rounded-pill d-inline-flex align-items-center justify-content-center ${
+                                                isDone
+                                                    ? 'bg-success text-white'
+                                                    : isActive
+                                                        ? 'bg-white text-dark'
+                                                        : 'bg-light text-muted border'
+                                            }`}
+                                            style={{ width: 24, height: 24 }}
+                                        >
+                                            {isDone ? '✓' : idx + 1}
+                                        </span>
+                                        <span className="d-none d-sm-inline fw-semibold">{step.label}</span>
+                                    </button>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                    {/* Barra de progreso */}
+                    <div className="progress" style={{ height: '4px' }}>
+                        <div
+                            className="progress-bar bg-dark"
+                            role="progressbar"
+                            style={{
+                                width: `${(Object.values(completedSteps).filter(Boolean).length / STEPS.length) * 100}%`,
+                                transition: 'width 0.4s ease',
+                            }}
+                            aria-valuenow={Object.values(completedSteps).filter(Boolean).length}
+                            aria-valuemin={0}
+                            aria-valuemax={STEPS.length}
+                        />
+                    </div>
+                </div>
 
                 <div className="row g-4 flex-lg-row-reverse">
                     <div className="col-lg-5">
-                        <div className="sticky-lg-top" style={{ top: '5.5rem' }}>
+                        <div className="sticky-lg-top" style={{ top: '10rem' }}>
                             <CheckoutSummary items={items} itemCount={itemCount} subtotal={subtotal} total={total} />
                         </div>
                     </div>

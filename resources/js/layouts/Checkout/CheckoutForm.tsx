@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 
 export default function CheckoutForm() {
     const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal' | 'oxxo' | 'transfer'>('card');
-    const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
+    const [shippingMethod, setShippingMethod] = useState<'standard' | 'express' | null>(null);
     const [sameAsShipping, setSameAsShipping] = useState(true);
 
     return (
-        <form className="d-flex flex-column gap-4" noValidate>
+        <form className="d-flex flex-column gap-5" noValidate style={{ scrollMarginTop: '12rem' }}>
             {/* 1. Contacto */}
-            <section className="card border-0 shadow-sm">
+            <section id="step-contact" data-step="contact" className="card border-0 shadow-sm" style={{ minHeight: '60vh' }}>
                 <div className="card-body p-4">
                     <div className="d-flex align-items-center mb-3">
                         <span className="badge rounded-circle bg-dark text-white me-2 d-inline-flex align-items-center justify-content-center" style={{ width: 28, height: 28 }}>1</span>
@@ -40,7 +40,7 @@ export default function CheckoutForm() {
             </section>
 
             {/* 2. Dirección de envío */}
-            <section className="card border-0 shadow-sm">
+            <section id="step-address" data-step="address" className="card border-0 shadow-sm" style={{ minHeight: '60vh' }}>
                 <div className="card-body p-4">
                     <div className="d-flex align-items-center mb-3">
                         <span className="badge rounded-circle bg-dark text-white me-2 d-inline-flex align-items-center justify-content-center" style={{ width: 28, height: 28 }}>2</span>
@@ -106,7 +106,7 @@ export default function CheckoutForm() {
             </section>
 
             {/* 3. Método de envío */}
-            <section className="card border-0 shadow-sm">
+            <section id="step-shipping" data-step="shipping" className="card border-0 shadow-sm" style={{ minHeight: '50vh' }}>
                 <div className="card-body p-4">
                     <div className="d-flex align-items-center mb-3">
                         <span className="badge rounded-circle bg-dark text-white me-2 d-inline-flex align-items-center justify-content-center" style={{ width: 28, height: 28 }}>3</span>
@@ -150,7 +150,7 @@ export default function CheckoutForm() {
             </section>
 
             {/* 4. Método de pago */}
-            <section className="card border-0 shadow-sm">
+            <section id="step-payment" data-step="payment" className="card border-0 shadow-sm" style={{ minHeight: '60vh' }}>
                 <div className="card-body p-4">
                     <div className="d-flex align-items-center mb-3">
                         <span className="badge rounded-circle bg-dark text-white me-2 d-inline-flex align-items-center justify-content-center" style={{ width: 28, height: 28 }}>4</span>
@@ -216,12 +216,9 @@ export default function CheckoutForm() {
                             Recibirás los <strong>datos bancarios</strong> por correo para realizar tu transferencia.
                         </div>
                     )}
-                </div>
-            </section>
 
-            {/* Términos + acción */}
-            <section className="card border-0 shadow-sm">
-                <div className="card-body p-4">
+                    <hr className="my-4" />
+
                     <div className="form-check mb-3">
                         <input className="form-check-input" type="checkbox" id="terms" required />
                         <label className="form-check-label small text-muted" htmlFor="terms">
