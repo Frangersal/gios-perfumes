@@ -56,7 +56,10 @@ export default function ProductsGrid() {
                 const response = await axios.get(`${baseUrl}/`, {
                     headers: { Accept: 'application/json' },
                 });
-                setProducts(Array.isArray(response.data) ? response.data : []);
+                const list = Array.isArray(response.data) ? response.data : [];
+                // Deduplicar por id por si el endpoint devuelve repetidos
+                const unique = Array.from(new Map(list.map((p: ProductItem) => [p.id, p])).values());
+                setProducts(unique);
             } catch (error) {
                 console.error('Error cargando novedades', error);
             } finally {

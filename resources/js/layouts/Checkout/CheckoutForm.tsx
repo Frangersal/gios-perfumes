@@ -1,9 +1,89 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 export default function CheckoutForm() {
     const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal' | 'oxxo' | 'transfer'>('card');
     const [shippingMethod, setShippingMethod] = useState<'standard' | 'express' | null>(null);
     const [sameAsShipping, setSameAsShipping] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
+    const [feedback, setFeedback] = useState<{ type: 'success' | 'danger'; message: string } | null>(null);
+
+    const baseUrl = document.getElementById('root')?.getAttribute('data-base-url') || '';
+
+    const handleConfirm = async () => {
+        setFeedback(null);
+
+        // Validaciones m\u00ednimas en cliente
+        const requiredInfo = ['email', 'phone', 'firstName', 'lastName', 'address', 'zip', 'city', 'state'];
+        const missing = requiredInfo.find((id) => {
+            const el = document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
+            return !el || el.value.trim() === '';
+        });
+        if (missing) {
+            setFeedback({ type: 'danger', message: 'Completa todos los campos de contacto y direcci\u00f3n.' });
+            return;
+        }
+        if (!shippingMethod) {
+            setFeedback({ type: 'danger', message: 'Selecciona un m\u00e9todo de env\u00edo.' });
+            return;
+        }
+        const terms = document.getElementById('terms') as HTMLInputElement | null;
+        if (!terms?.checked) {
+            setFeedback({ type: 'danger', message: 'Debes aceptar los t\u00e9rminos y condiciones.' });
+            return;
+        }
+
+        let storedItems: Array<{ product_variant_id: number; quantity: number }> = [];
+        try {
+            const raw = window.localStorage.getItem('gios_cart_items') || '[]';
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+                storedItems = parsed.map((it: any) => ({
+                    product_variant_id: Number(it.product_variant_id),
+                    quantity: Number(it.quantity),
+                }));
+            }
+        } catch {
+            storedItems = [];
+        }
+
+        if (storedItems.length === 0) {
+            setFeedback({ type: 'danger', message: 'Tu carrito est\u00e1 vac\u00edo.' });
+            return;
+        }
+
+        const url = `${baseUrl.replace(/\/$/, '')}/checkout`;
+        setSubmitting(true);
+        try {
+            const res = await axios.post(url, {
+                items: storedItems,
+                payment_method: paymentMethod,
+                shipping_method: shippingMethod,
+            });
+
+            if (res.data?.ok) {
+                // Limpiar carrito local
+                window.localStorage.removeItem('gios_cart_items');
+                window.localStorage.removeItem('gios_cart_id');
+
+                setFeedback({
+                    type: 'success',
+                    message: `\u00a1Orden #${res.data.order_id} creada con \u00e9xito! Redirigiendo\u2026`,
+                });
+
+                setTimeout(() => {
+                    window.location.href = `${baseUrl.replace(/\/$/, '')}/`;
+                }, 1800);
+            } else {
+                setFeedback({ type: 'danger', message: res.data?.message || 'No se pudo crear la orden.' });
+            }
+        } catch (err: any) {
+            const msg = err?.response?.data?.message || 'Error al procesar la orden. Intenta nuevamente.';
+            setFeedback({ type: 'danger', message: msg });
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
         <form className="d-flex flex-column gap-5" noValidate style={{ scrollMarginTop: '12rem' }}>
@@ -225,8 +305,27 @@ export default function CheckoutForm() {
                             He leído y acepto los <a href="#" className="text-decoration-none">términos y condiciones</a> y la <a href="#" className="text-decoration-none">política de privacidad</a>.
                         </label>
                     </div>
-                    <button type="button" className="btn btn-dark w-100 py-3 text-uppercase fw-bold">
-                        Confirmar y pagar
+
+                    {feedback && (
+                        <div className={`alert alert-${feedback.type} small`} role="alert">
+                            {feedback.message}
+                        </div>
+                    )}
+
+                    <button
+                        type="button"
+                        className="btn btn-dark w-100 py-3 text-uppercase fw-bold"
+                        onClick={handleConfirm}
+                        disabled={submitting}
+                    >
+                        {submitting ? (
+                            <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />
+                                Procesando…
+                            </>
+                        ) : (
+                            'Confirmar y pagar'
+                        )}
                     </button>
                     <p className="text-center text-muted small mb-0 mt-3">
                         🔒 Conexión cifrada · Tus datos están protegidos
