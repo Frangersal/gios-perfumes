@@ -1,11 +1,13 @@
 import React from 'react';
 import Navbar from '../layouts/Navbar';
+import SearchBar from '../layouts/SearchBar';
 import Footer from '../layouts/Footer';
 
 export default function About() {
     return (
         <div className="d-flex flex-column min-vh-100 bg-white">
             <Navbar />
+            <SearchBar />
             
             {/* Cabecera / Banner */}
             <div className="bg-light py-5 mb-5 text-center">

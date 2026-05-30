@@ -1,68 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import BrandItem, { Brand } from '../../components/Index/BrandItem';
 
-const BRANDS_DATA: Brand[] = [
-    {
-        id: 1,
-        name: "Lumière Paris",
-        logo: "LP",
-        description: "Elegancia y sofisticación francesa."
-    },
-    {
-        id: 2,
-        name: "Aqua di Mare",
-        logo: "AM",
-        description: "Frescura marina interminable."
-    },
-    {
-        id: 3,
-        name: "Verso Italica",
-        logo: "VI",
-        description: "Glamour y estilo atrevido."
-    },
-    {
-        id: 4,
-        name: "Nuit Noire",
-        logo: "NN",
-        description: "Aromas intensos y misteriosos."
-    },
-    {
-        id: 5,
-        name: "Flora Botanica",
-        logo: "FB",
-        description: "Notas florales y naturaleza pura."
-    },
-    {
-        id: 6,
-        name: "Oud Royale",
-        logo: "OR",
-        description: "Lujo oriental inigualable."
-    }
-];
-
 export default function BrandCarousel() {
-    // Creamos un grupo de Marcas asegurando ser más ancho que la pantalla.
-    const brandGroup = [...BRANDS_DATA, ...BRANDS_DATA];
+    const baseUrl = document.getElementById('root')?.getAttribute('data-base-url') || '';
+
+    const [brands, setBrands] = useState<Brand[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        axios.get(`${baseUrl}/marcas`, { headers: { Accept: 'application/json' } })
+            .then(res => {
+                const data: Brand[] = (Array.isArray(res.data) ? res.data : res.data.brands ?? []).slice(0, 12);
+                setBrands(data);
+            })
+            .catch(() => setBrands([]))
+            .finally(() => setLoading(false));
+    }, [baseUrl]);
+
+    if (loading || brands.length === 0) {
+        return null;
+    }
+
+    // Duplicamos para el ciclo infinito
+    const brandGroup = [...brands, ...brands];
 
     return (
         <section className="my-5 overflow-hidden">
-            <h3 className="text-center mb-4 text-uppercase fw-bold">Marcas Exclusivas</h3>
-            
+            <h3 className="text-center mb-4 text-uppercase">Marcas</h3>
+
             <div className="brand-carousel-container">
                 <div className="brand-carousel-track py-3">
-                    {/* Grupo 1 */}
                     <div className="brand-group">
                         {brandGroup.map((brand, index) => (
                             <div key={`g1-${brand.id}-${index}`} style={{ minWidth: '260px' }}>
-                                <BrandItem brand={brand} />
+                                <BrandItem brand={brand} baseUrl={baseUrl} />
                             </div>
                         ))}
                     </div>
-                    {/* Grupo 2 (Copia idéntica para hacer el ciclo infinito sin saltos) */}
                     <div className="brand-group">
                         {brandGroup.map((brand, index) => (
                             <div key={`g2-${brand.id}-${index}`} style={{ minWidth: '260px' }}>
-                                <BrandItem brand={brand} />
+                                <BrandItem brand={brand} baseUrl={baseUrl} />
                             </div>
                         ))}
                     </div>
@@ -76,11 +55,11 @@ export default function BrandCarousel() {
                     overflow: hidden;
                     position: relative;
                 }
-                
+
                 .brand-carousel-track {
                     display: flex;
                     width: max-content;
-                    animation: scroll-brands 40s linear infinite;
+                    animation: scroll-brands 95s linear infinite;
                 }
 
                 .brand-carousel-track:hover {
@@ -89,13 +68,13 @@ export default function BrandCarousel() {
 
                 .brand-group {
                     display: flex;
-                    gap: 1.5rem;   /* Bootstrap gap-4 = 1.5rem */
-                    padding-right: 1.5rem; /* El mismo gap al final para el empalme perfecto */
+                    gap: 1.5rem;
+                    padding-right: 1.5rem;
                 }
 
                 @keyframes scroll-brands {
                     0% { transform: translateX(0); }
-                    100% { transform: translateX(-50%); } 
+                    100% { transform: translateX(-50%); }
                 }
                 `}
             </style>

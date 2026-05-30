@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Concerns\GeneratesCreationBasedId;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +12,11 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use GeneratesCreationBasedId, HasFactory, Notifiable;
+
+    public $incrementing = false;
+
+    protected $keyType = 'int';
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +39,15 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $user): void {
+            if (empty($user->id)) {
+                $user->id = self::generateCreationBasedId();
+            }
+        });
+    }
 
     /**
      * Get the attributes that should be cast.

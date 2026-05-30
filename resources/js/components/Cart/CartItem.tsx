@@ -1,34 +1,98 @@
 import React from 'react';
 
-export default function CartItem() {
+interface CartItemProps {
+    productName: string;
+    variantVolume: string;
+    imageUrl?: string;
+    unitPrice: number;
+    quantity: number;
+    onIncrease: () => void;
+    onDecrease: () => void;
+    onRemove: () => void;
+}
+
+const placeholderImage = 'https://placehold.co/200x200/e9ecef/212529?text=Perfume';
+
+export default function CartItem({
+    productName,
+    variantVolume,
+    imageUrl,
+    unitPrice,
+    quantity,
+    onIncrease,
+    onDecrease,
+    onRemove,
+}: CartItemProps) {
+    const formatPrice = (value: number) =>
+        value.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+    const normalizeImageUrl = (url?: string) => {
+        if (!url) return placeholderImage;
+        if (/^https?:\/\//i.test(url)) return url;
+
+        const rootEl = document.getElementById('root');
+        const baseUrl = rootEl?.getAttribute('data-base-url') || '';
+        const sanitizedBase = baseUrl.replace(/\/$/, '');
+        const normalizedPath = url.startsWith('/') ? url : `/${url}`;
+
+        return `${sanitizedBase}${normalizedPath}`;
+    };
+
+    const itemTotal = unitPrice * quantity;
+
     return (
-        <div className="card mb-3 border-0 shadow-sm">
-            <div className="row g-0">
-                <div className="col-md-3">
-                    <img src="https://placehold.co/200x200/e9ecef/212529?text=Perfume" className="img-fluid rounded-start h-100 object-fit-cover" alt="Perfume" />
+        <div className="row g-3 align-items-center position-relative">
+            <button
+                type="button"
+                className="btn-close position-absolute top-0 end-0 mt-1 me-2"
+                style={{ fontSize: '0.7rem', zIndex: 2 }}
+                onClick={onRemove}
+                aria-label="Eliminar producto del carrito"
+                title="Eliminar producto"
+            ></button>
+
+            <div className="col-4 col-md-2">
+                <div className="ratio ratio-1x1 bg-light rounded overflow-hidden">
+                    <img
+                        src={normalizeImageUrl(imageUrl)}
+                        className="w-100 h-100 object-fit-cover"
+                        alt={productName}
+                    />
                 </div>
-                <div className="col-md-9">
-                    <div className="card-body d-flex flex-column h-100">
-                        <div className="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <h5 className="card-title fw-bold mb-1">Aqua di Mare Essenza</h5>
-                                <p className="card-text text-muted small mb-0">Tamaño: 50ml</p>
-                            </div>
-                            <h5 className="fw-bold text-primary mb-0">$2,450.00</h5>
-                        </div>
-                        
-                        <div className="d-flex justify-content-between align-items-center mt-auto pt-3">
-                            <div className="input-group" style={{ width: '120px' }}>
-                                <button className="btn btn-outline-secondary btn-sm px-2" type="button">-</button>
-                                <input type="text" className="form-control form-control-sm text-center font-weight-bold" defaultValue="1" readOnly />
-                                <button className="btn btn-outline-secondary btn-sm px-2" type="button">+</button>
-                            </div>
-                            <button className="btn btn-link text-danger p-0 text-decoration-none small">
-                                Eliminar
-                            </button>
-                        </div>
-                    </div>
+            </div>
+            <div className="col-8 col-md-5 pe-4">
+                <h6 className="fw-bold mb-1">{productName}</h6>
+                <p className="text-muted small mb-1">
+                    <span className="badge bg-light text-dark border me-1">{variantVolume}</span>
+                </p>
+                <p className="text-muted small mb-0">
+                    Precio unitario: <span className="fw-semibold text-dark">{formatPrice(unitPrice)}</span>
+                </p>
+            </div>
+            <div className="col-7 col-md-3">
+                <div className="input-group input-group-sm" style={{ maxWidth: '130px' }}>
+                    <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={onDecrease}
+                        aria-label="Disminuir cantidad"
+                    >−</button>
+                    <input
+                        type="text"
+                        className="form-control text-center fw-semibold"
+                        value={quantity}
+                        readOnly
+                    />
+                    <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={onIncrease}
+                        aria-label="Aumentar cantidad"
+                    >+</button>
                 </div>
+            </div>
+            <div className="col-5 col-md-2 text-end">
+                <span className="fw-bold fs-5 text-dark">{formatPrice(itemTotal)}</span>
             </div>
         </div>
     );

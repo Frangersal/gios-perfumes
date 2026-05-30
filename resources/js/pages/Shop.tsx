@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from '../layouts/Navbar';
+import SearchBar from '../layouts/SearchBar';
 import Footer from '../layouts/Footer';
 import PromoBar from '../layouts/Index/PromoBar';
 import ShopSidebar from '../layouts/Shop/ShopSidebar';
@@ -9,6 +10,7 @@ export default function Shop() {
     return (
         <div className="d-flex flex-column min-vh-100">
             <Navbar />
+            <SearchBar />
             <PromoBar />
 
             <div className="container mt-5">

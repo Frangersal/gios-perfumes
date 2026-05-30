@@ -1,11 +1,13 @@
 import React from 'react';
 import Navbar from '../layouts/Navbar';
+import SearchBar from '../layouts/SearchBar';
 import Footer from '../layouts/Footer';
 
 export default function Contact() {
     return (
         <div className="d-flex flex-column min-vh-100 bg-light bg-opacity-50">
             <Navbar />
+            <SearchBar />
             
             <div className="bg-dark text-white py-5 mb-5 text-center shadow-sm">
                 <div className="container py-3">

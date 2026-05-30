@@ -1,7 +1,11 @@
 import React from 'react';
 import ReviewItem from '../../components/Product/ReviewItem';
 
-export default function ProductReviews() {
+interface ProductReviewsProps {
+    reviews: any[];
+}
+
+export default function ProductReviews({ reviews }: ProductReviewsProps) {
     return (
         <div className="mt-5 pt-5 border-top">
             <h3 className="mb-4">Reseñas de Clientes</h3>

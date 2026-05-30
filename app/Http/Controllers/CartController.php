@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -27,7 +30,56 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'product_variant_id' => ['required', 'integer', 'exists:product_variants,id'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:99'],
+            'cart_id' => ['nullable', 'integer'],
+        ]);
+
+        $variant = ProductVariant::findOrFail($data['product_variant_id']);
+
+        if ($request->user()) {
+            $cart = Cart::firstOrCreate(['user_id' => $request->user()->id]);
+        } else {
+            $guestCartId = $data['cart_id'] ?? null;
+            $cart = null;
+
+            if ($guestCartId) {
+                $cart = Cart::where('id', $guestCartId)
+                    ->whereNull('user_id')
+                    ->first();
+            }
+
+            if (!$cart) {
+                $cart = Cart::create(['user_id' => null]);
+            }
+        }
+
+        $existingItem = CartItem::where('cart_id', $cart->id)
+            ->where('product_variant_id', $variant->id)
+            ->first();
+
+        if ($existingItem) {
+            $existingItem->quantity += (int) $data['quantity'];
+            $existingItem->price = $variant->price;
+            $existingItem->save();
+        } else {
+            CartItem::create([
+                'cart_id' => $cart->id,
+                'product_variant_id' => $variant->id,
+                'quantity' => (int) $data['quantity'],
+                'price' => $variant->price,
+            ]);
+        }
+
+        $itemCount = CartItem::where('cart_id', $cart->id)->sum('quantity');
+
+        return response()->json([
+            'ok' => true,
+            'message' => 'Producto agregado al carrito',
+            'cart_id' => $cart->id,
+            'item_count' => $itemCount,
+        ]);
     }
 
     /**

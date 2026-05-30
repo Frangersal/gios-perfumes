@@ -1,11 +1,13 @@
 import React from 'react';
 import Navbar from '../layouts/Navbar';
+import SearchBar from '../layouts/SearchBar';
 import Footer from '../layouts/Footer';
 
 export default function Search() {
     return (
         <div className="d-flex flex-column min-vh-100 bg-light">
             <Navbar />
+            <SearchBar />
             
             <main className="container my-5 pb-5">
                 <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
@@ -21,7 +23,7 @@ export default function Search() {
                             <div className="card-body text-center p-4">
                                 <h6 className="card-title fw-bold text-uppercase mb-1">Good Girl</h6>
                                 <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$3,200.00 MXN</p>
+                                <p className="fw-bold text-primary mb-0">$3,200.00</p>
                             </div>
                         </div>
                     </div>
@@ -32,7 +34,7 @@ export default function Search() {
                             <div className="card-body text-center p-4">
                                 <h6 className="card-title fw-bold text-uppercase mb-1">Bad Boy</h6>
                                 <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$2,900.00 MXN</p>
+                                <p className="fw-bold text-primary mb-0">$2,900.00</p>
                             </div>
                         </div>
                     </div>
@@ -43,7 +45,7 @@ export default function Search() {
                             <div className="card-body text-center p-4">
                                 <h6 className="card-title fw-bold text-uppercase mb-1">212 VIP</h6>
                                 <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$2,650.00 MXN</p>
+                                <p className="fw-bold text-primary mb-0">$2,650.00</p>
                             </div>
                         </div>
                     </div>
@@ -54,7 +56,7 @@ export default function Search() {
                             <div className="card-body text-center p-4">
                                 <h6 className="card-title fw-bold text-uppercase mb-1">CH Men</h6>
                                 <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$2,450.00 MXN</p>
+                                <p className="fw-bold text-primary mb-0">$2,450.00</p>
                             </div>
                         </div>
                     </div>

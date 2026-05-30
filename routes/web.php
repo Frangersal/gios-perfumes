@@ -26,10 +26,12 @@ use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/product/{id?}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/product/{id}/related', [ProductController::class, 'related'])->name('product.related');
 Route::get('/categoria/{slug?}', [CategoryController::class, 'show'])->name('category.show');
 
 Route::get('/marcas', [BrandController::class, 'index'])->name('brands.index');
 Route::get('/marcas/{slug}', [BrandController::class, 'show'])->name('brands.show');
+Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add');
 
 // --- RUTAS PROTEGIDAS DEL CLIENTE ---
 // Requiere login y tener el rol de 'Cliente'
@@ -37,6 +39,18 @@ Route::middleware(['auth', 'can:is-customer'])->group(function () {
     Route::resource('wishlist', WishlistController::class);
     Route::resource('cart', CartController::class);
     Route::resource('checkout', CheckoutController::class);
+
+    // Endpoints JSON del perfil del cliente
+    Route::get('profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
+    Route::get('profile/orders/{order}', [ProfileController::class, 'orderShow'])->name('profile.orders.show');
+    Route::get('profile/addresses', [ProfileController::class, 'addresses'])->name('profile.addresses');
+    Route::post('profile/addresses', [ProfileController::class, 'storeAddress'])->name('profile.addresses.store');
+    Route::put('profile/addresses/{address}', [ProfileController::class, 'updateAddress'])->name('profile.addresses.update');
+    Route::delete('profile/addresses/{address}', [ProfileController::class, 'destroyAddress'])->name('profile.addresses.destroy');
+
+    Route::get('profile/account', [ProfileController::class, 'account'])->name('profile.account');
+    Route::put('profile/account', [ProfileController::class, 'updateAccount'])->name('profile.account.update');
+
     Route::resource('profile', ProfileController::class);
 });
 
