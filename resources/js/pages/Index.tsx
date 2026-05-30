@@ -1,15 +1,18 @@
 import React from 'react';
 import Navbar from '../layouts/Navbar';
-import PromoBar from '../layouts/PromoBar';
+import SearchBar from '../layouts/SearchBar';
+import PromoBar from '../layouts/Index/PromoBar';
 import Footer from '../layouts/Footer';
-import Carrusel from '../layouts/Carrusel';
-import ProductsGrid from '../layouts/ProductsGrid';
-import BrandCarousel from '../layouts/BrandCarousel';
+import Carrusel from '../layouts/Index/Carrusel';
+import ProductsGrid from '../layouts/Index/ProductsGrid';
+import BrandCarousel from '../layouts/Index/BrandCarousel';
+import Newsletter from '../layouts/Index/Newsletter';
 
 export default function Index() {
     return (
         <div className="d-flex flex-column min-vh-100">
             <Navbar />
+            <SearchBar />
             <PromoBar />
             
             <Carrusel />
@@ -19,6 +22,8 @@ export default function Index() {
                 
                 <BrandCarousel />
                 
+                <Newsletter />
+
                 <hr className="my-5" />
 
                 {/* 
