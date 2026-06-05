@@ -1,32 +1,74 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import '../../css/layouts/header.css';
 
 export default function SearchBar() {
+    const root = document.getElementById('root');
+    const baseUrl = root?.getAttribute('data-base-url') || '';
+
+    const [query, setQuery] = useState('');
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            const target = e.target as HTMLElement | null;
+            const isTyping =
+                target &&
+                (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+            if (e.key === '/' && !isTyping) {
+                e.preventDefault();
+                inputRef.current?.focus();
+            }
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, []);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const q = query.trim();
+        if (!q) return;
+        window.location.href = `${baseUrl}/search?q=${encodeURIComponent(q)}`;
+    };
+
     return (
-        <div className="bg-dark py-2">
-            <div className="container">
-                <div className="row justify-content-center">
-                    <div className="col-12 col-md-8 col-lg-6">
-                        <div className="input-group">
-                            <input
-                                type="search"
-                                className="form-control bg-dark text-white border-secondary"
-                                placeholder="Buscar perfumes, marcas, notas..."
-                                aria-label="Buscar productos"
-                                style={{ caretColor: 'white' }}
-                            />
-                            <button
-                                className="btn btn-outline-light"
-                                type="button"
-                                aria-label="Buscar"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <section className="gp-search" aria-label="Buscar productos">
+            <form className="gp-search__inner" onSubmit={handleSubmit} role="search">
+                <label className="gp-search__field">
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                    >
+                        <circle cx="11" cy="11" r="7" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+
+                    <input
+                        ref={inputRef}
+                        type="search"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder="Busca tu fragancia, marca o nota olfativa…"
+                        aria-label="Buscar perfumes, marcas o notas"
+                        autoComplete="off"
+                    />
+                </label>
+
+                <span className="gp-search__hint" aria-hidden="true">
+                    Pulsa
+                    <kbd className="gp-search__kbd">/</kbd>
+                </span>
+
+                <button type="submit" className="gp-search__submit">
+                    Buscar
+                </button>
+            </form>
+        </section>
     );
 }

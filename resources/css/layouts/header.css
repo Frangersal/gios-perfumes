@@ -1,0 +1,297 @@
+/* =========================================================================
+   Gio's Perfumes — Header system (TopBar + SearchBar + PromoBar)
+   Coherente con el rediseño luxury del Navbar.
+   Todos los selectores van con prefijo para NO romper Bootstrap.
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --gp-h-ivory:     #f7f1e6;
+    --gp-h-cream:     #efe6d4;
+    --gp-h-espresso:  #1c1814;
+    --gp-h-charcoal:  #2a2622;
+    --gp-h-mute:      rgba(247, 241, 230, 0.7);
+    --gp-h-line:      rgba(247, 241, 230, 0.12);
+    --gp-h-gold:      #c8a45c;
+    --gp-h-gold-deep: #a98237;
+
+    --gp-h-serif: 'Cormorant Garamond', Georgia, serif;
+    --gp-h-sans:  'Inter', 'Helvetica Neue', system-ui, sans-serif;
+}
+
+/* =========================================================================
+   TOP BAR (la franja superior con Login / Registro / Mi cuenta)
+   Se renderiza desde welcome.blade.php
+   ========================================================================= */
+.gp-top {
+    background: #110e0b;
+    color: var(--gp-h-mute);
+    font-family: var(--gp-h-sans);
+    border-bottom: 1px solid var(--gp-h-line);
+    position: relative;
+    z-index: 1031;
+}
+
+.gp-top__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0.55rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+.gp-top__tagline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--gp-h-mute);
+}
+
+.gp-top__tagline em {
+    font-family: var(--gp-h-serif);
+    font-style: italic;
+    color: var(--gp-h-gold);
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    text-transform: none;
+}
+
+.gp-top__tagline .gp-top__diamond {
+    color: var(--gp-h-gold);
+    font-size: 0.6rem;
+}
+
+.gp-top__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.gp-top__actions a {
+    color: var(--gp-h-mute);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    transition: color 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.gp-top__actions a:hover { color: var(--gp-h-gold); }
+
+.gp-top__actions a.is-cta {
+    color: var(--gp-h-gold);
+}
+
+.gp-top__sep {
+    color: rgba(247, 241, 230, 0.25);
+    font-weight: 300;
+    letter-spacing: 0;
+}
+
+@media (max-width: 700px) {
+    .gp-top__inner { justify-content: center; }
+    .gp-top__tagline { display: none; }
+}
+
+/* =========================================================================
+   SEARCH BAR
+   Editorial / minimalista. Va debajo del Navbar.
+   ========================================================================= */
+.gp-search {
+    background: #2a2622;
+    background-image: linear-gradient(180deg, #2a2622 0%, #211d1a 100%);
+    color: var(--gp-h-ivory);
+    font-family: var(--gp-h-sans);
+    border-bottom: 1px solid var(--gp-h-line);
+    position: relative;
+}
+
+.gp-search__inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.gp-search__field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.65rem 0.25rem;
+    border: none;
+    border-bottom: 1px solid rgba(247, 241, 230, 0.22);
+    transition: border-color 0.3s ease;
+}
+
+.gp-search__field:focus-within {
+    border-bottom-color: var(--gp-h-gold);
+}
+
+.gp-search__field svg {
+    color: var(--gp-h-gold);
+    flex-shrink: 0;
+}
+
+.gp-search__field input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--gp-h-ivory);
+    font-family: var(--gp-h-serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    font-weight: 400;
+    padding: 0.15rem 0;
+    letter-spacing: 0.01em;
+    caret-color: var(--gp-h-gold);
+}
+
+.gp-search__field input::placeholder {
+    color: rgba(247, 241, 230, 0.45);
+    font-style: italic;
+    letter-spacing: 0.02em;
+}
+
+.gp-search__hint {
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(247, 241, 230, 0.45);
+    white-space: nowrap;
+}
+
+.gp-search__kbd {
+    border: 1px solid rgba(247, 241, 230, 0.25);
+    padding: 0.15rem 0.4rem;
+    margin-left: 0.4rem;
+    border-radius: 3px;
+    font-family: var(--gp-h-sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: rgba(247, 241, 230, 0.6);
+}
+
+.gp-search__submit {
+    background: transparent;
+    border: 1px solid rgba(247, 241, 230, 0.35);
+    color: var(--gp-h-ivory);
+    padding: 0.55rem 1.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    white-space: nowrap;
+}
+
+.gp-search__submit:hover {
+    background: var(--gp-h-gold);
+    border-color: var(--gp-h-gold);
+    color: var(--gp-h-espresso);
+}
+
+@media (max-width: 700px) {
+    .gp-search__hint { display: none; }
+    .gp-search__inner { padding: 0.85rem 1rem; }
+    .gp-search__submit { padding: 0.55rem 1rem; }
+}
+
+/* =========================================================================
+   PROMO BAR
+   Tira inferior con mensajes promocionales en loop.
+   Cambio: fondo crema, tipografía serif italic, separadores en diamante.
+   ========================================================================= */
+.gp-promo {
+    background: var(--gp-h-cream);
+    color: var(--gp-h-espresso);
+    border-bottom: 1px solid rgba(28, 24, 20, 0.08);
+    padding: 0.75rem 0;
+    overflow: hidden;
+    position: relative;
+    font-family: var(--gp-h-serif);
+}
+
+.gp-promo::before,
+.gp-promo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.gp-promo::before {
+    left: 0;
+    background: linear-gradient(to right, var(--gp-h-cream), transparent);
+}
+
+.gp-promo::after {
+    right: 0;
+    background: linear-gradient(to left, var(--gp-h-cream), transparent);
+}
+
+.gp-promo__track {
+    display: flex;
+    width: max-content;
+    animation: gp-promo-scroll 45s linear infinite;
+}
+
+.gp-promo:hover .gp-promo__track {
+    animation-play-state: paused;
+}
+
+@keyframes gp-promo-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.gp-promo__group {
+    display: flex;
+    align-items: center;
+}
+
+.gp-promo__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0 2.5rem;
+    font-family: var(--gp-h-serif);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gp-h-charcoal);
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+}
+
+.gp-promo__item strong {
+    font-style: normal;
+    font-family: var(--gp-h-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gp-h-gold-deep);
+    font-weight: 700;
+}
+
+.gp-promo__sep {
+    color: var(--gp-h-gold);
+    font-size: 0.55rem;
+    letter-spacing: 0.5em;
+}
