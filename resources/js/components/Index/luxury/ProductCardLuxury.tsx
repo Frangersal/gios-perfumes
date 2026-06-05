@@ -14,7 +14,7 @@ interface ProductCardLuxuryProps {
 }
 
 interface WishlistStorageItem {
-    product_id: number;
+    product_id: string;
     name: string;
     brand: string;
     image: string;
@@ -56,37 +56,39 @@ export default function ProductCardLuxury({
     const userRole = root?.getAttribute('data-user-role') || '';
     const isAuthed = userRole.trim() !== '';
     const productUrl = productId ? `${baseUrl}/product/${productId}` : '#';
-    const numericId = productId !== undefined ? Number(productId) : null;
+    // Los IDs pueden superar Number.MAX_SAFE_INTEGER, por lo que se manejan
+    // como string en todo momento para evitar colisiones.
+    const idKey = productId !== undefined && productId !== null ? String(productId) : null;
 
     const [active, setActive] = useState<boolean>(false);
 
     useEffect(() => {
-        if (numericId === null) return;
+        if (idKey === null) return;
         const items = readWishlist();
-        setActive(items.some((it) => it.product_id === numericId));
+        setActive(items.some((it) => String(it.product_id) === idKey));
 
         const handleChange = () => {
             const fresh = readWishlist();
-            setActive(fresh.some((it) => it.product_id === numericId));
+            setActive(fresh.some((it) => String(it.product_id) === idKey));
         };
         window.addEventListener('wishlist:changed', handleChange);
         return () => window.removeEventListener('wishlist:changed', handleChange);
-    }, [numericId]);
+    }, [idKey]);
 
     const handleToggleWishlist = async (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        if (numericId === null) return;
+        if (idKey === null) return;
 
         const items = readWishlist();
-        const exists = items.some((it) => it.product_id === numericId);
+        const exists = items.some((it) => String(it.product_id) === idKey);
 
         const nextItems: WishlistStorageItem[] = exists
-            ? items.filter((it) => it.product_id !== numericId)
+            ? items.filter((it) => String(it.product_id) !== idKey)
             : [
                   ...items,
                   {
-                      product_id: numericId,
+                      product_id: idKey,
                       name,
                       brand,
                       image,
@@ -101,7 +103,7 @@ export default function ProductCardLuxury({
         if (isAuthed) {
             try {
                 await axios.post(`${baseUrl.replace(/\/$/, '')}/wishlist`, {
-                    product_id: numericId,
+                    product_id: idKey,
                 });
             } catch (err) {
                 console.warn('No se pudo sincronizar la wishlist con el servidor', err);

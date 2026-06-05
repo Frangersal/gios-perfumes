@@ -1,0 +1,646 @@
+/* =========================================================================
+   Gio's Perfumes — Product (Luxury redesign)
+   Hereda tokens y componentes definidos en pages/index.css (.gp-luxury)
+   ========================================================================= */
+
+/* ---------- Breadcrumb ---------- */
+.gp-luxury .gp-product-breadcrumb {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gp-mute);
+    font-weight: 600;
+}
+
+.gp-luxury .gp-product-breadcrumb a {
+    color: var(--gp-mute);
+    text-decoration: none;
+    transition: color 0.25s ease;
+}
+
+.gp-luxury .gp-product-breadcrumb a:hover {
+    color: var(--gp-gold-deep);
+}
+
+.gp-luxury .gp-product-breadcrumb__sep {
+    margin: 0 0.6rem;
+    color: var(--gp-gold);
+}
+
+.gp-luxury .gp-product-breadcrumb__current {
+    color: var(--gp-espresso);
+}
+
+/* ---------- Layout principal ---------- */
+.gp-luxury .gp-product-main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+@media (max-width: 1000px) {
+    .gp-luxury .gp-product-main {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 2rem 1rem 4rem;
+    }
+}
+
+/* ---------- Galería ---------- */
+.gp-luxury .gp-gallery {
+    position: sticky;
+    top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.gp-luxury .gp-gallery__main {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid rgba(28, 24, 20, 0.08);
+    background:
+        radial-gradient(ellipse at 30% 25%, rgba(255, 255, 255, 0.95) 0%, rgba(247, 241, 230, 0.7) 35%, rgba(239, 230, 212, 0.85) 70%, rgba(220, 206, 178, 0.95) 100%),
+        var(--gp-cream);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.6) inset,
+        0 30px 60px -25px rgba(28, 24, 20, 0.35),
+        0 8px 18px -10px rgba(28, 24, 20, 0.25);
+}
+
+/* Halo dorado decorativo detrás del producto */
+.gp-luxury .gp-gallery__main::before {
+    content: "";
+    position: absolute;
+    inset: 8% 12%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200, 164, 92, 0.28) 0%, rgba(200, 164, 92, 0.12) 35%, rgba(200, 164, 92, 0) 70%);
+    filter: blur(20px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Marco interno sutil dorado */
+.gp-luxury .gp-gallery__main::after {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(200, 164, 92, 0.25);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.gp-luxury .gp-gallery__main img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    padding: 12%;
+    object-fit: contain;
+    filter: drop-shadow(0 24px 28px rgba(28, 24, 20, 0.28)) drop-shadow(0 6px 10px rgba(28, 24, 20, 0.18));
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.gp-luxury .gp-gallery__main:hover img {
+    transform: scale(1.04);
+}
+
+.gp-luxury .gp-gallery__thumbs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+}
+
+.gp-luxury .gp-gallery__thumb {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 30% 25%, #fff 0%, var(--gp-ivory) 60%, var(--gp-cream) 100%);
+    border: 1px solid rgba(28, 24, 20, 0.08);
+    box-shadow: 0 6px 14px -10px rgba(28, 24, 20, 0.35);
+    cursor: pointer;
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    padding: 0;
+}
+
+.gp-luxury .gp-gallery__thumb img {
+    width: 100%;
+    height: 100%;
+    padding: 14%;
+    object-fit: contain;
+    opacity: 0.75;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.gp-luxury .gp-gallery__thumb:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 18px -10px rgba(28, 24, 20, 0.45);
+}
+
+.gp-luxury .gp-gallery__thumb:hover img {
+    opacity: 1;
+}
+
+.gp-luxury .gp-gallery__thumb.is-active {
+    border-color: var(--gp-gold);
+    box-shadow: 0 0 0 1px var(--gp-gold), 0 10px 18px -10px rgba(200, 164, 92, 0.55);
+}
+
+.gp-luxury .gp-gallery__thumb.is-active img {
+    opacity: 1;
+}
+
+/* ---------- Info ---------- */
+.gp-luxury .gp-product-info__brand {
+    display: inline-block;
+    font-family: var(--gp-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gp-gold-deep);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.gp-luxury .gp-product-info__title {
+    font-family: var(--gp-serif);
+    font-weight: 400;
+    font-size: clamp(2rem, 3.6vw, 2.85rem);
+    line-height: 1.1;
+    color: var(--gp-espresso);
+    margin: 0 0 1rem;
+}
+
+.gp-luxury .gp-product-info__title em {
+    font-style: italic;
+    color: var(--gp-gold-deep);
+}
+
+.gp-luxury .gp-product-info__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--gp-mute);
+    font-size: 0.85rem;
+}
+
+.gp-luxury .gp-product-info__rating .gp-star {
+    color: var(--gp-gold);
+    letter-spacing: 0.12em;
+}
+
+.gp-luxury .gp-product-info__divider {
+    width: 48px;
+    height: 1px;
+    background: var(--gp-gold);
+    margin: 0 0 1.5rem;
+}
+
+.gp-luxury .gp-product-info__price {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    font-family: var(--gp-sans);
+}
+
+.gp-luxury .gp-product-info__price-current {
+    font-family: var(--gp-sans);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--gp-espresso);
+    letter-spacing: 0.01em;
+}
+
+.gp-luxury .gp-product-info__price-old {
+    font-family: var(--gp-sans);
+    font-size: 0.95rem;
+    text-decoration: line-through;
+    color: var(--gp-mute);
+}
+
+.gp-luxury .gp-product-info__stock {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 0.4rem 0.85rem;
+    margin-bottom: 1.75rem;
+    border: 1px solid;
+}
+
+.gp-luxury .gp-product-info__stock--ok {
+    color: #4f6f3a;
+    border-color: rgba(79, 111, 58, 0.4);
+    background: rgba(79, 111, 58, 0.08);
+}
+
+.gp-luxury .gp-product-info__stock--off {
+    color: #8a3a2d;
+    border-color: rgba(138, 58, 45, 0.4);
+    background: rgba(138, 58, 45, 0.08);
+}
+
+.gp-luxury .gp-product-info__stock::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.gp-luxury .gp-product-info__desc {
+    font-family: var(--gp-sans);
+    color: var(--gp-mute);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin: 0 0 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--gp-line);
+}
+
+/* ---------- Variantes ---------- */
+.gp-luxury .gp-variants {
+    margin-bottom: 2rem;
+}
+
+.gp-luxury .gp-variants__label {
+    display: block;
+    font-family: var(--gp-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--gp-gold-deep);
+    margin-bottom: 0.85rem;
+}
+
+.gp-luxury .gp-variants__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
+.gp-luxury .gp-variant {
+    cursor: pointer;
+    padding: 0.7rem 1.2rem;
+    border: 1px solid var(--gp-line);
+    background: #fff;
+    color: var(--gp-charcoal);
+    font-family: var(--gp-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    transition: all 0.25s ease;
+}
+
+.gp-luxury .gp-variant:hover {
+    border-color: var(--gp-gold-deep);
+    color: var(--gp-espresso);
+}
+
+.gp-luxury .gp-variant small {
+    color: var(--gp-mute);
+    font-weight: 400;
+    font-size: 0.78rem;
+}
+
+.gp-luxury .gp-variant.is-active {
+    background: var(--gp-espresso);
+    color: var(--gp-ivory);
+    border-color: var(--gp-espresso);
+}
+
+.gp-luxury .gp-variant.is-active small {
+    color: rgba(247, 241, 230, 0.7);
+}
+
+/* ---------- Qty + CTA ---------- */
+.gp-luxury .gp-product-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: stretch;
+    margin-bottom: 1rem;
+}
+
+.gp-luxury .gp-qty {
+    display: inline-flex;
+    align-items: stretch;
+    border: 1px solid var(--gp-line);
+    background: #fff;
+    overflow: hidden;
+}
+
+.gp-luxury .gp-qty__btn {
+    background: transparent;
+    border: none;
+    width: 42px;
+    color: var(--gp-charcoal);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.gp-luxury .gp-qty__btn:hover {
+    background: var(--gp-cream);
+    color: var(--gp-gold-deep);
+}
+
+.gp-luxury .gp-qty__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.gp-luxury .gp-qty__value {
+    width: 48px;
+    text-align: center;
+    border: none;
+    border-left: 1px solid var(--gp-line);
+    border-right: 1px solid var(--gp-line);
+    background: transparent;
+    font-family: var(--gp-sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gp-espresso);
+    outline: none;
+}
+
+.gp-luxury .gp-product-actions .gp-btn {
+    flex: 1;
+    min-width: 220px;
+}
+
+.gp-luxury .gp-product-feedback {
+    margin: 0.5rem 0 0;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+}
+
+.gp-luxury .gp-product-feedback--ok { color: #4f6f3a; }
+.gp-luxury .gp-product-feedback--err { color: #8a3a2d; }
+
+/* ---------- Notas olfativas ---------- */
+.gp-luxury .gp-onotes {
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--gp-line);
+}
+
+.gp-luxury .gp-onotes__head {
+    margin-bottom: 1.75rem;
+}
+
+.gp-luxury .gp-onotes__head .gp-eyebrow {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.gp-luxury .gp-onotes__title {
+    font-family: var(--gp-serif);
+    font-weight: 500;
+    font-size: 1.6rem;
+    color: var(--gp-espresso);
+    margin: 0;
+}
+
+.gp-luxury .gp-onotes__title em {
+    font-style: italic;
+    color: var(--gp-gold-deep);
+}
+
+.gp-luxury .gp-onotes__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 700px) { .gp-luxury .gp-onotes__grid { grid-template-columns: 1fr; } }
+
+.gp-luxury .gp-onote {
+    background: #fff;
+    border: 1px solid var(--gp-line);
+    border-left: 3px solid var(--gp-gold);
+    padding: 1.25rem 1.25rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gp-luxury .gp-onote:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--gp-shadow-sm);
+}
+
+.gp-luxury .gp-onote__title {
+    font-family: var(--gp-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gp-gold-deep);
+    font-weight: 700;
+    margin: 0 0 0.6rem;
+}
+
+.gp-luxury .gp-onote__notes {
+    font-family: var(--gp-serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--gp-espresso);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ---------- Reviews ---------- */
+.gp-luxury .gp-reviews {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+}
+
+.gp-luxury .gp-reviews__head {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.gp-luxury .gp-reviews__head .gp-eyebrow {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.gp-luxury .gp-reviews__head h2 {
+    font-family: var(--gp-serif);
+    font-weight: 400;
+    font-size: clamp(2rem, 3.4vw, 2.8rem);
+    color: var(--gp-espresso);
+    margin: 0 0 1rem;
+}
+
+.gp-luxury .gp-reviews__head h2 em {
+    font-style: italic;
+    color: var(--gp-gold-deep);
+}
+
+.gp-luxury .gp-reviews__summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    background: var(--gp-cream);
+    border: 1px solid var(--gp-line);
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.gp-luxury .gp-reviews__score {
+    font-family: var(--gp-serif);
+    font-size: 3.5rem;
+    font-weight: 400;
+    color: var(--gp-espresso);
+    line-height: 1;
+}
+
+.gp-luxury .gp-reviews__score em {
+    font-style: italic;
+    color: var(--gp-gold-deep);
+    font-size: 1.5rem;
+    margin-left: 0.25rem;
+}
+
+.gp-luxury .gp-reviews__stars {
+    color: var(--gp-gold);
+    font-size: 1.2rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.4rem;
+}
+
+.gp-luxury .gp-reviews__count {
+    color: var(--gp-mute);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+}
+
+.gp-luxury .gp-reviews__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 880px;
+    margin: 0 auto;
+}
+
+.gp-luxury .gp-review {
+    background: #fff;
+    border: 1px solid var(--gp-line);
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.gp-luxury .gp-review:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--gp-shadow-sm);
+    border-color: var(--gp-gold);
+}
+
+.gp-luxury .gp-review__head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.gp-luxury .gp-review__stars {
+    color: var(--gp-gold);
+    letter-spacing: 0.15em;
+}
+
+.gp-luxury .gp-review__author {
+    font-family: var(--gp-serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--gp-espresso);
+    font-weight: 500;
+}
+
+.gp-luxury .gp-review__date {
+    font-size: 0.78rem;
+    color: var(--gp-mute);
+    letter-spacing: 0.04em;
+    margin-left: auto;
+}
+
+.gp-luxury .gp-review__body {
+    color: var(--gp-charcoal);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.gp-luxury .gp-reviews__more {
+    text-align: center;
+    margin-top: 2.5rem;
+}
+
+/* ---------- Related ---------- */
+.gp-luxury .gp-related {
+    background: var(--gp-cream);
+    padding: 5rem 1.5rem;
+    margin-top: 2rem;
+}
+
+.gp-luxury .gp-related__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.gp-luxury .gp-related__head {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.gp-luxury .gp-related__head .gp-eyebrow {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.gp-luxury .gp-related__head h2 {
+    font-family: var(--gp-serif);
+    font-weight: 400;
+    font-size: clamp(2rem, 3.4vw, 2.8rem);
+    color: var(--gp-espresso);
+    margin: 0;
+}
+
+.gp-luxury .gp-related__head h2 em {
+    font-style: italic;
+    color: var(--gp-gold-deep);
+}
+
+/* ---------- Estados ---------- */
+.gp-luxury .gp-product-state {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gp-mute);
+    font-family: var(--gp-serif);
+    font-style: italic;
+    font-size: 1.2rem;
+}

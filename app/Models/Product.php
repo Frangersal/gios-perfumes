@@ -14,6 +14,13 @@ class Product extends Model
         'video_url', 'meta_title', 'meta_description', 'meta_keywords'
     ];
 
+    // Los IDs de producto se generan a partir del timestamp y pueden superar
+    // Number.MAX_SAFE_INTEGER en JavaScript. Serializarlos como string evita
+    // la perdida de precision al transmitir JSON al frontend.
+    protected $casts = [
+        'id' => 'string',
+    ];
+
     public function brand() { return $this->belongsTo(Brand::class); }
     public function category() { return $this->belongsTo(Category::class); }
     public function variants() { return $this->hasMany(ProductVariant::class); }

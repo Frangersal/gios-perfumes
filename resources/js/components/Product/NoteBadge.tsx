@@ -7,11 +7,9 @@ interface NoteBadgeProps {
 
 export default function NoteBadge({ title, notes }: NoteBadgeProps) {
     return (
-        <div className="card text-center mb-3 h-100 shadow-sm border-0">
-            <div className="card-body">
-                <h6 className="card-title text-uppercase text-muted" style={{fontSize: '0.8rem'}}>{title}</h6>
-                <p className="card-text fw-bold">{notes}</p>
-            </div>
+        <div className="gp-onote">
+            <h4 className="gp-onote__title">{title}</h4>
+            <p className="gp-onote__notes">{notes}</p>
         </div>
     );
 }

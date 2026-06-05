@@ -105,90 +105,115 @@ export default function ProductInfo({ product, baseUrl }: ProductInfoProps) {
     };
 
     return (
-        <div>
-            <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                        <a href={`${baseUrl}/`} className="text-decoration-none text-muted">Inicio</a>
-                    </li>
-                    {product.category?.name && (
-                        <li className="breadcrumb-item">
-                            <a href={`${baseUrl}/shop`} className="text-decoration-none text-muted">{product.category.name}</a>
-                        </li>
-                    )}
-                    <li className="breadcrumb-item active" aria-current="page">{product.name}</li>
-                </ol>
-            </nav>
-
+        <div className="gp-product-info">
             {product.brand?.name && (
-                <p className="text-muted text-uppercase fw-semibold small mb-1">{product.brand.name}</p>
+                <span className="gp-product-info__brand">{product.brand.name}</span>
             )}
 
-            <h1 className="fw-bold mb-2">{product.name}</h1>
+            <h1 className="gp-product-info__title">{product.name}</h1>
 
-            <div className="d-flex align-items-center gap-3 mb-3">
-                <h3 className="text-dark fw-bold mb-0">{formatPrice(displayPrice)}</h3>
+            <div className="gp-product-info__rating" aria-label="Calificación 4.8 de 5">
+                <span className="gp-star" aria-hidden="true">★★★★★</span>
+                <span>4.8 · 24 reseñas</span>
+            </div>
+
+            <span className="gp-product-info__divider" />
+
+            <div className="gp-product-info__price">
+                <span className="gp-product-info__price-current">{formatPrice(displayPrice)}</span>
                 {hasDiscount && (
-                    <span className="text-muted text-decoration-line-through fs-5">{formatPrice(regularPrice)}</span>
+                    <span className="gp-product-info__price-old">{formatPrice(regularPrice)}</span>
                 )}
             </div>
 
             {totalStock > 0 ? (
-                <p className="text-success small fw-bold mb-4">Stock disponible: {totalStock} unidades</p>
+                <span className="gp-product-info__stock gp-product-info__stock--ok">
+                    {totalStock} unidades disponibles
+                </span>
             ) : (
-                <p className="text-danger small fw-bold mb-4">Sin stock disponible</p>
+                <span className="gp-product-info__stock gp-product-info__stock--off">
+                    Sin stock disponible
+                </span>
             )}
 
             {product.description && (
-                <p className="mb-4 text-muted" style={{ lineHeight: '1.8' }}>{product.description}</p>
+                <p className="gp-product-info__desc">{product.description}</p>
             )}
 
             {variants.length > 0 && (
-                <div className="mb-4">
-                    <strong className="d-block mb-3">Variantes (Tamaño):</strong>
-                    <div className="btn-group" role="group">
+                <div className="gp-variants">
+                    <span className="gp-variants__label">Tamaño</span>
+                    <div className="gp-variants__list" role="radiogroup" aria-label="Variantes de tamaño">
                         {variants.map((variant, i) => (
-                            <React.Fragment key={variant.id}>
+                            <label
+                                key={variant.id}
+                                htmlFor={`variant_${variant.id}`}
+                                className={`gp-variant${selectedVariant === i ? ' is-active' : ''}`}
+                            >
                                 <input
                                     type="radio"
-                                    className="btn-check"
                                     name="size_variant"
                                     id={`variant_${variant.id}`}
                                     checked={selectedVariant === i}
                                     onChange={() => setSelectedVariant(i)}
+                                    style={{ display: 'none' }}
                                 />
-                                <label className="btn btn-outline-dark" htmlFor={`variant_${variant.id}`}>
-                                    {variant.volume}
-                                    {Number(variant.price) !== regularPrice && (
-                                        <small className="text-muted ms-1">({formatPrice(variant.price)})</small>
-                                    )}
-                                </label>
-                            </React.Fragment>
+                                <span>{variant.volume}</span>
+                                {Number(variant.price) !== regularPrice && (
+                                    <small>{formatPrice(variant.price)}</small>
+                                )}
+                            </label>
                         ))}
                     </div>
                 </div>
             )}
 
-            <div className="d-flex gap-3 mb-2 align-items-center flex-wrap">
-                <div className="input-group" style={{ width: '130px' }}>
-                    <button className="btn btn-outline-secondary px-3" type="button"
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                    <input type="text" className="form-control text-center" value={quantity} readOnly />
-                    <button className="btn btn-outline-secondary px-3" type="button"
-                        onClick={() => setQuantity(quantity + 1)}>+</button>
+            <div className="gp-product-actions">
+                <div className="gp-qty" role="group" aria-label="Cantidad">
+                    <button
+                        type="button"
+                        className="gp-qty__btn"
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        disabled={quantity <= 1}
+                        aria-label="Disminuir cantidad"
+                    >
+                        −
+                    </button>
+                    <input
+                        type="text"
+                        className="gp-qty__value"
+                        value={quantity}
+                        readOnly
+                        aria-label="Cantidad"
+                    />
+                    <button
+                        type="button"
+                        className="gp-qty__btn"
+                        onClick={() => setQuantity(quantity + 1)}
+                        aria-label="Aumentar cantidad"
+                    >
+                        +
+                    </button>
                 </div>
+
                 <button
                     type="button"
-                    className="btn btn-dark btn-sm fw-bold text-uppercase px-3 py-2 shrink-0"
+                    className="gp-btn gp-btn-dark"
                     onClick={handleAddToCart}
                     disabled={isAdding || !activeVariant || totalStock <= 0}
                 >
-                    {isAdding ? 'Agregando...' : 'Añadir al carrito'}
+                    {isAdding ? 'Agregando…' : 'Añadir al carrito'}
                 </button>
             </div>
 
             {cartFeedback && (
-                <p className={`small mb-4 ${cartFeedback.includes('No se pudo') ? 'text-danger' : 'text-success'}`}>
+                <p
+                    className={`gp-product-feedback ${
+                        cartFeedback.includes('No') || cartFeedback.includes('no')
+                            ? 'gp-product-feedback--err'
+                            : 'gp-product-feedback--ok'
+                    }`}
+                >
                     {cartFeedback}
                 </p>
             )}

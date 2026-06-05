@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Card from '../../components/Index/Card';
+import ProductCardLuxury from '../../components/Index/luxury/ProductCardLuxury';
 
 interface RelatedProductsProps {
     categoryId?: number;
@@ -8,7 +8,7 @@ interface RelatedProductsProps {
     baseUrl: string;
 }
 
-export default function RelatedProducts({ categoryId, excludeId, baseUrl }: RelatedProductsProps) {
+export default function RelatedProducts({ excludeId, baseUrl }: RelatedProductsProps) {
     const [products, setProducts] = useState<any[]>([]);
 
     const normalize = (url: string) => {
@@ -39,27 +39,37 @@ export default function RelatedProducts({ categoryId, excludeId, baseUrl }: Rela
     if (products.length === 0) return null;
 
     return (
-        <section className="mt-5 pt-5 mb-5 border-top">
-            <h3 className="mb-4 text-center fw-bold">También te podría gustar</h3>
-            <div className="row g-4 justify-content-center">
-                {products.map((product) => {
-                    const regularPrice = Number(product.price || 0);
-                    const discountedPrice = Number(product.discount_price || 0);
-                    const hasDiscount = discountedPrice > 0 && discountedPrice < regularPrice;
+        <section className="gp-related">
+            <div className="gp-related__inner">
+                <div className="gp-related__head">
+                    <span className="gp-eyebrow">Complementa tu colección</span>
+                    <h2>
+                        También te podría <em>gustar</em>
+                    </h2>
+                    <span className="gp-divider" />
+                </div>
 
-                    return (
-                        <div key={product.id} className="col-12 col-sm-6 col-lg-3 d-flex justify-content-center">
-                            <Card
+                <div className="gp-pgrid">
+                    {products.map((product) => {
+                        const regularPrice = Number(product.price || 0);
+                        const discountedPrice = Number(product.discount_price || 0);
+                        const hasDiscount = discountedPrice > 0 && discountedPrice < regularPrice;
+
+                        return (
+                            <ProductCardLuxury
+                                key={product.id}
+                                productId={product.id}
                                 brand={product.brand?.name || "Gio's Selection"}
                                 name={product.name}
                                 currentPrice={formatPrice(hasDiscount ? discountedPrice : regularPrice)}
                                 oldPrice={hasDiscount ? formatPrice(regularPrice) : undefined}
                                 image={getMainImage(product)}
-                                productId={product.id}
+                                badge={hasDiscount ? 'OFERTA' : undefined}
+                                badgeVariant={hasDiscount ? 'gold' : 'dark'}
                             />
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
         </section>
     );
