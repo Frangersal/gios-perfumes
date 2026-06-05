@@ -27,19 +27,28 @@ class CategoryController extends Controller
                 ->whereIn('status', ['publicado', 'active'])
                 ->orderByDesc('created_at');
 
+            $matchedCategory = null;
+
             if (!empty($slug)) {
-                $category = Category::query()
-                    ->get(['id', 'name'])
+                $matchedCategory = Category::query()
+                    ->get(['id', 'name', 'description'])
                     ->first(fn (Category $item) => Str::slug($item->name) === $slug);
 
-                if ($category) {
-                    $query->where('category_id', $category->id);
+                if ($matchedCategory) {
+                    $query->where('category_id', $matchedCategory->id);
                 }
             }
 
-            return response()->json(
-                $query->paginate($perPage)->appends($request->query())
-            );
+            $paginated = $query->paginate($perPage)->appends($request->query());
+
+            return response()->json(array_merge($paginated->toArray(), [
+                'category' => $matchedCategory ? [
+                    'id'          => $matchedCategory->id,
+                    'name'        => $matchedCategory->name,
+                    'slug'        => Str::slug($matchedCategory->name),
+                    'description' => $matchedCategory->description,
+                ] : null,
+            ]));
         }
 
         return view('welcome', ['page' => 'category']);

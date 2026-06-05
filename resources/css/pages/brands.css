@@ -1,0 +1,249 @@
+/* =========================================================================
+   Gio's Perfumes — Brands (Luxury redesign)
+   Hereda tokens y componentes definidos en pages/index.css (.gp-luxury)
+   ========================================================================= */
+
+/* ---------- Hero ---------- */
+.gp-luxury .gp-brands-hero {
+    position: relative;
+    background: linear-gradient(135deg, #1c1814 0%, #2a2622 55%, #3a3128 100%);
+    color: var(--gp-ivory);
+    padding: 6rem 1.5rem 5rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.gp-luxury .gp-brands-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 80% 30%, rgba(200, 164, 92, 0.22), transparent 55%),
+        radial-gradient(circle at 15% 75%, rgba(216, 180, 160, 0.16), transparent 55%);
+    pointer-events: none;
+}
+
+.gp-luxury .gp-brands-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.gp-luxury .gp-brands-hero .gp-eyebrow {
+    color: var(--gp-gold);
+    display: inline-block;
+    margin-bottom: 1.25rem;
+}
+
+.gp-luxury .gp-brands-hero__title {
+    font-family: var(--gp-serif);
+    font-weight: 300;
+    font-size: clamp(2.6rem, 5.2vw, 4.2rem);
+    line-height: 1.05;
+    margin: 0 0 1rem;
+    color: var(--gp-ivory);
+}
+
+.gp-luxury .gp-brands-hero__title em {
+    font-style: italic;
+    color: var(--gp-gold);
+    font-weight: 400;
+}
+
+.gp-luxury .gp-brands-hero__lead {
+    margin: 1.5rem auto 0;
+    max-width: 620px;
+    color: rgba(247, 241, 230, 0.78);
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+/* ---------- Sección ---------- */
+.gp-luxury .gp-brands-section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 6rem;
+}
+
+.gp-luxury .gp-brands-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--gp-line);
+    flex-wrap: wrap;
+}
+
+.gp-luxury .gp-brands-toolbar__count {
+    font-size: 0.85rem;
+    color: var(--gp-mute);
+    letter-spacing: 0.04em;
+}
+
+.gp-luxury .gp-brands-toolbar__hint {
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gp-gold-deep);
+    font-weight: 700;
+}
+
+/* ---------- Grid ---------- */
+.gp-luxury .gp-brands-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+@media (max-width: 1000px) { .gp-luxury .gp-brands-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px)  { .gp-luxury .gp-brands-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Tarjeta ---------- */
+.gp-luxury .gp-brand-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--gp-line);
+    padding: 2.5rem 2rem 2rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    overflow: hidden;
+}
+
+.gp-luxury .gp-brand-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gp-gold), transparent);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.gp-luxury .gp-brand-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--gp-shadow-md);
+    border-color: var(--gp-gold);
+}
+
+.gp-luxury .gp-brand-card:hover::before { opacity: 1; }
+
+.gp-luxury .gp-brand-card__media {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--gp-cream);
+    border: 1px solid var(--gp-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    transition: background 0.3s ease;
+}
+
+.gp-luxury .gp-brand-card:hover .gp-brand-card__media {
+    background: var(--gp-sand);
+}
+
+.gp-luxury .gp-brand-card__media img {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    filter: grayscale(0.2);
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.gp-luxury .gp-brand-card:hover .gp-brand-card__media img {
+    filter: grayscale(0);
+    transform: scale(1.05);
+}
+
+.gp-luxury .gp-brand-card__initial {
+    font-family: var(--gp-serif);
+    font-style: italic;
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: var(--gp-gold-deep);
+    letter-spacing: 0.02em;
+}
+
+.gp-luxury .gp-brand-card__country {
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gp-gold-deep);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.gp-luxury .gp-brand-card__name {
+    font-family: var(--gp-serif);
+    font-size: 1.55rem;
+    font-weight: 500;
+    color: var(--gp-espresso);
+    margin: 0 0 0.85rem;
+    line-height: 1.2;
+}
+
+.gp-luxury .gp-brand-card__divider {
+    width: 32px;
+    height: 1px;
+    background: var(--gp-gold);
+    margin: 0 auto 1rem;
+}
+
+.gp-luxury .gp-brand-card__desc {
+    color: var(--gp-mute);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin: 0 0 1.5rem;
+    flex-grow: 1;
+}
+
+.gp-luxury .gp-brand-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--gp-espresso);
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.gp-luxury .gp-brand-card:hover .gp-brand-card__link {
+    color: var(--gp-gold-deep);
+    border-bottom-color: var(--gp-gold);
+}
+
+.gp-luxury .gp-brand-card__link svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s ease;
+}
+
+.gp-luxury .gp-brand-card:hover .gp-brand-card__link svg {
+    transform: translateX(4px);
+}
+
+/* ---------- Estado vacío / loading ---------- */
+.gp-luxury .gp-brands-empty {
+    text-align: center;
+    color: var(--gp-mute);
+    padding: 4rem 1rem;
+    font-family: var(--gp-sans);
+    font-size: 0.95rem;
+}

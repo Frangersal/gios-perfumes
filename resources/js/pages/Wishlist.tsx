@@ -7,6 +7,9 @@ import PromoBar from '../layouts/Index/PromoBar';
 import WishlistGrid, { WishlistGridItem } from '../layouts/Wishlist/WishlistGrid';
 import WishlistEmpty from '../layouts/Wishlist/WishlistEmpty';
 
+import '../../css/pages/index.css';
+import '../../css/pages/wishlist.css';
+
 const WISHLIST_KEY = 'gios_wishlist_items';
 
 const readLocal = (): WishlistGridItem[] => {
@@ -102,17 +105,28 @@ export default function Wishlist() {
             <SearchBar />
             <PromoBar />
 
-            <main className="container mt-5">
-                <div className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                    <h2 className="fw-bold m-0">Mi Wishlist</h2>
-                    <span className="text-muted">
-                        {hasItems
-                            ? `${items.length} ${items.length === 1 ? 'perfume guardado' : 'perfumes guardados'}`
-                            : 'Sin perfumes guardados'}
-                    </span>
-                </div>
+            <main className="grow gp-luxury">
+                <section className="gp-wishlist-hero">
+                    <div className="gp-wishlist-hero__inner">
+                        <span className="gp-eyebrow">Mi colección</span>
+                        <h1 className="gp-wishlist-hero__title">
+                            Tu <em>wishlist</em> de fragancias
+                        </h1>
+                        <span className="gp-divider" />
+                        <p className="gp-subtitle" style={{ marginTop: '1.25rem', color: 'rgba(247, 241, 230, 0.78)' }}>
+                            Guarda las piezas que despierten tu memoria olfativa y vuelve a ellas cuando estés listo para llevarlas a casa.
+                        </p>
+                        <span className="gp-wishlist-hero__count">
+                            {hasItems
+                                ? `${items.length} ${items.length === 1 ? 'perfume guardado' : 'perfumes guardados'}`
+                                : 'Sin perfumes guardados'}
+                        </span>
+                    </div>
+                </section>
 
-                {hasItems ? <WishlistGrid items={items} onRemove={handleRemove} /> : <WishlistEmpty />}
+                <section className="gp-wishlist-section">
+                    {hasItems ? <WishlistGrid items={items} onRemove={handleRemove} /> : <WishlistEmpty />}
+                </section>
             </main>
 
             <Footer />

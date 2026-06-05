@@ -2,89 +2,165 @@ import React from 'react';
 import Navbar from '../layouts/Navbar';
 import SearchBar from '../layouts/SearchBar';
 import Footer from '../layouts/Footer';
+import PromoBar from '../layouts/Index/PromoBar';
+
+import '../../css/pages/index.css';
+import '../../css/pages/contact.css';
 
 export default function Contact() {
     return (
-        <div className="d-flex flex-column min-vh-100 bg-light bg-opacity-50">
+        <div className="d-flex flex-column min-vh-100">
             <Navbar />
             <SearchBar />
-            
-            <div className="bg-dark text-white py-5 mb-5 text-center shadow-sm">
-                <div className="container py-3">
-                    <h1 className="fw-bold mb-0">Contacto</h1>
-                </div>
-            </div>
+            <PromoBar />
 
-            <main className="container mb-5 pb-5">
-                <div className="row g-5">
-                    {/* Info Contacto */}
-                    <div className="col-lg-5">
-                        <h2 className="fw-bold mb-4">¿En qué podemos ayudarte?</h2>
-                        <p className="text-muted fs-5 mb-5">
-                            Nuestro equipo de atención al cliente está siempre disponible para responder tus dudas sobre pedidos, fragancias o envíos.
+            <main className="grow gp-luxury">
+                <section className="gp-contact-hero">
+                    <div className="gp-contact-hero__inner">
+                        <span className="gp-eyebrow">Atención personalizada</span>
+                        <h1 className="gp-contact-hero__title">
+                            Hablemos de <em>fragancias</em>
+                        </h1>
+                        <span className="gp-divider" />
+                        <p className="gp-contact-hero__lead">
+                            Nuestro equipo de atención al cliente está siempre disponible para responder
+                            tus dudas sobre pedidos, fragancias o envíos.
                         </p>
-
-                        <div className="d-flex align-items-center mb-4 pb-3 border-bottom">
-                            <div className="bg-dark text-white rounded-circle d-flex justify-content-center align-items-center" style={{ width: '50px', height: '50px' }}>
-                                <i className="bi bi-geo-alt-fill fs-5"></i>
-                            </div>
-                            <div className="ms-4">
-                                <h5 className="fw-bold mb-1">Visítanos</h5>
-                                <p className="text-muted mb-0">Av. de los Insurgentes Sur 123<br/>Ciudad de México, CDMX 01234</p>
-                            </div>
-                        </div>
-
-                        <div className="d-flex align-items-center mb-4 pb-3 border-bottom">
-                            <div className="bg-dark text-white rounded-circle d-flex justify-content-center align-items-center" style={{ width: '50px', height: '50px' }}>
-                                <i className="bi bi-envelope-fill fs-5"></i>
-                            </div>
-                            <div className="ms-4">
-                                <h5 className="fw-bold mb-1">Escríbenos</h5>
-                                <p className="text-muted mb-0">soporte@giosperfumes.com</p>
-                            </div>
-                        </div>
-
-                        <div className="d-flex align-items-center">
-                            <div className="bg-dark text-white rounded-circle d-flex justify-content-center align-items-center" style={{ width: '50px', height: '50px' }}>
-                                <i className="bi bi-telephone-fill fs-5"></i>
-                            </div>
-                            <div className="ms-4">
-                                <h5 className="fw-bold mb-1">Llámanos</h5>
-                                <p className="text-muted mb-0">+52 (55) 1234 5678</p>
-                            </div>
-                        </div>
                     </div>
+                </section>
+
+                <section className="gp-contact-layout">
+                    {/* Información de contacto */}
+                    <aside className="gp-contact-info">
+                        <div className="gp-contact-info__head">
+                            <span className="gp-eyebrow">¿Cómo podemos ayudarte?</span>
+                            <h2 className="gp-contact-info__title">
+                                Tu próxima <em>fragancia</em> empieza con una conversación
+                            </h2>
+                            <p className="gp-contact-info__lead">
+                                Elige el canal que prefieras: respondemos en menos de 24 horas
+                                con la misma dedicación con la que seleccionamos nuestras piezas.
+                            </p>
+                        </div>
+
+                        <div className="gp-contact-info__list">
+                            <div className="gp-contact-item">
+                                <div className="gp-contact-item__icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                        <circle cx="12" cy="10" r="3" />
+                                    </svg>
+                                </div>
+                                <div className="gp-contact-item__body">
+                                    <strong>Visítanos</strong>
+                                    <p>
+                                        Av. de los Insurgentes Sur 123
+                                        <br />
+                                        Ciudad de México, CDMX 01234
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="gp-contact-item">
+                                <div className="gp-contact-item__icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                        <polyline points="22,6 12,13 2,6" />
+                                    </svg>
+                                </div>
+                                <div className="gp-contact-item__body">
+                                    <strong>Escríbenos</strong>
+                                    <p>
+                                        <a href="mailto:soporte@giosperfumes.com">soporte@giosperfumes.com</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="gp-contact-item">
+                                <div className="gp-contact-item__icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                    </svg>
+                                </div>
+                                <div className="gp-contact-item__body">
+                                    <strong>Llámanos</strong>
+                                    <p>
+                                        <a href="tel:+525512345678">+52 (55) 1234 5678</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
 
                     {/* Formulario */}
-                    <div className="col-lg-7">
-                        <div className="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
-                            <h4 className="fw-bold mb-4">Envíanos un mensaje</h4>
-                            <form>
-                                <div className="row g-3 mb-3">
-                                    <div className="col-md-6 form-floating">
-                                        <input type="text" className="form-control bg-light border-0 rounded-3" id="contactName" placeholder="Nombre" required />
-                                        <label htmlFor="contactName" className="ms-2">Nombre completo</label>
-                                    </div>
-                                    <div className="col-md-6 form-floating">
-                                        <input type="email" className="form-control bg-light border-0 rounded-3" id="contactEmail" placeholder="Correo" required />
-                                        <label htmlFor="contactEmail" className="ms-2">Correo electrónico</label>
-                                    </div>
-                                </div>
-                                <div className="form-floating mb-3">
-                                    <input type="text" className="form-control bg-light border-0 rounded-3" id="contactSubject" placeholder="Asunto" required />
-                                    <label htmlFor="contactSubject">Asunto</label>
-                                </div>
-                                <div className="form-floating mb-4">
-                                    <textarea className="form-control bg-light border-0 rounded-3" id="contactMessage" placeholder="Mensaje" style={{ height: '150px' }} required></textarea>
-                                    <label htmlFor="contactMessage">Tu mensaje...</label>
-                                </div>
-                                <button className="btn btn-dark w-100 py-3 rounded-pill fw-bold" style={{ letterSpacing: '1px' }}>
-                                    ENVIAR MENSAJE
-                                </button>
-                            </form>
+                    <div className="gp-contact-form">
+                        <div className="gp-contact-form__head">
+                            <span className="gp-eyebrow">Envíanos un mensaje</span>
+                            <h3 className="gp-contact-form__title">
+                                Cuéntanos qué <em>buscas</em>
+                            </h3>
+                            <span className="gp-contact-form__divider" />
                         </div>
+
+                        <form>
+                            <div className="gp-contact-form__grid">
+                                <div className="gp-field">
+                                    <label htmlFor="contactName" className="gp-field__label">
+                                        Nombre completo
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="contactName"
+                                        className="gp-field__input"
+                                        placeholder="Tu nombre"
+                                        required
+                                    />
+                                </div>
+                                <div className="gp-field">
+                                    <label htmlFor="contactEmail" className="gp-field__label">
+                                        Correo electrónico
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="contactEmail"
+                                        className="gp-field__input"
+                                        placeholder="tu@correo.com"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="gp-field">
+                                <label htmlFor="contactSubject" className="gp-field__label">
+                                    Asunto
+                                </label>
+                                <input
+                                    type="text"
+                                    id="contactSubject"
+                                    className="gp-field__input"
+                                    placeholder="¿Sobre qué quieres hablar?"
+                                    required
+                                />
+                            </div>
+
+                            <div className="gp-field">
+                                <label htmlFor="contactMessage" className="gp-field__label">
+                                    Mensaje
+                                </label>
+                                <textarea
+                                    id="contactMessage"
+                                    className="gp-field__textarea"
+                                    placeholder="Cuéntanos los detalles…"
+                                    required
+                                />
+                            </div>
+
+                            <button type="submit" className="gp-btn gp-btn-dark gp-contact-form__submit">
+                                Enviar mensaje
+                            </button>
+                        </form>
                     </div>
-                </div>
+                </section>
             </main>
 
             <Footer />

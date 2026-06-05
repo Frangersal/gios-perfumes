@@ -44,7 +44,7 @@ export default function Navbar() {
         { label: 'Hombre',    href: `${baseUrl}/categoria/hombre` },
         { label: 'Marcas',    href: `${baseUrl}/marcas` },
         { label: 'Novedades', href: `${baseUrl}/shop?sort=newest` },
-        { label: 'Ofertas',   href: `${baseUrl}/shop?oferta=1`, accent: true },
+        { label: 'Ofertas',   href: `${baseUrl}/shop?oferta=1` },
         { label: 'Contacto',  href: `${baseUrl}/contact` },
     ];
 

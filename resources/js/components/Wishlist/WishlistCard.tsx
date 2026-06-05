@@ -10,6 +10,8 @@ interface WishlistCardProps {
     onRemove: (productId: number) => void;
 }
 
+const DEFAULT_IMG = 'https://placehold.co/640x640/efe6d4/1c1814?text=Gio%27s';
+
 export default function WishlistCard({
     productId,
     name,
@@ -19,51 +21,50 @@ export default function WishlistCard({
     oldPrice,
     onRemove,
 }: WishlistCardProps) {
-    const baseUrl = document.getElementById('root')?.getAttribute('data-base-url') || '';
+    const baseUrl = (document.getElementById('root')?.getAttribute('data-base-url') || '').replace(/\/$/, '');
     const productUrl = `${baseUrl}/product/${productId}`;
 
-    return (
-        <div className="card h-100 shadow-sm border-0 position-relative overflow-hidden">
-            <button
-                type="button"
-                className="btn btn-light position-absolute rounded-circle shadow-sm d-flex align-items-center justify-content-center p-0"
-                title="Quitar de la wishlist"
-                aria-label="Quitar de la wishlist"
-                style={{ top: '10px', right: '10px', width: '35px', height: '35px', zIndex: 2 }}
-                onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onRemove(productId);
-                }}
-            >
-                <span className="text-danger fw-bold">&times;</span>
-            </button>
+    const handleRemove = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onRemove(productId);
+    };
 
-            <a href={productUrl} className="text-decoration-none text-dark d-flex flex-column h-100">
-                <img
-                    src={image || 'https://placehold.co/300x300/e9ecef/212529?text=Perfume'}
-                    className="card-img-top"
-                    alt={name}
-                    style={{ aspectRatio: '1 / 1', objectFit: 'cover' }}
-                />
-                <div className="card-body d-flex flex-column">
-                    <small className="text-muted text-uppercase fw-semibold">{brand}</small>
-                    <h5 className="card-title fw-bold mt-1">{name}</h5>
-                    <div className="d-flex flex-column align-items-start gap-1 mb-3">
-                        {oldPrice && <span className="text-muted text-decoration-line-through small">{oldPrice}</span>}
-                        <span className="text-dark fw-bold">{currentPrice}</span>
-                    </div>
-                    <div className="mt-auto">
-                        <button
-                            className="btn btn-dark w-100 fw-semibold"
-                            onClick={(e) => e.preventDefault()}
-                        >
-                            Añadir al carrito
-                        </button>
-                    </div>
+    return (
+        <a href={productUrl} className="gp-pcard">
+            <div className="gp-pcard__media">
+                <button
+                    type="button"
+                    className="gp-pcard__remove"
+                    aria-label="Quitar de la wishlist"
+                    title="Quitar de la wishlist"
+                    onClick={handleRemove}
+                >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                        <line x1="6" y1="18" x2="18" y2="6" />
+                    </svg>
+                </button>
+
+                <img src={image || DEFAULT_IMG} alt={name} loading="lazy" />
+
+                <div className="gp-pcard__quick">
+                    <button type="button" onClick={(e) => e.preventDefault()}>
+                        Añadir al carrito
+                    </button>
                 </div>
-            </a>
-        </div>
+            </div>
+
+            <div className="gp-pcard__body">
+                <span className="gp-pcard__brand">{brand}</span>
+                <h3 className="gp-pcard__name">{name}</h3>
+
+                <div className="gp-pcard__price">
+                    {oldPrice && <span className="gp-pcard__price-old">{oldPrice}</span>}
+                    <span className="gp-pcard__price-current">{currentPrice}</span>
+                </div>
+            </div>
+        </a>
     );
 }
 

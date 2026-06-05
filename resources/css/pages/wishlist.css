@@ -1,0 +1,154 @@
+/* =========================================================================
+   Gio's Perfumes — Wishlist (Luxury redesign)
+   Hereda los tokens y componentes definidos en pages/index.css (.gp-luxury)
+   ========================================================================= */
+
+/* ---------- Hero / Cabecera ---------- */
+.gp-luxury .gp-wishlist-hero {
+    background: linear-gradient(135deg, #1c1814 0%, #2a2622 55%, #3a3128 100%);
+    color: var(--gp-ivory);
+    padding: 5rem 1.5rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.gp-luxury .gp-wishlist-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 80% 30%, rgba(200, 164, 92, 0.22), transparent 55%),
+        radial-gradient(circle at 15% 80%, rgba(216, 180, 160, 0.16), transparent 55%);
+    pointer-events: none;
+}
+
+.gp-luxury .gp-wishlist-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.gp-luxury .gp-wishlist-hero .gp-eyebrow {
+    color: var(--gp-gold);
+    display: inline-block;
+    margin-bottom: 1.25rem;
+}
+
+.gp-luxury .gp-wishlist-hero__title {
+    font-family: var(--gp-serif);
+    font-weight: 300;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    line-height: 1.05;
+    margin: 0 0 1rem;
+    color: var(--gp-ivory);
+}
+
+.gp-luxury .gp-wishlist-hero__title em {
+    font-style: italic;
+    color: var(--gp-gold);
+    font-weight: 400;
+}
+
+.gp-luxury .gp-wishlist-hero__count {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(247, 241, 230, 0.72);
+    padding: 0.55rem 1.1rem;
+    border: 1px solid rgba(200, 164, 92, 0.55);
+    border-radius: 999px;
+}
+
+/* ---------- Sección de productos ---------- */
+.gp-luxury .gp-wishlist-section {
+    padding: 4rem 1.5rem 6rem;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* ---------- Botón eliminar en la tarjeta ---------- */
+.gp-luxury .gp-pcard__remove {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    z-index: 3;
+    color: var(--gp-mute);
+    box-shadow: var(--gp-shadow-sm);
+}
+
+.gp-luxury .gp-pcard__remove:hover {
+    background: var(--gp-espresso);
+    color: var(--gp-ivory);
+    transform: scale(1.08);
+}
+
+/* ---------- Estado vacío ---------- */
+.gp-luxury .gp-wishlist-empty {
+    max-width: 620px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 5rem 1.5rem 6rem;
+}
+
+.gp-luxury .gp-wishlist-empty__icon {
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gp-cream);
+    color: var(--gp-gold-deep);
+    border: 1px solid var(--gp-line);
+}
+
+.gp-luxury .gp-wishlist-empty__icon svg {
+    width: 38px;
+    height: 38px;
+}
+
+.gp-luxury .gp-wishlist-empty .gp-eyebrow {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.gp-luxury .gp-wishlist-empty__title {
+    font-family: var(--gp-serif);
+    font-weight: 400;
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+    color: var(--gp-espresso);
+    margin: 0 0 1rem;
+}
+
+.gp-luxury .gp-wishlist-empty__title em {
+    font-style: italic;
+    color: var(--gp-gold-deep);
+}
+
+.gp-luxury .gp-wishlist-empty__text {
+    color: var(--gp-mute);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0 auto 2.25rem;
+    max-width: 480px;
+}
+
+@media (max-width: 600px) {
+    .gp-luxury .gp-wishlist-hero { padding: 3.5rem 1.25rem 3rem; }
+    .gp-luxury .gp-wishlist-section { padding: 3rem 1rem 4.5rem; }
+}
