@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Note;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -12,4 +13,15 @@ class PageController extends Controller
     public function faq() { return view('welcome', ['page' => 'faq']); }
     public function terms() { return view('welcome', ['page' => 'terms']); }
     public function privacy() { return view('welcome', ['page' => 'privacy']); }
+
+    public function notes(Request $request)
+    {
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(
+                Note::orderBy('name')->get(['id', 'name', 'slug', 'image'])
+            );
+        }
+
+        return view('welcome', ['page' => 'notes']);
+    }
 }

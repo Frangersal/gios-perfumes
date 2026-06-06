@@ -27,6 +27,9 @@ export default function Navbar() {
                             <a className="nav-link" href={`${baseUrl}/marcas`}>Marcas</a>
                         </li>
                         <li className="nav-item">
+                            <a className="nav-link" href={`${baseUrl}/notas`}>Notas olfativas</a>
+                        </li>
+                        <li className="nav-item">
                             <a className="nav-link" href={`${baseUrl}/shop?sort=newest`}>Novedades</a>
                         </li>
                         <li className="nav-item">

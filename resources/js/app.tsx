@@ -22,6 +22,7 @@ import Contact from './pages/Contact';
 import FAQ from './pages/FAQ';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
+import Notes from './pages/Notes';
 
 // Admin Pages
 import AdminLogin from './pages/AdminLogin';
@@ -85,6 +86,8 @@ if (container) {
         root.render(<Terms />);
     } else if (page === 'privacy') {
         root.render(<Privacy />);
+    } else if (page === 'notes') {
+        root.render(<Notes />);
     } else if (page === 'admin-login') {
         root.render(<AdminLogin />);
     } else if (page === 'admin-dashboard') {

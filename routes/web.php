@@ -61,6 +61,7 @@ Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 Route::get('/terms', [PageController::class, 'terms'])->name('terms');
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
+Route::get('/notas', [PageController::class, 'notes'])->name('notes.index');
 
 
 // --- DASHBOARD ADMINISTRATIVO ---
