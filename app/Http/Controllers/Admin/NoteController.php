@@ -35,6 +35,7 @@ class NoteController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:100|unique:notes,name',
             'slug' => 'nullable|string|max:120|unique:notes,slug',
+            'description' => 'nullable|string',
             'image' => 'nullable|string|max:255',
             'image_file' => 'nullable|image|max:5120',
         ]);
@@ -42,6 +43,7 @@ class NoteController extends Controller
         $note = new Note([
             'name' => $validated['name'],
             'slug' => $this->resolveUniqueSlug($validated['slug'] ?? null, $validated['name']),
+            'description' => $validated['description'] ?? null,
             'image' => null,
         ]);
 
@@ -61,7 +63,8 @@ class NoteController extends Controller
         return response()->json(
             Note::with([
                 'productNotes:id,product_id,note_id,note_type_id,position,intensity',
-                'productNotes.product:id,name,sku,status,price',
+                'productNotes.product:id,name,sku,status',
+                'productNotes.product.variants:id,product_id,price,discount_price',
                 'productNotes.noteType:id,name',
             ])->findOrFail($id)
         );
@@ -84,12 +87,14 @@ class NoteController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', Rule::unique('notes', 'name')->ignore($note->id)],
             'slug' => ['nullable', 'string', 'max:120', Rule::unique('notes', 'slug')->ignore($note->id)],
+            'description' => 'nullable|string',
             'image' => 'nullable|string|max:255',
             'image_file' => 'nullable|image|max:5120',
         ]);
 
         $note->name = $validated['name'];
         $note->slug = $this->resolveUniqueSlug($validated['slug'] ?? null, $validated['name'], $note->id);
+        $note->description = $validated['description'] ?? null;
         $note->image = $this->resolveImagePath($request, $validated['image'] ?? $note->image, $note->id, $note->name);
         $note->save();
 

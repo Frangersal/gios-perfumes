@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 100)->unique();
             $table->string('slug', 120)->unique();
+            $table->text('description')->nullable();
             $table->string('image', 255)->nullable();
             $table->timestamps();
         });

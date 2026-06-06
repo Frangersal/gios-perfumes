@@ -18,6 +18,7 @@ class CategoryController extends Controller
             $query = Product::query()
                 ->with([
                     'brand:id,name',
+                    'variants:id,product_id,price,discount_price',
                     'images' => function ($imageQuery) {
                         $imageQuery->select(['id', 'product_id', 'image', 'is_main'])
                             ->orderByDesc('is_main')

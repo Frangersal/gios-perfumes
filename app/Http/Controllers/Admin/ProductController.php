@@ -22,6 +22,7 @@ class ProductController extends Controller
                 \App\Models\Product::with([
                     'category',
                     'brand',
+                    'variants:id,product_id,price,discount_price',
                     'images' => function ($query) {
                         $query->select(['id', 'product_id', 'image', 'is_main'])
                             ->orderByDesc('is_main')
@@ -52,9 +53,6 @@ class ProductController extends Controller
             'name' => 'required|string|max:200',
             'slug' => 'required|string|max:191|unique:products',
             'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'discount_price' => 'nullable|numeric',
-            'cost' => 'nullable|numeric',
             'sku' => 'required|string|max:100|unique:products',
             'gender' => 'nullable|string|max:50',
             'olfactory_family' => 'nullable|string|max:100',
@@ -62,7 +60,6 @@ class ProductController extends Controller
             'year' => 'nullable|integer',
             'country_of_origin' => 'nullable|string|max:100',
             'status' => 'required|string|max:50',
-            'discount_percentage' => 'nullable|integer|min:0|max:100',
             'video_url' => 'nullable|url|max:255',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
@@ -78,20 +75,28 @@ class ProductController extends Controller
             'product_images.*.existing_image' => 'nullable|string|max:255',
             'product_images.*.image' => 'nullable|image|max:5120',
             'product_images.*.is_main' => 'nullable|boolean',
+            'variants' => 'required|array|min:1',
+            'variants.*.volume' => 'required|string|max:50',
+            'variants.*.price' => 'required|numeric|min:0',
+            'variants.*.discount_price' => 'nullable|numeric|min:0',
+            'variants.*.cost' => 'nullable|numeric|min:0',
+            'variants.*.stock' => 'nullable|integer|min:0',
+            'variants.*.min_stock' => 'nullable|integer|min:0',
         ]);
 
-        $product = new Product(Arr::except($validated, ['product_notes', 'product_images']));
+        $product = new Product(Arr::except($validated, ['product_notes', 'product_images', 'variants']));
         $product->id = $this->generateCreationBasedProductId();
         $product->save();
         $this->syncProductNotes($product, $validated['product_notes'] ?? []);
         $this->syncProductImages($product, $validated['product_images'] ?? []);
+        $this->syncProductVariants($product, $validated['variants'] ?? []);
         return response()->json(['message' => 'Producto creado con éxito', 'product' => $product], 201);
     }
 
     public function show(string $id)
     {
         return response()->json(
-            Product::with(['category', 'brand', 'notes', 'productNotes.noteType', 'images'])->findOrFail($id)
+            Product::with(['category', 'brand', 'notes', 'productNotes.noteType', 'images', 'variants'])->findOrFail($id)
         );
     }
 
@@ -114,9 +119,6 @@ class ProductController extends Controller
             'name' => 'required|string|max:200',
             'slug' => 'required|string|max:191|unique:products,slug,' . $id,
             'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'discount_price' => 'nullable|numeric',
-            'cost' => 'nullable|numeric',
             'sku' => 'required|string|max:100|unique:products,sku,' . $id,
             'gender' => 'nullable|string|max:50',
             'olfactory_family' => 'nullable|string|max:100',
@@ -124,7 +126,6 @@ class ProductController extends Controller
             'year' => 'nullable|integer',
             'country_of_origin' => 'nullable|string|max:100',
             'status' => 'required|string|max:50',
-            'discount_percentage' => 'nullable|integer|min:0|max:100',
             'video_url' => 'nullable|url|max:255',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
@@ -140,11 +141,19 @@ class ProductController extends Controller
             'product_images.*.existing_image' => 'nullable|string|max:255',
             'product_images.*.image' => 'nullable|image|max:5120',
             'product_images.*.is_main' => 'nullable|boolean',
+            'variants' => 'required|array|min:1',
+            'variants.*.volume' => 'required|string|max:50',
+            'variants.*.price' => 'required|numeric|min:0',
+            'variants.*.discount_price' => 'nullable|numeric|min:0',
+            'variants.*.cost' => 'nullable|numeric|min:0',
+            'variants.*.stock' => 'nullable|integer|min:0',
+            'variants.*.min_stock' => 'nullable|integer|min:0',
         ]);
 
-        $product->update(Arr::except($validated, ['product_notes', 'product_images']));
+        $product->update(Arr::except($validated, ['product_notes', 'product_images', 'variants']));
         $this->syncProductNotes($product, $validated['product_notes'] ?? []);
         $this->syncProductImages($product, $validated['product_images'] ?? []);
+        $this->syncProductVariants($product, $validated['variants'] ?? []);
         return response()->json(['message' => 'Producto actualizado con éxito', 'product' => $product]);
     }
 
@@ -152,6 +161,35 @@ class ProductController extends Controller
     {
         Product::findOrFail($id)->delete();
         return response()->json(['message' => 'Producto eliminado correctamente']);
+    }
+
+    private function syncProductVariants(Product $product, array $variants): void
+    {
+        $product->variants()->delete();
+
+        $rows = [];
+        foreach ($variants as $item) {
+            $volume = trim((string) ($item['volume'] ?? ''));
+            if ($volume === '' || !isset($item['price']) || $item['price'] === '') {
+                continue;
+            }
+
+            $rows[] = [
+                'product_id' => $product->id,
+                'volume' => $volume,
+                'price' => (float) $item['price'],
+                'discount_price' => isset($item['discount_price']) && $item['discount_price'] !== '' ? (float) $item['discount_price'] : null,
+                'cost' => isset($item['cost']) && $item['cost'] !== '' ? (float) $item['cost'] : null,
+                'stock' => isset($item['stock']) && $item['stock'] !== '' ? (int) $item['stock'] : 0,
+                'min_stock' => isset($item['min_stock']) && $item['min_stock'] !== '' ? (int) $item['min_stock'] : 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        if (!empty($rows)) {
+            \App\Models\ProductVariant::insert($rows);
+        }
     }
 
     private function syncProductNotes(Product $product, array $productNotes): void

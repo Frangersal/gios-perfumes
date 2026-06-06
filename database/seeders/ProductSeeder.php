@@ -12,52 +12,6 @@ class ProductSeeder extends Seeder
     {
         $now = now();
 
-        $noteTypes = [
-            ['name' => 'Salida', 'slug' => 'salida'],
-            ['name' => 'Corazon', 'slug' => 'corazon'],
-            ['name' => 'Fondo', 'slug' => 'fondo'],
-        ];
-
-        foreach ($noteTypes as $noteType) {
-            DB::table('note_types')->updateOrInsert(
-                ['slug' => $noteType['slug']],
-                [
-                    'name' => $noteType['name'],
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]
-            );
-        }
-
-        $notes = [
-            ['name' => 'Bergamota', 'slug' => 'bergamota'],
-            ['name' => 'Pimienta negra', 'slug' => 'pimienta-negra'],
-            ['name' => 'Lavanda', 'slug' => 'lavanda'],
-            ['name' => 'Ambroxan', 'slug' => 'ambroxan'],
-            ['name' => 'Vainilla negra', 'slug' => 'vainilla-negra'],
-            ['name' => 'Jazmin', 'slug' => 'jazmin'],
-            ['name' => 'Rosa', 'slug' => 'rosa'],
-            ['name' => 'Almizcle', 'slug' => 'almizcle'],
-            ['name' => 'Oud', 'slug' => 'oud'],
-            ['name' => 'Ambar', 'slug' => 'ambar'],
-            ['name' => 'Haba tonka', 'slug' => 'haba-tonka'],
-            ['name' => 'Limon', 'slug' => 'limon'],
-            ['name' => 'Incienso', 'slug' => 'incienso'],
-            ['name' => 'Vetiver', 'slug' => 'vetiver'],
-            ['name' => 'Pera', 'slug' => 'pera'],
-        ];
-
-        foreach ($notes as $note) {
-            DB::table('notes')->updateOrInsert(
-                ['slug' => $note['slug']],
-                [
-                    'name' => $note['name'],
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]
-            );
-        }
-
         $brandIds = DB::table('brands')->pluck('id', 'name');
 
         $products = [
@@ -286,9 +240,6 @@ class ProductSeeder extends Seeder
                 'name' => $product['name'],
                 'slug' => Str::slug($product['name'] . ' ' . $product['brand_name'] . ' ' . $product['sku']),
                 'description' => 'Fragancia de prueba para catalogo: ' . $product['name'] . '.',
-                'price' => $product['price'],
-                'discount_price' => $product['discount_price'],
-                'cost' => $product['cost'],
                 'sku' => $product['sku'],
                 'gender' => $product['gender'],
                 'olfactory_family' => $product['olfactory_family'],
@@ -296,7 +247,6 @@ class ProductSeeder extends Seeder
                 'year' => $product['year'],
                 'country_of_origin' => $product['country_of_origin'],
                 'status' => 'publicado',
-                'discount_percentage' => $product['discount_percentage'],
                 'video_url' => 'https://www.youtube.com/watch?v=demo',
                 'meta_title' => $product['name'] . ' | Gio\'s Perfumes',
                 'meta_description' => 'Compra ' . $product['name'] . ' en Gio\'s Perfumes.',
@@ -342,10 +292,20 @@ class ProductSeeder extends Seeder
                 continue;
             }
 
+            // Precio 50ml = 78% del 100ml; descuento y costo se replican en proporción.
+            $price50 = round($product['price'] * 0.78, 2);
+            $price100 = $product['price'];
+            $discount50 = $product['discount_price'] !== null ? round($product['discount_price'] * 0.78, 2) : null;
+            $discount100 = $product['discount_price'];
+            $cost50 = round($product['cost'] * 0.78, 2);
+            $cost100 = $product['cost'];
+
             $variants[] = [
                 'product_id' => $productId,
                 'volume' => '50ml',
-                'price' => round($product['price'] * 0.78, 2),
+                'price' => $price50,
+                'discount_price' => $discount50,
+                'cost' => $cost50,
                 'stock' => 12 + $index,
                 'min_stock' => 4,
                 'created_at' => $now,
@@ -354,7 +314,9 @@ class ProductSeeder extends Seeder
             $variants[] = [
                 'product_id' => $productId,
                 'volume' => '100ml',
-                'price' => $product['price'],
+                'price' => $price100,
+                'discount_price' => $discount100,
+                'cost' => $cost100,
                 'stock' => 18 + $index,
                 'min_stock' => 5,
                 'created_at' => $now,
@@ -401,24 +363,6 @@ class ProductSeeder extends Seeder
         }
 
         $noteTypeIds = DB::table('note_types')->pluck('id', 'slug');
-        $noteIds = DB::table('notes')->pluck('id', 'slug');
-
-        $extraNotes = [
-            ['name' => 'Canela', 'slug' => 'canela'],
-            ['name' => 'Coco', 'slug' => 'coco'],
-        ];
-
-        foreach ($extraNotes as $note) {
-            DB::table('notes')->updateOrInsert(
-                ['slug' => $note['slug']],
-                [
-                    'name' => $note['name'],
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]
-            );
-        }
-
         $noteIds = DB::table('notes')->pluck('id', 'slug');
         $noteSlugs = $noteIds->keys()->values()->all();
 

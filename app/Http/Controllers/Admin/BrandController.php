@@ -71,7 +71,10 @@ class BrandController extends Controller
     {
         return response()->json(
             Brand::with([
-                'products:id,brand_id,name,sku,price,status',
+                'products' => function ($query) {
+                    $query->select(['id', 'brand_id', 'name', 'sku', 'status'])
+                        ->with('variants:id,product_id,price,discount_price');
+                },
             ])->findOrFail($id)
         );
     }

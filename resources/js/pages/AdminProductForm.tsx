@@ -16,6 +16,15 @@ type ProductImageRow = {
     is_main: boolean;
 };
 
+type ProductVariantRow = {
+    volume: string;
+    price: string;
+    discount_price: string;
+    cost: string;
+    stock: string;
+    min_stock: string;
+};
+
 export default function AdminProductForm() {
     const baseUrl = document.getElementById('root')?.getAttribute('data-base-url') || '';
     const isEdit = document.getElementById('root')?.getAttribute('data-page') === 'admin-product-edit';
@@ -31,14 +40,12 @@ export default function AdminProductForm() {
     const [noteTypes, setNoteTypes] = useState<any[]>([]);
     const [productNotes, setProductNotes] = useState<ProductNoteRow[]>([]);
     const [productImages, setProductImages] = useState<ProductImageRow[]>([]);
+    const [variants, setVariants] = useState<ProductVariantRow[]>([]);
 
     const [formData, setFormData] = useState({
         name: '',
         slug: '',
         description: '',
-        price: '',
-        discount_price: '',
-        cost: '',
         sku: '',
         gender: '',
         olfactory_family: '',
@@ -46,7 +53,6 @@ export default function AdminProductForm() {
         year: '',
         country_of_origin: '',
         status: 'publicado',
-        discount_percentage: '',
         video_url: '',
         meta_title: '',
         meta_description: '',
@@ -92,9 +98,6 @@ export default function AdminProductForm() {
                         name: p.name || '',
                         slug: p.slug || '',
                         description: p.description || '',
-                        price: p.price || '',
-                        discount_price: p.discount_price || '',
-                        cost: p.cost || '',
                         sku: p.sku || '',
                         gender: p.gender || '',
                         olfactory_family: p.olfactory_family || '',
@@ -102,7 +105,6 @@ export default function AdminProductForm() {
                         year: p.year || '',
                         country_of_origin: p.country_of_origin || '',
                         status: p.status || 'publicado',
-                        discount_percentage: p.discount_percentage || '',
                         video_url: p.video_url || '',
                         meta_title: p.meta_title || '',
                         meta_description: p.meta_description || '',
@@ -110,6 +112,17 @@ export default function AdminProductForm() {
                         category_id: p.category_id || '',
                         brand_id: p.brand_id || ''
                     });
+
+                    setVariants(
+                        (p.variants || []).map((variant: any) => ({
+                            volume: String(variant.volume ?? ''),
+                            price: variant.price !== null && variant.price !== undefined ? String(variant.price) : '',
+                            discount_price: variant.discount_price !== null && variant.discount_price !== undefined ? String(variant.discount_price) : '',
+                            cost: variant.cost !== null && variant.cost !== undefined ? String(variant.cost) : '',
+                            stock: variant.stock !== null && variant.stock !== undefined ? String(variant.stock) : '',
+                            min_stock: variant.min_stock !== null && variant.min_stock !== undefined ? String(variant.min_stock) : '',
+                        }))
+                    );
 
                     setProductNotes(
                         (p.notes || []).map((note: any) => ({
@@ -131,6 +144,7 @@ export default function AdminProductForm() {
                 } else {
                     setProductNotes([{ note_id: '', note_type_id: '', position: '', intensity: '' }]);
                     setProductImages([]);
+                    setVariants([{ volume: '100ml', price: '', discount_price: '', cost: '', stock: '0', min_stock: '0' }]);
                 }
             } catch (err) {
                 console.error(err);
@@ -159,9 +173,25 @@ export default function AdminProductForm() {
             return;
         }
 
+        const validVariants = variants.filter((item) => item.volume.trim() !== '' && item.price.trim() !== '');
+        if (validVariants.length === 0) {
+            setError('Debes registrar al menos una variante con volumen y precio.');
+            setSubmitting(false);
+            return;
+        }
+
         const payload = new FormData();
         Object.entries(formData).forEach(([key, value]) => {
             payload.append(key, String(value ?? ''));
+        });
+
+        validVariants.forEach((item, index) => {
+            payload.append(`variants[${index}][volume]`, item.volume);
+            payload.append(`variants[${index}][price]`, item.price);
+            payload.append(`variants[${index}][discount_price]`, item.discount_price);
+            payload.append(`variants[${index}][cost]`, item.cost);
+            payload.append(`variants[${index}][stock]`, item.stock);
+            payload.append(`variants[${index}][min_stock]`, item.min_stock);
         });
 
         productNotes
@@ -218,6 +248,20 @@ export default function AdminProductForm() {
 
     const removeProductNote = (index: number) => {
         setProductNotes(productNotes.filter((_, i) => i !== index));
+    };
+
+    const handleVariantChange = (index: number, field: keyof ProductVariantRow, value: string) => {
+        const updated = [...variants];
+        updated[index] = { ...updated[index], [field]: value };
+        setVariants(updated);
+    };
+
+    const addVariant = () => {
+        setVariants([...variants, { volume: '', price: '', discount_price: '', cost: '', stock: '0', min_stock: '0' }]);
+    };
+
+    const removeVariant = (index: number) => {
+        setVariants(variants.filter((_, i) => i !== index));
     };
 
     const getNoteById = (noteId: string) => notes.find((note) => String(note.id) === noteId);
@@ -312,18 +356,6 @@ export default function AdminProductForm() {
                                 <label className="form-label">SKU</label>
                                 <input type="text" className="form-control" name="sku" value={formData.sku} onChange={handleChange} required />
                             </div>
-                            <div className="col-md-6">
-                                <label className="form-label">Precio ($)</label>
-                                <input type="number" step="0.01" className="form-control" name="price" value={formData.price} onChange={handleChange} required />
-                            </div>
-                            <div className="col-md-6">
-                                <label className="form-label">Precio con descuento ($)</label>
-                                <input type="number" step="0.01" className="form-control" name="discount_price" value={formData.discount_price} onChange={handleChange} />
-                            </div>
-                            <div className="col-md-6">
-                                <label className="form-label">Costo ($)</label>
-                                <input type="number" step="0.01" className="form-control" name="cost" value={formData.cost} onChange={handleChange} />
-                            </div>
                             <div className="col-md-4">
                                 <label className="form-label">Categoría</label>
                                 <select className="form-select" name="category_id" value={formData.category_id} onChange={handleChange} required>
@@ -370,10 +402,6 @@ export default function AdminProductForm() {
                                 <label className="form-label">País de origen</label>
                                 <input type="text" className="form-control" name="country_of_origin" value={formData.country_of_origin} onChange={handleChange} />
                             </div>
-                            <div className="col-md-4">
-                                <label className="form-label">% Descuento</label>
-                                <input type="number" className="form-control" name="discount_percentage" value={formData.discount_percentage} onChange={handleChange} min="0" max="100" />
-                            </div>
 
                             <div className="col-12">
                                 <label className="form-label">Descripción</label>
@@ -396,6 +424,57 @@ export default function AdminProductForm() {
                             <div className="col-12">
                                 <label className="form-label">Meta description</label>
                                 <textarea className="form-control" name="meta_description" value={formData.meta_description} onChange={handleChange} rows={3} />
+                            </div>
+
+                            <div className="col-12 mt-3">
+                                <hr className="my-3" />
+                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h5 className="mb-0">Variantes / presentaciones</h5>
+                                        <small className="text-muted">El precio, descuento, costo y stock se gestionan aquí por presentación (50ml, 100ml, etc.)</small>
+                                    </div>
+                                    <button type="button" className="btn btn-sm btn-outline-dark" onClick={addVariant}>
+                                        Agregar variante
+                                    </button>
+                                </div>
+
+                                {variants.length === 0 ? (
+                                    <div className="alert alert-light border">No hay variantes registradas. Debes añadir al menos una.</div>
+                                ) : (
+                                    variants.map((item, index) => (
+                                        <div className="row g-2 align-items-end mb-2" key={`variant-row-${index}`}>
+                                            <div className="col-md-2">
+                                                <label className="form-label">Volumen</label>
+                                                <input type="text" className="form-control" value={item.volume} placeholder="100ml" onChange={(e) => handleVariantChange(index, 'volume', e.target.value)} />
+                                            </div>
+                                            <div className="col-md-2">
+                                                <label className="form-label">Precio</label>
+                                                <input type="number" step="0.01" min="0" className="form-control" value={item.price} onChange={(e) => handleVariantChange(index, 'price', e.target.value)} />
+                                            </div>
+                                            <div className="col-md-2">
+                                                <label className="form-label">Precio descuento</label>
+                                                <input type="number" step="0.01" min="0" className="form-control" value={item.discount_price} onChange={(e) => handleVariantChange(index, 'discount_price', e.target.value)} />
+                                            </div>
+                                            <div className="col-md-2">
+                                                <label className="form-label">Costo</label>
+                                                <input type="number" step="0.01" min="0" className="form-control" value={item.cost} onChange={(e) => handleVariantChange(index, 'cost', e.target.value)} />
+                                            </div>
+                                            <div className="col-md-1">
+                                                <label className="form-label">Stock</label>
+                                                <input type="number" min="0" className="form-control" value={item.stock} onChange={(e) => handleVariantChange(index, 'stock', e.target.value)} />
+                                            </div>
+                                            <div className="col-md-2">
+                                                <label className="form-label">Stock mínimo</label>
+                                                <input type="number" min="0" className="form-control" value={item.min_stock} onChange={(e) => handleVariantChange(index, 'min_stock', e.target.value)} />
+                                            </div>
+                                            <div className="col-md-1 d-grid">
+                                                <button type="button" className="btn btn-outline-danger" onClick={() => removeVariant(index)}>
+                                                    X
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
 
                             <div className="col-12 mt-3">

@@ -53,6 +53,9 @@ CREATE TABLE CATEGORIES (
 -- Tabla base de productos.
 -- category_id (1:N): Cada producto se asocia fuertemente a una categoría.
 -- brand_id (1:N): Cada producto pertenece a una marca que lo produce.
+-- NOTA: el precio, costo y descuento NO viven aquí. Cada presentación (50ml,
+-- 100ml, etc.) tiene precio propio en PRODUCT_VARIANTS. El "desde" del catálogo
+-- se calcula con MIN(product_variants.price).
 CREATE TABLE PRODUCTS (
     id BIGINT PRIMARY KEY,
     brand_id BIGINT,
@@ -61,10 +64,6 @@ CREATE TABLE PRODUCTS (
     name VARCHAR(255),
     slug VARCHAR(255),
     description TEXT,
-
-    price DECIMAL(10,2),
-    discount_price DECIMAL(10,2),
-    cost DECIMAL(10,2),
 
     sku VARCHAR(255),
     gender VARCHAR(255),
@@ -75,7 +74,6 @@ CREATE TABLE PRODUCTS (
     country_of_origin VARCHAR(255),
 
     status VARCHAR(255),
-    discount_percentage INT,
 
     created_at TIMESTAMP,
 
@@ -85,14 +83,17 @@ CREATE TABLE PRODUCTS (
 
 -- Variantes de productos. Relación de 1 a muchísimos (1:N) con products.
 -- Crucial para perfumería: El mismo perfume se agrupa bajo 'products',
--- pero vende en distintas presentaciones ('volumen' como 50ml, 100ml)
--- y cada variante tiene su propio stock y precio individual.
+-- pero se vende en distintas presentaciones ('volumen' como 50ml, 100ml)
+-- y cada variante tiene su propio stock, precio, costo y descuento.
 CREATE TABLE PRODUCT_VARIANTS (
     id BIGINT PRIMARY KEY,
     product_id BIGINT,
 
     volume VARCHAR(255),
+
     price DECIMAL(10,2),
+    discount_price DECIMAL(10,2),
+    cost DECIMAL(10,2),
 
     stock INT,
     min_stock INT,
@@ -134,6 +135,7 @@ CREATE TABLE NOTES (
     id BIGINT PRIMARY KEY,
     name VARCHAR(255),
     slug VARCHAR(255),
+    description TEXT,
     image VARCHAR(255)
 );
 

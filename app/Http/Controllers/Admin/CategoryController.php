@@ -50,7 +50,10 @@ class CategoryController extends Controller
         return response()->json(
             Category::with([
                 'parent:id,name',
-                'products:id,category_id,name,sku,price,status',
+                'products' => function ($query) {
+                    $query->select(['id', 'category_id', 'name', 'sku', 'status'])
+                        ->with('variants:id,product_id,price,discount_price');
+                },
             ])->findOrFail($id)
         );
     }

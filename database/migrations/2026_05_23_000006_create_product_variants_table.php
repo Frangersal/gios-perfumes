@@ -13,6 +13,8 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->string('volume', 50);
             $table->decimal('price', 10, 2);
+            $table->decimal('discount_price', 10, 2)->nullable();
+            $table->decimal('cost', 10, 2)->nullable();
             $table->integer('stock')->default(0);
             $table->integer('min_stock')->default(0);
             $table->timestamps();

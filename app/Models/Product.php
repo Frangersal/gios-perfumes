@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-        'brand_id', 'category_id', 'name', 'slug', 'description', 
-        'price', 'discount_price', 'cost', 'sku', 'gender', 
-        'olfactory_family', 'concentration', 'year', 'country_of_origin', 
-        'status', 'discount_percentage',
+        'brand_id', 'category_id', 'name', 'slug', 'description',
+        'sku', 'gender',
+        'olfactory_family', 'concentration', 'year', 'country_of_origin',
+        'status',
         'video_url', 'meta_title', 'meta_description', 'meta_keywords'
     ];
 
@@ -19,6 +19,31 @@ class Product extends Model
     protected $casts = [
         'id' => 'string',
     ];
+
+    // price y discount_price NO viven en products: se calculan tomando el mínimo de
+    // las variantes (la presentación más barata = el "desde $X" del catálogo).
+    // Para que estos accessors funcionen, el caller debe hacer ->with('variants').
+    protected $appends = ['price', 'discount_price'];
+
+    public function getPriceAttribute()
+    {
+        if (!$this->relationLoaded('variants')) {
+            return null;
+        }
+        $min = $this->variants->min('price');
+        return $min !== null ? (float) $min : null;
+    }
+
+    public function getDiscountPriceAttribute()
+    {
+        if (!$this->relationLoaded('variants')) {
+            return null;
+        }
+        $min = $this->variants
+            ->filter(fn ($v) => $v->discount_price !== null)
+            ->min('discount_price');
+        return $min !== null ? (float) $min : null;
+    }
 
     public function brand() { return $this->belongsTo(Brand::class); }
     public function category() { return $this->belongsTo(Category::class); }

@@ -6,6 +6,7 @@ type NoteDetails = {
     id?: number;
     name?: string;
     slug?: string;
+    description?: string | null;
     image?: string | null;
     created_at?: string | null;
     updated_at?: string | null;
@@ -20,7 +21,6 @@ type NoteDetails = {
             name?: string;
             sku?: string;
             status?: string;
-            price?: number | string;
         } | null;
         note_type?: {
             id?: number;
@@ -127,6 +127,10 @@ export default function AdminNoteDetails() {
                                         <tr>
                                             <td className="ps-4 fw-semibold">Slug</td>
                                             <td className="pe-4">{renderValue(note?.slug)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="ps-4 fw-semibold">Descripción</td>
+                                            <td className="pe-4" style={{ whiteSpace: 'pre-wrap' }}>{renderValue(note?.description)}</td>
                                         </tr>
                                         <tr>
                                             <td className="ps-4 fw-semibold">Imagen</td>

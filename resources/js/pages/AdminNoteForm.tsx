@@ -17,6 +17,7 @@ export default function AdminNoteForm() {
     const [formData, setFormData] = useState({
         name: '',
         slug: '',
+        description: '',
         image: ''
     });
 
@@ -44,6 +45,7 @@ export default function AdminNoteForm() {
                     setFormData({
                         name: note.name || '',
                         slug: note.slug || '',
+                        description: note.description || '',
                         image: note.image || ''
                     });
                     setImagePreview(normalizeImageUrl(note.image || ''));
@@ -59,7 +61,7 @@ export default function AdminNoteForm() {
         loadNote();
     }, [isEdit, resourceId, baseUrl]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -97,6 +99,7 @@ export default function AdminNoteForm() {
         const payload = new FormData();
         payload.append('name', formData.name);
         payload.append('slug', formData.slug);
+        payload.append('description', formData.description);
 
         if (imageFile) {
             payload.append('image_file', imageFile);
@@ -179,6 +182,18 @@ export default function AdminNoteForm() {
                                     value={formData.slug}
                                     onChange={handleChange}
                                     placeholder="Opcional (si lo dejas vacío se genera automáticamente)"
+                                />
+                            </div>
+
+                            <div className="col-12">
+                                <label className="form-label">Descripción</label>
+                                <textarea
+                                    name="description"
+                                    className="form-control"
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                    rows={4}
+                                    placeholder="Describe brevemente esta nota olfativa (familia, sensación, perfumes en los que aparece, etc.)"
                                 />
                             </div>
 

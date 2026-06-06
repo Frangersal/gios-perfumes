@@ -32,7 +32,7 @@ class ProductController extends Controller
     {
         $product = Product::select('id', 'category_id')->findOrFail($id);
 
-        $related = Product::with(['brand:id,name', 'images'])
+        $related = Product::with(['brand:id,name', 'images', 'variants:id,product_id,price,discount_price'])
             ->where('category_id', $product->category_id)
             ->where('id', '<>', $product->id)
             ->whereIn('status', ['publicado', 'active'])

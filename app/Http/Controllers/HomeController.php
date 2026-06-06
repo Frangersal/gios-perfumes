@@ -13,6 +13,7 @@ class HomeController extends Controller
             $products = Product::query()
                 ->with([
                     'brand:id,name',
+                    'variants:id,product_id,price,discount_price',
                     'images' => function ($query) {
                         $query->select(['id', 'product_id', 'image', 'is_main'])
                             ->orderByDesc('is_main')
@@ -22,7 +23,7 @@ class HomeController extends Controller
                 ->whereIn('status', ['publicado', 'active'])
                 ->orderByDesc('created_at')
                 ->limit(8)
-                ->get(['id', 'brand_id', 'name', 'price', 'discount_price', 'status', 'created_at']);
+                ->get(['id', 'brand_id', 'name', 'status', 'created_at']);
 
             return response()->json($products);
         }

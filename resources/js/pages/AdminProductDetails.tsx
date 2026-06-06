@@ -9,9 +9,6 @@ type ProductDetails = {
     name?: string | null;
     slug?: string | null;
     description?: string | null;
-    price?: number | string | null;
-    discount_price?: number | string | null;
-    cost?: number | string | null;
     sku?: string | null;
     gender?: string | null;
     olfactory_family?: string | null;
@@ -19,7 +16,6 @@ type ProductDetails = {
     year?: number | null;
     country_of_origin?: string | null;
     status?: string | null;
-    discount_percentage?: number | null;
     video_url?: string | null;
     meta_title?: string | null;
     meta_description?: string | null;
@@ -47,6 +43,15 @@ type ProductDetails = {
         image?: string | null;
         is_main?: boolean;
     }>;
+    variants?: Array<{
+        id?: number;
+        volume?: string;
+        price?: number | string | null;
+        discount_price?: number | string | null;
+        cost?: number | string | null;
+        stock?: number | null;
+        min_stock?: number | null;
+    }>;
 };
 
 const fields: Array<{ key: keyof ProductDetails; label: string }> = [
@@ -56,9 +61,6 @@ const fields: Array<{ key: keyof ProductDetails; label: string }> = [
     { key: 'name', label: 'Nombre' },
     { key: 'slug', label: 'Slug' },
     { key: 'description', label: 'Descripcion' },
-    { key: 'price', label: 'Precio' },
-    { key: 'discount_price', label: 'Precio con descuento' },
-    { key: 'cost', label: 'Costo' },
     { key: 'sku', label: 'SKU' },
     { key: 'gender', label: 'Genero' },
     { key: 'olfactory_family', label: 'Familia olfativa' },
@@ -66,7 +68,6 @@ const fields: Array<{ key: keyof ProductDetails; label: string }> = [
     { key: 'year', label: 'Año' },
     { key: 'country_of_origin', label: 'Pais de origen' },
     { key: 'status', label: 'Estado' },
-    { key: 'discount_percentage', label: 'Porcentaje de descuento' },
     { key: 'video_url', label: 'Video URL' },
     { key: 'meta_title', label: 'Meta title' },
     { key: 'meta_description', label: 'Meta description' },
@@ -249,6 +250,45 @@ export default function AdminProductDetails() {
                                                     </td>
                                                     <td>{img.image || '-'}</td>
                                                     <td className="pe-4">{img.is_main ? 'Sí' : 'No'}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="card border-0 shadow-sm mb-3">
+                        <div className="card-body p-0">
+                            <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
+                                <h5 className="mb-0">Variantes / presentaciones</h5>
+                                <small className="text-muted">Tabla product_variants (precio, descuento, costo y stock por presentación)</small>
+                            </div>
+                            {(product?.variants || []).length === 0 ? (
+                                <div className="p-4 text-center text-muted">No hay variantes registradas para este producto.</div>
+                            ) : (
+                                <div className="table-responsive">
+                                    <table className="table align-middle mb-0">
+                                        <thead className="table-light">
+                                            <tr>
+                                                <th className="ps-4">Volumen</th>
+                                                <th>Precio</th>
+                                                <th>Precio descuento</th>
+                                                <th>Costo</th>
+                                                <th>Stock</th>
+                                                <th className="pe-4">Stock mínimo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {(product?.variants || []).map((variant) => (
+                                                <tr key={`variant-${variant.id}`}>
+                                                    <td className="ps-4 fw-semibold">{variant.volume || '-'}</td>
+                                                    <td>{renderValue(variant.price)}</td>
+                                                    <td>{renderValue(variant.discount_price)}</td>
+                                                    <td>{renderValue(variant.cost)}</td>
+                                                    <td>{renderValue(variant.stock)}</td>
+                                                    <td className="pe-4">{renderValue(variant.min_stock)}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
