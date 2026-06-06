@@ -14,6 +14,12 @@ class Product extends Model
         'video_url', 'meta_title', 'meta_description', 'meta_keywords'
     ];
 
+    // Los IDs se generan con timestamp y pueden superar Number.MAX_SAFE_INTEGER (2^53-1).
+    // Casteamos a string para que JSON los entregue como string y JS no pierda precisión.
+    protected $casts = [
+        'id' => 'string',
+    ];
+
     public function brand() { return $this->belongsTo(Brand::class); }
     public function category() { return $this->belongsTo(Category::class); }
     public function variants() { return $this->hasMany(ProductVariant::class); }

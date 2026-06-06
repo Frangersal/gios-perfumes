@@ -11,7 +11,7 @@ interface ProductImage {
 }
 
 interface CategoryProduct {
-    id: number;
+    id: number | string;
     name: string;
     price: number | string;
     discount_price?: number | string | null;
