@@ -116,12 +116,21 @@ class NoteSeeder extends Seeder
             ],
         ];
 
+        // Extensiones por slug cuando el archivo no es .png
+        $imageExtensions = [
+            'coco' => 'jpg',
+        ];
+
         foreach ($notes as $note) {
+            $extension = $imageExtensions[$note['slug']] ?? 'png';
+            $imagePath = '/resources/img/notes/' . $note['slug'] . '.' . $extension;
+
             DB::table('notes')->updateOrInsert(
                 ['slug' => $note['slug']],
                 [
                     'name' => $note['name'],
                     'description' => $note['description'],
+                    'image' => $imagePath,
                     'created_at' => $now,
                     'updated_at' => $now,
                 ]

@@ -4,13 +4,7 @@ import Navbar from '../layouts/Navbar';
 import SearchBar from '../layouts/SearchBar';
 import Footer from '../layouts/Footer';
 import PromoBar from '../layouts/Index/PromoBar';
-
-interface NoteItem {
-    id: number | string;
-    name: string;
-    slug: string;
-    image?: string | null;
-}
+import NoteDetailsModal, { NoteItem, normalizeNoteImageUrl } from '../components/Notes/NoteDetailsModal';
 
 const NOTE_FAMILIES = [
     {
@@ -49,16 +43,12 @@ export default function Notes() {
     const [notes, setNotes] = useState<NoteItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [selectedNote, setSelectedNote] = useState<NoteItem | null>(null);
 
-    const normalizeImageUrl = (url?: string | null): string => {
-        if (!url) return '';
-        if (url.startsWith('blob:') || url.startsWith('data:') || /^https?:\/\//i.test(url)) {
-            return url;
-        }
-        const normalizedBase = baseUrl.replace(/\/$/, '');
-        const normalizedPath = url.startsWith('/') ? url : `/${url}`;
-        return `${normalizedBase}${normalizedPath}`;
-    };
+    const openNoteModal = (note: NoteItem) => setSelectedNote(note);
+    const closeNoteModal = () => setSelectedNote(null);
+
+    const normalizeImageUrl = (url?: string | null): string => normalizeNoteImageUrl(url, baseUrl);
 
     useEffect(() => {
         const loadNotes = async () => {
@@ -182,7 +172,21 @@ export default function Notes() {
                                 const imgUrl = normalizeImageUrl(note.image);
                                 return (
                                     <div key={String(note.id)} className="col-6 col-sm-4 col-md-3 col-lg-2">
-                                        <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center">
+                                        <button
+                                            type="button"
+                                            onClick={() => openNoteModal(note)}
+                                            className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center w-100 p-0 bg-white"
+                                            style={{ cursor: 'pointer', transition: 'transform .2s ease, box-shadow .2s ease' }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.transform = 'translateY(-4px)';
+                                                e.currentTarget.style.boxShadow = '0 .75rem 1.5rem rgba(0,0,0,.1)';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.transform = '';
+                                                e.currentTarget.style.boxShadow = '';
+                                            }}
+                                            aria-label={`Ver detalle de la nota ${note.name}`}
+                                        >
                                             <div
                                                 className="d-flex align-items-center justify-content-center bg-light"
                                                 style={{ aspectRatio: '1 / 1' }}
@@ -202,7 +206,7 @@ export default function Notes() {
                                                     {note.name}
                                                 </div>
                                             </div>
-                                        </div>
+                                        </button>
                                     </div>
                                 );
                             })}
@@ -223,6 +227,8 @@ export default function Notes() {
             </main>
 
             <Footer />
+
+            <NoteDetailsModal note={selectedNote} onClose={closeNoteModal} baseUrl={baseUrl} />
         </div>
     );
 }

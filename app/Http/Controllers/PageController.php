@@ -18,7 +18,7 @@ class PageController extends Controller
     {
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json(
-                Note::orderBy('name')->get(['id', 'name', 'slug', 'image'])
+                Note::orderBy('name')->get(['id', 'name', 'slug', 'image', 'description'])
             );
         }
 
