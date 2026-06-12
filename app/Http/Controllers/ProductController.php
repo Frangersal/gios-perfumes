@@ -22,10 +22,14 @@ class ProductController extends Controller
                 'reviews',
             ])->findOrFail($id);
 
-            return response()->json($product);
+            return response()->json($product)
+                ->header('Vary', 'Accept')
+                ->header('Cache-Control', 'no-store, private, max-age=0, must-revalidate');
         }
 
-        return view('welcome', ['page' => 'product', 'resourceId' => $id]);
+        return response()
+            ->view('welcome', ['page' => 'product', 'resourceId' => $id])
+            ->header('Vary', 'Accept');
     }
 
     public function related(Request $request, $id)

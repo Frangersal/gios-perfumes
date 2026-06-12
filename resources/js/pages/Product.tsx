@@ -21,8 +21,14 @@ export default function Product() {
     useEffect(() => {
         if (!productId) return;
 
-        axios.get(`${baseUrl}/product/${productId}`, {
-            headers: { Accept: 'application/json' },
+        // Se usa un query string distinto al de la navegación HTML (?format=json)
+        // para evitar colisiones de caché del navegador entre la respuesta HTML y la JSON
+        // cuando el usuario presiona "atrás" en el navegador.
+        axios.get(`${baseUrl}/product/${productId}?format=json`, {
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
         })
             .then((res) => setProduct(res.data))
             .catch((err) => console.error('Error cargando producto', err))

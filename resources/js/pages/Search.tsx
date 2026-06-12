@@ -1,9 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../layouts/Navbar';
 import SearchBar from '../layouts/SearchBar';
 import Footer from '../layouts/Footer';
+import Card from '../components/Index/Card';
 
 export default function Search() {
+    const [query, setQuery] = useState('');
+    const [products, setProducts] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const baseUrl = document.getElementById('root')?.getAttribute('data-base-url') || '';
+
+    const normalizeImageUrl = (url?: string): string => {
+        if (!url) return '';
+        if (url.startsWith('blob:') || url.startsWith('data:') || /^https?:\/\//i.test(url)) {
+            return url;
+        }
+
+        const normalizedBase = baseUrl.replace(/\/$/, '');
+        const normalizedPath = url.startsWith('/') ? url : `/${url}`;
+
+        return `${normalizedBase}${normalizedPath}`;
+    };
+
+    const getMainImage = (product: any): string => {
+        const images = Array.isArray(product.images) ? product.images : [];
+        const mainImage = images.find((img: any) => Boolean(img?.is_main)) || images[0];
+        return normalizeImageUrl(mainImage?.image || '');
+    };
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const q = params.get('q') || '';
+        setQuery(q);
+
+        fetch(`/search?q=${encodeURIComponent(q)}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            setProducts(data);
+            setLoading(false);
+        })
+        .catch(err => {
+            console.error('Error fetching search results:', err);
+            setLoading(false);
+        });
+    }, []);
+
     return (
         <div className="d-flex flex-column min-vh-100 bg-light">
             <Navbar />
@@ -11,56 +58,36 @@ export default function Search() {
             
             <main className="container my-5 pb-5">
                 <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-                    <h2 className="fw-bold mb-0">Resultados para "Carolina Herrera"</h2>
-                    <span className="text-muted">4 productos encontrados</span>
+                    <h2 className="fw-bold mb-0">Resultados {query ? `para "${query}"` : ''}</h2>
+                    <span className="text-muted">{products.length} productos encontrados</span>
                 </div>
                 
-                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-2">
-                    {/* Producto 1 */}
-                    <div className="col">
-                        <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1594035910387-fea477242ba4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" className="card-img-top" alt="Perfume" style={{ objectFit: 'cover', height: '250px' }} />
-                            <div className="card-body text-center p-4">
-                                <h6 className="card-title fw-bold text-uppercase mb-1">Good Girl</h6>
-                                <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$3,200.00</p>
-                            </div>
+                {loading ? (
+                    <div className="text-center my-5">
+                        <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Cargando...</span>
                         </div>
                     </div>
-                    {/* Producto 2 */}
-                    <div className="col">
-                        <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1594035910387-fea477242ba4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" className="card-img-top" alt="Perfume" style={{ objectFit: 'cover', height: '250px' }} />
-                            <div className="card-body text-center p-4">
-                                <h6 className="card-title fw-bold text-uppercase mb-1">Bad Boy</h6>
-                                <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$2,900.00</p>
+                ) : products.length > 0 ? (
+                    <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-2 justify-content-center">
+                        {products.map((product) => (
+                            <div className="col d-flex justify-content-center mb-4" key={product.id}>
+                                <Card
+                                    brand={product.brand?.name}
+                                    name={product.name}
+                                    currentPrice={`$${(product.discount_price ?? product.price ?? 0).toFixed(2)}`}
+                                    oldPrice={product.discount_price ? `$${(product.price ?? 0).toFixed(2)}` : undefined}
+                                    image={getMainImage(product) || undefined}
+                                    productId={product.id}
+                                />
                             </div>
-                        </div>
+                        ))}
                     </div>
-                    {/* Producto 3 */}
-                    <div className="col">
-                        <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1594035910387-fea477242ba4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" className="card-img-top" alt="Perfume" style={{ objectFit: 'cover', height: '250px' }} />
-                            <div className="card-body text-center p-4">
-                                <h6 className="card-title fw-bold text-uppercase mb-1">212 VIP</h6>
-                                <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$2,650.00</p>
-                            </div>
-                        </div>
+                ) : (
+                    <div className="text-center my-5">
+                        <h4 className="text-muted">No se encontraron productos para tu búsqueda.</h4>
                     </div>
-                    {/* Producto 4 */}
-                    <div className="col">
-                        <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1594035910387-fea477242ba4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" className="card-img-top" alt="Perfume" style={{ objectFit: 'cover', height: '250px' }} />
-                            <div className="card-body text-center p-4">
-                                <h6 className="card-title fw-bold text-uppercase mb-1">CH Men</h6>
-                                <p className="text-muted small mb-2">Carolina Herrera</p>
-                                <p className="fw-bold text-primary mb-0">$2,450.00</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                )}
             </main>
 
             <Footer />
