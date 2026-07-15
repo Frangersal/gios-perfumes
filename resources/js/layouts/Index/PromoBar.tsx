@@ -1,48 +1,38 @@
 import React from 'react';
+import '../../../css/layouts/header.css';
+
+interface Promo {
+    tag: string;
+    text: string;
+}
+
+const promos: Promo[] = [
+    { tag: 'Envío gratis',    text: 'En compras superiores a $1,500 MXN' },
+    { tag: 'Hasta 30 % off',  text: 'En fragancias femeninas seleccionadas' },
+    { tag: 'Regalo especial', text: 'Al adquirir dos fragancias o más' },
+    { tag: 'Edición limitada', text: 'Descubre las novedades de temporada' },
+];
 
 export default function PromoBar() {
+    const Group = (key: string) => (
+        <div className="gp-promo__group" key={key}>
+            {promos.map((p, idx) => (
+                <React.Fragment key={`${key}-${idx}`}>
+                    <span className="gp-promo__item">
+                        <strong>{p.tag}</strong>
+                        <span>· {p.text}</span>
+                    </span>
+                    <span className="gp-promo__sep" aria-hidden="true">◆ ◆ ◆</span>
+                </React.Fragment>
+            ))}
+        </div>
+    );
+
     return (
-        <div style={{ backgroundColor: '#000', color: '#fff', padding: '10px 0', overflow: 'hidden' }}>
-            <style>
-                {`
-                .promo-container {
-                    display: flex;
-                    width: max-content;
-                    animation: scroll-promo 30s linear infinite;
-                }
-                .promo-container:hover {
-                    animation-play-state: paused;
-                }
-                @keyframes scroll-promo {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-50%); }
-                }
-                .promo-group {
-                    display: flex;
-                }
-                .promo-item {
-                    margin: 0 3rem;
-                    font-size: 0.85rem;
-                    letter-spacing: 0.5px;
-                    white-space: nowrap;
-                }
-                `}
-            </style>
-            <div className="promo-container">
-                {/* Primer Grupo */}
-                <div className="promo-group">
-                    <span className="promo-item">🚀 ENVÍO GRATIS EN COMPRAS MAYORES A $1500</span>
-                    <span className="promo-item">🌟 HASTA 30% DE DESCUENTO EN PERFUMES DE MUJER</span>
-                    <span className="promo-item">🎁 REGALO ESPECIAL EN LA COMPRA DE 2 FRAGANCIAS</span>
-                    <span className="promo-item">🔥 DESCUBRE NUESTRAS OFERTAS DE TEMPORADA</span>
-                </div>
-                {/* Segundo Grupo (Copia Exacta) */}
-                <div className="promo-group">
-                    <span className="promo-item">🚀 ENVÍO GRATIS EN COMPRAS MAYORES A $1500</span>
-                    <span className="promo-item">🌟 HASTA 30% DE DESCUENTO EN PERFUMES DE MUJER</span>
-                    <span className="promo-item">🎁 REGALO ESPECIAL EN LA COMPRA DE 2 FRAGANCIAS</span>
-                    <span className="promo-item">🔥 DESCUBRE NUESTRAS OFERTAS DE TEMPORADA</span>
-                </div>
+        <div className="gp-promo" role="region" aria-label="Promociones">
+            <div className="gp-promo__track">
+                {Group('a')}
+                {Group('b')}
             </div>
         </div>
     );

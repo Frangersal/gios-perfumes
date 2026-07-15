@@ -1,0 +1,294 @@
+/* =========================================================================
+   Gio's Perfumes — Contact (Luxury redesign)
+   Hereda tokens y componentes definidos en pages/index.css (.gp-luxury)
+   ========================================================================= */
+
+/* ---------- Hero ---------- */
+.gp-luxury .gp-contact-hero {
+    position: relative;
+    background: linear-gradient(135deg, #1c1814 0%, #2a2622 55%, #3a3128 100%);
+    color: var(--gp-ivory);
+    padding: 6rem 1.5rem 5rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.gp-luxury .gp-contact-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 80% 30%, rgba(200, 164, 92, 0.22), transparent 55%),
+        radial-gradient(circle at 15% 75%, rgba(216, 180, 160, 0.16), transparent 55%);
+    pointer-events: none;
+}
+
+.gp-luxury .gp-contact-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.gp-luxury .gp-contact-hero .gp-eyebrow {
+    color: var(--gp-gold);
+    display: inline-block;
+    margin-bottom: 1.25rem;
+}
+
+.gp-luxury .gp-contact-hero__title {
+    font-family: var(--gp-serif);
+    font-weight: 300;
+    font-size: clamp(2.6rem, 5.2vw, 4.2rem);
+    line-height: 1.05;
+    margin: 0 0 1rem;
+    color: var(--gp-ivory);
+}
+
+.gp-luxury .gp-contact-hero__title em {
+    font-style: italic;
+    color: var(--gp-gold);
+    font-weight: 400;
+}
+
+.gp-luxury .gp-contact-hero__lead {
+    margin: 1.5rem auto 0;
+    max-width: 620px;
+    color: rgba(247, 241, 230, 0.78);
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+/* ---------- Layout principal ---------- */
+.gp-luxury .gp-contact-layout {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 6rem;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+@media (max-width: 1000px) {
+    .gp-luxury .gp-contact-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 3.5rem 1rem 5rem;
+    }
+}
+
+/* ---------- Info lateral ---------- */
+.gp-luxury .gp-contact-info__head {
+    margin-bottom: 2.5rem;
+}
+
+.gp-luxury .gp-contact-info__head .gp-eyebrow {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.gp-luxury .gp-contact-info__title {
+    font-family: var(--gp-serif);
+    font-weight: 400;
+    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    color: var(--gp-espresso);
+    margin: 0 0 1rem;
+    line-height: 1.15;
+}
+
+.gp-luxury .gp-contact-info__title em {
+    font-style: italic;
+    color: var(--gp-gold-deep);
+}
+
+.gp-luxury .gp-contact-info__lead {
+    color: var(--gp-mute);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.gp-luxury .gp-contact-info__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.gp-luxury .gp-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--gp-line);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.gp-luxury .gp-contact-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--gp-shadow-sm);
+    border-color: var(--gp-gold);
+}
+
+.gp-luxury .gp-contact-item__icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    background: var(--gp-cream);
+    color: var(--gp-gold-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gp-line);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.gp-luxury .gp-contact-item:hover .gp-contact-item__icon {
+    background: var(--gp-espresso);
+    color: var(--gp-gold);
+    border-color: var(--gp-espresso);
+}
+
+.gp-luxury .gp-contact-item__icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.gp-luxury .gp-contact-item__body strong {
+    display: block;
+    font-family: var(--gp-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gp-gold-deep);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.gp-luxury .gp-contact-item__body p {
+    margin: 0;
+    color: var(--gp-charcoal);
+    font-family: var(--gp-serif);
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+
+.gp-luxury .gp-contact-item__body a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.gp-luxury .gp-contact-item__body a:hover {
+    color: var(--gp-gold-deep);
+}
+
+/* ---------- Form ---------- */
+.gp-luxury .gp-contact-form {
+    background: #fff;
+    border: 1px solid var(--gp-line);
+    padding: 3rem 2.5rem;
+    box-shadow: var(--gp-shadow-sm);
+}
+
+@media (max-width: 600px) {
+    .gp-luxury .gp-contact-form { padding: 2rem 1.5rem; }
+}
+
+.gp-luxury .gp-contact-form__head {
+    margin-bottom: 2rem;
+}
+
+.gp-luxury .gp-contact-form__head .gp-eyebrow {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+}
+
+.gp-luxury .gp-contact-form__title {
+    font-family: var(--gp-serif);
+    font-weight: 500;
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+    color: var(--gp-espresso);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.gp-luxury .gp-contact-form__title em {
+    font-style: italic;
+    color: var(--gp-gold-deep);
+}
+
+.gp-luxury .gp-contact-form__divider {
+    width: 36px;
+    height: 1px;
+    background: var(--gp-gold);
+    margin: 1rem 0 0;
+}
+
+.gp-luxury .gp-contact-form__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .gp-luxury .gp-contact-form__grid { grid-template-columns: 1fr; }
+}
+
+.gp-luxury .gp-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.gp-luxury .gp-contact-form__grid .gp-field { margin-bottom: 0; }
+
+.gp-luxury .gp-field__label {
+    font-family: var(--gp-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--gp-gold-deep);
+}
+
+.gp-luxury .gp-field__input,
+.gp-luxury .gp-field__textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--gp-line);
+    padding: 0.75rem 0;
+    font-family: var(--gp-sans);
+    font-size: 0.95rem;
+    color: var(--gp-espresso);
+    transition: border-color 0.25s ease;
+    border-radius: 0;
+    outline: none;
+}
+
+.gp-luxury .gp-field__input::placeholder,
+.gp-luxury .gp-field__textarea::placeholder {
+    color: rgba(28, 24, 20, 0.32);
+    font-family: var(--gp-serif);
+    font-style: italic;
+}
+
+.gp-luxury .gp-field__input:focus,
+.gp-luxury .gp-field__textarea:focus {
+    border-bottom-color: var(--gp-gold-deep);
+}
+
+.gp-luxury .gp-field__textarea {
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.gp-luxury .gp-contact-form__submit {
+    width: 100%;
+    margin-top: 1rem;
+}

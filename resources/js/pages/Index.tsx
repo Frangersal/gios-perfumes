@@ -3,10 +3,18 @@ import Navbar from '../layouts/Navbar';
 import SearchBar from '../layouts/SearchBar';
 import PromoBar from '../layouts/Index/PromoBar';
 import Footer from '../layouts/Footer';
-import Carrusel from '../layouts/Index/Carrusel';
-import ProductsGrid from '../layouts/Index/ProductsGrid';
-import BrandCarousel from '../layouts/Index/BrandCarousel';
-import Newsletter from '../layouts/Index/Newsletter';
+
+// Nueva propuesta de diseño "luxury" para la home
+import '../../css/pages/index.css';
+import HeroSection from '../layouts/Index/luxury/HeroSection';
+import ValueProps from '../layouts/Index/luxury/ValueProps';
+import FeaturedCategories from '../layouts/Index/luxury/FeaturedCategories';
+import NewArrivals from '../layouts/Index/luxury/NewArrivals';
+import EditorialBanner from '../layouts/Index/luxury/EditorialBanner';
+import NotesPyramid from '../layouts/Index/luxury/NotesPyramid';
+import BrandsMarquee from '../layouts/Index/luxury/BrandsMarquee';
+import Testimonials from '../layouts/Index/luxury/Testimonials';
+import NewsletterLuxury from '../layouts/Index/luxury/NewsletterLuxury';
 
 export default function Index() {
     return (
@@ -14,26 +22,17 @@ export default function Index() {
             <Navbar />
             <SearchBar />
             <PromoBar />
-            
-            <Carrusel />
 
-            <main className="container mt-5 grow">
-                <ProductsGrid />
-                
-                <BrandCarousel />
-                
-                <Newsletter />
-
-                <hr className="my-5" />
-
-                {/* 
-                <h1 className="text-primary">Hello world!</h1>
-                <h2>Bienvenidos a Gio's Perfumes</h2>
-                <div className="mt-4">
-                    <button className="btn btn-primary me-2">Comprar Perfume</button>
-                    <button className="btn btn-success">Ver Catálogo</button>
-                </div>
-                */}
+            <main className="grow gp-luxury">
+                <HeroSection />
+                <ValueProps />
+                <FeaturedCategories />
+                <NewArrivals />
+                <EditorialBanner />
+                <NotesPyramid />
+                <BrandsMarquee />
+                <Testimonials />
+                <NewsletterLuxury />
             </main>
 
             <Footer />

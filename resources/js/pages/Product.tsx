@@ -10,6 +10,9 @@ import ProductReviews from '../layouts/Product/ProductReviews';
 import RelatedProducts from '../layouts/Product/RelatedProducts';
 import PromoBar from '../layouts/Index/PromoBar';
 
+import '../../css/pages/index.css';
+import '../../css/pages/product.css';
+
 export default function Product() {
     const rootEl = document.getElementById('root');
     const baseUrl = rootEl?.getAttribute('data-base-url') || '';
@@ -41,40 +44,40 @@ export default function Product() {
             <SearchBar />
             <PromoBar />
 
-            {loading ? (
-                <main className="container mt-5 grow d-flex align-items-center justify-content-center">
-                    <div className="text-muted fs-5">Cargando producto...</div>
-                </main>
-            ) : !product ? (
-                <main className="container mt-5 grow d-flex align-items-center justify-content-center">
-                    <div className="text-muted fs-5">Producto no encontrado.</div>
-                </main>
-            ) : (
-                <main className="container mt-5">
-                    <div className="row mb-5">
-                        {/* Columna Izquierda: Galería */}
-                        <div className="col-lg-6 mb-4 mb-lg-0">
+            <main className="grow gp-luxury">
+                {loading ? (
+                    <div className="gp-product-state">Cargando piezas exclusivas…</div>
+                ) : !product ? (
+                    <div className="gp-product-state">Producto no encontrado.</div>
+                ) : (
+                    <>
+                        <nav className="gp-product-breadcrumb" aria-label="breadcrumb">
+                            <a href={`${baseUrl}/`}>Inicio</a>
+                            <span className="gp-product-breadcrumb__sep">/</span>
+                            {product.category?.name && (
+                                <>
+                                    <a href={`${baseUrl}/shop`}>{product.category.name}</a>
+                                    <span className="gp-product-breadcrumb__sep">/</span>
+                                </>
+                            )}
+                            <span className="gp-product-breadcrumb__current">{product.name}</span>
+                        </nav>
+
+                        <section className="gp-product-main">
                             <ProductGallery images={product.images ?? []} baseUrl={baseUrl} />
-                        </div>
 
-                        {/* Columna Derecha: Información Principal */}
-                        <div className="col-lg-6 px-lg-5">
-                            <ProductInfo product={product} baseUrl={baseUrl} />
-                            <OlfactoryNotes productNotes={product.product_notes ?? []} />
-                        </div>
-                    </div>
+                            <div>
+                                <ProductInfo product={product} baseUrl={baseUrl} />
+                                <OlfactoryNotes productNotes={product.product_notes ?? []} />
+                            </div>
+                        </section>
 
-                    {/* Reseñas */}
-                    <div className="row">
-                        <div className="col-lg-10 mx-auto">
-                            <ProductReviews reviews={product.reviews ?? []} />
-                        </div>
-                    </div>
+                        <ProductReviews reviews={product.reviews ?? []} />
 
-                    {/* Productos Relacionados */}
-                    <RelatedProducts categoryId={product.category_id} excludeId={product.id} baseUrl={baseUrl} />
-                </main>
-            )}
+                        <RelatedProducts categoryId={product.category_id} excludeId={product.id} baseUrl={baseUrl} />
+                    </>
+                )}
+            </main>
 
             <Footer />
         </div>

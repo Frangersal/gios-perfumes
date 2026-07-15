@@ -25,17 +25,28 @@
         @php($isAdminPage = \Illuminate\Support\Str::startsWith($page ?? '', 'admin-'))
 
         @if (Route::has('login') && !$isAdminPage)
-            <div class="bg-dark text-white py-2" style="font-size: 0.8rem; letter-spacing: 0.5px;">
-                <div class="container d-flex justify-content-end align-items-center gap-3">
-                    @auth
-                        <a href="{{ url('/profile') }}" class="text-white text-decoration-none text-uppercase fw-semibold">Mi Cuenta</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-white text-decoration-none text-uppercase fw-semibold">Iniciar Sesión</a>
-                        @if (Route::has('register'))
-                            <span class="text-white-50">|</span>
-                            <a href="{{ route('register') }}" class="text-white text-decoration-none text-uppercase fw-semibold">Registrarse</a>
-                        @endif
-                    @endauth
+            <div class="gp-top">
+                <div class="gp-top__inner">
+                    <span class="gp-top__tagline">
+                        <span class="gp-top__diamond">◆</span>
+                        <em>Maison de Parfum</em>
+                        <span class="gp-top__diamond">◆</span>
+                        Selección exclusiva de fragancias originales
+                    </span>
+
+                    <div class="gp-top__actions">
+                        @auth
+                            <a href="{{ url('/profile') }}">Mi cuenta</a>
+                            <span class="gp-top__sep">|</span>
+                            <a href="{{ url('/logout') }}">Cerrar sesión</a>
+                        @else
+                            <a href="{{ route('login') }}">Iniciar sesión</a>
+                            @if (Route::has('register'))
+                                <span class="gp-top__sep">|</span>
+                                <a href="{{ route('register') }}" class="is-cta">Crear cuenta</a>
+                            @endif
+                        @endauth
+                    </div>
                 </div>
             </div>
         @endif

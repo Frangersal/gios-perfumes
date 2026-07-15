@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Header system (TopBar + SearchBar + PromoBar) — disponible en SSR */
+@import './layouts/header.css';
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';

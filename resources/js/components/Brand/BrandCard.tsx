@@ -1,30 +1,76 @@
 import React from 'react';
 
-export default function BrandCard() {
+interface BrandCardProps {
+    id?: number | string;
+    name: string;
+    slug?: string;
+    description?: string | null;
+    country?: string | null;
+    logo?: string | null;
+}
+
+const slugify = (value: string): string =>
+    value
+        .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+
+const getInitials = (value: string): string => {
+    const parts = value.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+};
+
+const normalizeLogoUrl = (logo: string | null | undefined, baseUrl: string): string => {
+    if (!logo) return '';
+    if (logo.startsWith('blob:') || logo.startsWith('data:') || /^https?:\/\//i.test(logo)) return logo;
+    const base = baseUrl.replace(/\/$/, '');
+    // Acepta tanto "archivo.webp" como "/resources/img/brands/archivo.webp"
+    if (logo.includes('/')) {
+        return `${base}${logo.startsWith('/') ? '' : '/'}${logo}`;
+    }
+    return `${base}/resources/img/brands/${logo}`;
+};
+
+export default function BrandCard({
+    name,
+    slug,
+    description,
+    country,
+    logo,
+}: BrandCardProps) {
+    const baseUrl = (document.getElementById('root')?.getAttribute('data-base-url') || '').replace(/\/$/, '');
+    const finalSlug = slug && slug.trim() !== '' ? slug : slugify(name);
+    const href = `${baseUrl}/marcas/${finalSlug}`;
+    const logoUrl = normalizeLogoUrl(logo, baseUrl);
+
     return (
-        <a href="/marcas/lumiere-paris" className="text-decoration-none text-dark">
-            <div className="card h-100 border-0 shadow-sm text-center brand-card transition duration-300">
-                <style>
-                    {`
-                    .brand-card:hover {
-                        transform: translateY(-5px);
-                        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-                    }
-                    `}
-                </style>
-                <div className="card-body p-4 d-flex flex-column align-items-center justify-content-center">
-                    <div 
-                        className="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3" 
-                        style={{ width: '100px', height: '100px', fontSize: '1.5rem', fontWeight: 'bold', color: '#555' }}
-                    >
-                        LP
-                    </div>
-                    <h5 className="card-title fw-bold">Lumière Paris</h5>
-                    <p className="card-text text-muted small mt-2">
-                        Elegancia y sofisticación francesa para paladares exquisitos.
-                    </p>
-                </div>
+        <a href={href} className="gp-brand-card">
+            <div className="gp-brand-card__media">
+                {logoUrl ? (
+                    <img src={logoUrl} alt={name} loading="lazy" />
+                ) : (
+                    <span className="gp-brand-card__initial">{getInitials(name)}</span>
+                )}
             </div>
+
+            {country && <span className="gp-brand-card__country">{country}</span>}
+
+            <h3 className="gp-brand-card__name">{name}</h3>
+            <span className="gp-brand-card__divider" />
+
+            {description && <p className="gp-brand-card__desc">{description}</p>}
+
+            <span className="gp-brand-card__link">
+                Descubrir
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="13 6 19 12 13 18" />
+                </svg>
+            </span>
         </a>
     );
 }

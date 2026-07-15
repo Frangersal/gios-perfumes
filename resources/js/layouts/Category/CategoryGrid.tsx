@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Card from '../../components/Index/Card';
+import ProductCardLuxury from '../../components/Index/luxury/ProductCardLuxury';
 import CategorySort from './CategorySort';
 import CategoryPagination from './CategoryPagination';
 
@@ -19,6 +19,13 @@ interface CategoryProduct {
     images?: ProductImage[];
 }
 
+export interface CategoryInfo {
+    id: number;
+    name: string;
+    slug: string;
+    description?: string | null;
+}
+
 interface CategoryProductsResponse {
     current_page: number;
     last_page: number;
@@ -26,9 +33,14 @@ interface CategoryProductsResponse {
     to: number | null;
     total: number;
     data: CategoryProduct[];
+    category?: CategoryInfo | null;
 }
 
-export default function CategoryGrid() {
+interface CategoryGridProps {
+    onCategoryLoaded?: (category: CategoryInfo | null) => void;
+}
+
+export default function CategoryGrid({ onCategoryLoaded }: CategoryGridProps) {
     const rootEl = document.getElementById('root');
     const baseUrl = rootEl?.getAttribute('data-base-url') || '';
 
@@ -86,6 +98,10 @@ export default function CategoryGrid() {
                 setFrom(response.data.from || 0);
                 setTo(response.data.to || 0);
                 setTotal(response.data.total || 0);
+
+                if (onCategoryLoaded) {
+                    onCategoryLoaded(response.data.category ?? null);
+                }
             } catch (error) {
                 console.error('Error cargando productos de categoria', error);
                 setProducts([]);
@@ -102,49 +118,48 @@ export default function CategoryGrid() {
 
     return (
         <section>
-            <div className="d-flex justify-content-between align-items-end mb-4 border-bottom pb-3">
-                <span className="text-muted">
+            <div className="gp-cat-toolbar">
+                <span className="gp-cat-toolbar__count">
                     {loading
-                        ? 'Cargando resultados...'
-                        : `Mostrando ${from}-${to} de ${total} resultados`}
+                        ? 'Cargando resultados…'
+                        : `Mostrando ${from}–${to} de ${total} resultados`}
                 </span>
                 <CategorySort />
             </div>
 
             {loading ? (
-                <div className="text-center text-muted py-5">Cargando productos...</div>
+                <div className="gp-cat-empty">Cargando piezas exclusivas…</div>
             ) : products.length === 0 ? (
-                <div className="text-center text-muted py-5">No hay productos disponibles en esta categoría.</div>
+                <div className="gp-cat-empty">No hay productos disponibles en esta categoría.</div>
             ) : (
-                <div className="row g-4 mb-5">
+                <div className="gp-pgrid">
                     {products.map((product) => {
                         const regularPrice = Number(product.price || 0);
                         const discountedPrice = Number(product.discount_price || 0);
                         const hasDiscount = discountedPrice > 0 && discountedPrice < regularPrice;
 
                         return (
-                            <div key={product.id} className="col-12 col-sm-6 col-lg-4 d-flex justify-content-center">
-                                <Card
-                                    brand={product.brand?.name || 'Gio\'s Selection'}
-                                    name={product.name}
-                                    currentPrice={formatPrice(hasDiscount ? discountedPrice : regularPrice)}
-                                    oldPrice={hasDiscount ? formatPrice(regularPrice) : undefined}
-                                    image={getMainImage(product)}
-                                    productId={product.id}
-                                />
-                            </div>
+                            <ProductCardLuxury
+                                key={product.id}
+                                productId={product.id}
+                                brand={product.brand?.name || "Gio's Selection"}
+                                name={product.name}
+                                currentPrice={formatPrice(hasDiscount ? discountedPrice : regularPrice)}
+                                oldPrice={hasDiscount ? formatPrice(regularPrice) : undefined}
+                                image={getMainImage(product)}
+                                badge={hasDiscount ? 'OFERTA' : undefined}
+                                badgeVariant={hasDiscount ? 'gold' : 'dark'}
+                            />
                         );
                     })}
                 </div>
             )}
 
-            <div className="pb-5">
-                <CategoryPagination
-                    currentPage={currentPage}
-                    lastPage={lastPage}
-                    onPageChange={setCurrentPage}
-                />
-            </div>
+            <CategoryPagination
+                currentPage={currentPage}
+                lastPage={lastPage}
+                onPageChange={setCurrentPage}
+            />
         </section>
     );
 }

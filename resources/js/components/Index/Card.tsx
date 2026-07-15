@@ -54,6 +54,8 @@ export default function Card({
     const userRole = root?.getAttribute('data-user-role') || '';
     const isAuthed = userRole.trim() !== '';
     const productUrl = productId ? `${baseUrl}/product/${productId}` : '#';
+    // Los IDs pueden superar Number.MAX_SAFE_INTEGER, por lo que se manejan
+    // como string en todo momento para evitar colisiones.
     const idKey = productId !== undefined && productId !== null ? String(productId) : null;
 
     const [active, setActive] = useState<boolean>(wishlistActive);

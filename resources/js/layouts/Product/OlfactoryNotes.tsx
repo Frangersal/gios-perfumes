@@ -31,24 +31,18 @@ export default function OlfactoryNotes({ productNotes }: OlfactoryNotesProps) {
     if (!salida && !corazon && !fondo) return null;
 
     return (
-        <div className="mt-5 pt-3">
-            <h4 className="mb-4">Notas Olfativas</h4>
-            <div className="row g-3">
-                {salida && (
-                    <div className="col-12 col-md-4">
-                        <NoteBadge title="Notas de Salida" notes={salida} />
-                    </div>
-                )}
-                {corazon && (
-                    <div className="col-12 col-md-4">
-                        <NoteBadge title="Notas de Corazón" notes={corazon} />
-                    </div>
-                )}
-                {fondo && (
-                    <div className="col-12 col-md-4">
-                        <NoteBadge title="Notas de Fondo" notes={fondo} />
-                    </div>
-                )}
+        <div className="gp-onotes">
+            <div className="gp-onotes__head">
+                <span className="gp-eyebrow">Pirámide olfativa</span>
+                <h3 className="gp-onotes__title">
+                    Notas que <em>componen</em> la fragancia
+                </h3>
+            </div>
+
+            <div className="gp-onotes__grid">
+                {salida && <NoteBadge title="Notas de Salida" notes={salida} />}
+                {corazon && <NoteBadge title="Notas de Corazón" notes={corazon} />}
+                {fondo && <NoteBadge title="Notas de Fondo" notes={fondo} />}
             </div>
         </div>
     );

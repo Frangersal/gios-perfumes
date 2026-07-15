@@ -2,9 +2,9 @@ import React from 'react';
 
 export default function CategorySort() {
     return (
-        <div className="d-flex align-items-center">
-            <span className="me-2 text-muted fw-bold">Ordenar por:</span>
-            <select className="form-select w-auto font-weight-bold" aria-label="Order category by">
+        <div className="gp-cat-sort">
+            <span className="gp-cat-sort__label">Ordenar</span>
+            <select className="gp-cat-sort__select" aria-label="Ordenar productos">
                 <option value="populares">Más Vendidos</option>
                 <option value="recientes">Nuevos Ingresos</option>
                 <option value="precio_desc">Mayor Precio</option>

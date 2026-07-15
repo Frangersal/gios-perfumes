@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const placeholder = 'https://placehold.co/600x600/f4f1ec/212529?text=Perfume';
+const placeholder = 'https://placehold.co/800x800/efe6d4/1c1814?text=Gio%27s';
 
 interface ProductImage {
     id: number;
@@ -25,31 +25,23 @@ export default function ProductGallery({ images, baseUrl }: ProductGalleryProps)
     const mainSrc = sorted.length > 0 ? normalize(sorted[active]?.image) : placeholder;
 
     return (
-        <div className="d-flex flex-column gap-3 sticky-top" style={{ top: '80px', zIndex: 1 }}>
-            <img
-                src={mainSrc}
-                className="img-fluid rounded shadow-sm w-100"
-                alt="Imagen principal"
-                style={{ aspectRatio: '1 / 1', objectFit: 'cover' }}
-            />
+        <div className="gp-gallery">
+            <div className="gp-gallery__main">
+                <img src={mainSrc} alt="Imagen principal" loading="lazy" />
+            </div>
+
             {sorted.length > 1 && (
-                <div className="d-flex gap-2">
+                <div className="gp-gallery__thumbs">
                     {sorted.map((img, i) => (
-                        <img
+                        <button
                             key={img.id}
-                            src={normalize(img.image)}
-                            className="img-fluid rounded"
-                            alt={`Vista ${i + 1}`}
+                            type="button"
+                            className={`gp-gallery__thumb${i === active ? ' is-active' : ''}`}
                             onClick={() => setActive(i)}
-                            style={{
-                                width: '23%',
-                                cursor: 'pointer',
-                                objectFit: 'cover',
-                                aspectRatio: '1 / 1',
-                                border: i === active ? '2px solid #000' : '2px solid transparent',
-                                opacity: i === active ? 1 : 0.55,
-                            }}
-                        />
+                            aria-label={`Ver imagen ${i + 1}`}
+                        >
+                            <img src={normalize(img.image)} alt={`Vista ${i + 1}`} loading="lazy" />
+                        </button>
                     ))}
                 </div>
             )}

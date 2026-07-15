@@ -20,41 +20,42 @@ export default function CategoryPagination({ currentPage, lastPage, onPageChange
     }
 
     return (
-        <nav aria-label="Category pagination">
-            <ul className="pagination justify-content-center mb-0">
-                <li className={`page-item ${currentPage <= 1 ? 'disabled' : ''}`}>
+        <nav aria-label="Paginación de categoría" className="gp-cat-pagination">
+            <ul className="gp-cat-pagination__list">
+                <li>
                     <button
                         type="button"
-                        className="page-link bg-dark text-light border-secondary"
+                        className="gp-cat-pagination__btn"
                         onClick={() => onPageChange(currentPage - 1)}
                         disabled={currentPage <= 1}
-                        aria-label="Previous"
+                        aria-label="Página anterior"
                     >
-                        <span aria-hidden="true">&laquo; Ant</span>
+                        &laquo; Ant
                     </button>
                 </li>
 
                 {pages.map((page) => (
-                    <li key={page} className={`page-item ${page === currentPage ? 'active' : ''}`}>
+                    <li key={page}>
                         <button
                             type="button"
-                            className={`page-link border-secondary ${page === currentPage ? 'bg-light text-dark fw-semibold' : 'bg-dark text-light'}`}
+                            className={`gp-cat-pagination__btn${page === currentPage ? ' is-active' : ''}`}
                             onClick={() => onPageChange(page)}
+                            disabled={page === currentPage}
                         >
                             {page}
                         </button>
                     </li>
                 ))}
 
-                <li className={`page-item ${currentPage >= lastPage ? 'disabled' : ''}`}>
+                <li>
                     <button
                         type="button"
-                        className="page-link bg-dark text-light border-secondary"
+                        className="gp-cat-pagination__btn"
                         onClick={() => onPageChange(currentPage + 1)}
                         disabled={currentPage >= lastPage}
-                        aria-label="Next"
+                        aria-label="Página siguiente"
                     >
-                        <span aria-hidden="true">Sig &raquo;</span>
+                        Sig &raquo;
                     </button>
                 </li>
             </ul>
