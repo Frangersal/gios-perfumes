@@ -4,14 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Brand;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class BrandSeeder extends Seeder
 {
     public function run(): void
     {
-        $now = now();
-
         $brands = [
             ['name' => 'Carolina Herrera', 'logo' => '/resources/img/brands/carolina_herrera_logo.png', 'description' => 'Marca de lujo reconocida mundialmente por sus fragancias elegantes.', 'country_of_origin' => 'Estados Unidos'],
             ['name' => 'Dior', 'logo' => '/resources/img/brands/dior_logo.png', 'description' => 'Casa francesa con perfumes intensos y sofisticados.', 'country_of_origin' => 'Francia'],
@@ -26,25 +23,14 @@ class BrandSeeder extends Seeder
         ];
 
         foreach ($brands as $brand) {
-            $existingBrandId = DB::table('brands')->where('name', $brand['name'])->value('id');
-
-            $payload = [
-                'logo' => $brand['logo'],
-                'description' => $brand['description'],
-                'country_of_origin' => $brand['country_of_origin'],
-                'updated_at' => $now,
-            ];
-
-            if ($existingBrandId) {
-                DB::table('brands')->where('id', $existingBrandId)->update($payload);
-                continue;
-            }
-
-            DB::table('brands')->insert($payload + [
-                'id' => Brand::generateCreationBasedId($now),
-                'name' => $brand['name'],
-                'created_at' => $now,
-            ]);
+            Brand::updateOrCreate(
+                ['name' => $brand['name']],
+                [
+                    'logo' => $brand['logo'],
+                    'description' => $brand['description'],
+                    'country_of_origin' => $brand['country_of_origin'],
+                ]
+            );
         }
     }
 }

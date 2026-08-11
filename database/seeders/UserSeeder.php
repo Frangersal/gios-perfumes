@@ -29,45 +29,25 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($users as $user) {
-            $existingUserId = DB::table('users')->where('email', $user['email'])->value('id');
+            $userModel = User::updateOrCreate(
+                ['email' => $user['email']],
+                [
+                    'name' => $user['name'],
+                    'phone' => $user['phone'],
+                    'password' => $password,
+                    'email_verified_at' => $now,
+                    'remember_token' => Str::random(10),
+                ]
+            );
 
-            $payload = [
-                'name' => $user['name'],
-                'phone' => $user['phone'],
-                'password' => $password,
-                'email_verified_at' => $now,
-                'remember_token' => Str::random(10),
-                'updated_at' => $now,
-            ];
-
-            if ($existingUserId) {
-                DB::table('users')->where('id', $existingUserId)->update($payload);
-                continue;
-            }
-
-            DB::table('users')->insert($payload + [
-                'id' => User::generateCreationBasedId($now),
-                'email' => $user['email'],
-                'created_at' => $now,
-            ]);
-        }
-
-        $userIds = DB::table('users')
-            ->whereIn('email', array_column($users, 'email'))
-            ->pluck('id', 'email');
-
-        DB::table('user_roles')->whereIn('user_id', $userIds->values())->delete();
-
-        $roles = [];
-        foreach ($users as $user) {
-            $roles[] = [
-                'user_id' => $userIds[$user['email']],
+            // Recreate roles precisely without duplication constraint errors
+            DB::table('user_roles')->where('user_id', $userModel->id)->delete();
+            DB::table('user_roles')->insert([
+                'user_id' => $userModel->id,
                 'role_id' => $user['role_id'],
                 'created_at' => $now,
                 'updated_at' => $now,
-            ];
+            ]);
         }
-
-        DB::table('user_roles')->insert($roles);
     }
 }
