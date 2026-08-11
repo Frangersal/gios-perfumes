@@ -126,9 +126,9 @@ class NoteSeeder extends Seeder
             $imagePath = '/resources/img/notes/' . $note['slug'] . '.' . $extension;
 
             DB::table('notes')->updateOrInsert(
-                ['slug' => $note['slug']],
+                ['name' => $note['name']],
                 [
-                    'name' => $note['name'],
+                    'slug' => $note['slug'],
                     'description' => $note['description'],
                     'image' => $imagePath,
                     'created_at' => $now,
