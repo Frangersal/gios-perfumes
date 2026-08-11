@@ -17,10 +17,16 @@ class NoteSeeder extends Seeder
         ];
 
         foreach ($noteTypes as $noteType) {
-            NoteType::updateOrCreate(
-                ['slug' => $noteType['slug']],
-                ['name' => $noteType['name']]
-            );
+            $existingNoteType = NoteType::whereRaw("slug = ?", [$noteType['slug']])->first();
+            
+            if ($existingNoteType) {
+                $existingNoteType->update(['name' => $noteType['name']]);
+            } else {
+                NoteType::create([
+                    'slug' => $noteType['slug'],
+                    'name' => $noteType['name']
+                ]);
+            }
         }
 
         $notes = [
@@ -121,14 +127,23 @@ class NoteSeeder extends Seeder
             $extension = $imageExtensions[$note['slug']] ?? 'png';
             $imagePath = '/resources/img/notes/' . $note['slug'] . '.' . $extension;
 
-            Note::updateOrCreate(
-                ['slug' => $note['slug']],
-                [
+            // Manual check and insert/update carefully for this specific DB driver
+            $existingNote = Note::whereRaw("slug = ?", [$note['slug']])->first();
+            
+            if ($existingNote) {
+                $existingNote->update([
                     'name' => $note['name'],
                     'description' => $note['description'],
                     'image' => $imagePath,
-                ]
-            );
+                ]);
+            } else {
+                Note::create([
+                    'slug' => $note['slug'],
+                    'name' => $note['name'],
+                    'description' => $note['description'],
+                    'image' => $imagePath,
+                ]);
+            }
         }
     }
 }

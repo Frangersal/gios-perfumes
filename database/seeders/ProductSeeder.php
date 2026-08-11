@@ -185,8 +185,8 @@ class ProductSeeder extends Seeder
         $families = ['Amaderada', 'Ambar Especiada', 'Citrica', 'Floral', 'Aromatica', 'Oriental'];
         $concentrations = ['Eau de Toilette', 'Eau de Parfum', 'Parfum', 'Extrait de Parfum'];
 
-        $availableCategoryIds = DB::table('categories')->pluck('id')->values()->all();
-        $availableBrands = DB::table('brands')->select(['name', 'country_of_origin'])->get()->keyBy('name');
+        $availableCategoryIds = \Illuminate\Support\Facades\DB::table('categories')->pluck('id')->values()->all();
+        $availableBrands = \Illuminate\Support\Facades\DB::table('brands')->select(['name', 'country_of_origin'])->get()->keyBy('name');
 
         $extraProducts = [];
         for ($i = 1; $i <= 24; $i++) {
@@ -258,10 +258,13 @@ class ProductSeeder extends Seeder
                 $payload['id'] = $product['id'];
             }
 
-            Product::updateOrCreate(
-                ['sku' => $product['sku']],
-                $payload
-            );
+            $existingProduct = Product::whereRaw("sku = ?", [$product['sku']])->first();
+
+            if ($existingProduct) {
+                $existingProduct->update($payload);
+            } else {
+                Product::create($payload);
+            }
         }
 
         $productIds = Product::whereIn('sku', array_column($products, 'sku'))
