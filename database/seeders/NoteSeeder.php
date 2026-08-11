@@ -2,15 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Note;
+use App\Models\NoteType;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class NoteSeeder extends Seeder
 {
     public function run(): void
     {
-        $now = now();
-
         $noteTypes = [
             ['name' => 'Salida', 'slug' => 'salida'],
             ['name' => 'Corazon', 'slug' => 'corazon'],
@@ -18,13 +17,9 @@ class NoteSeeder extends Seeder
         ];
 
         foreach ($noteTypes as $noteType) {
-            DB::table('note_types')->updateOrInsert(
+            NoteType::updateOrCreate(
                 ['slug' => $noteType['slug']],
-                [
-                    'name' => $noteType['name'],
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]
+                ['name' => $noteType['name']]
             );
         }
 
@@ -34,6 +29,7 @@ class NoteSeeder extends Seeder
                 'slug' => 'bergamota',
                 'description' => 'Citrico italiano luminoso y refrescante. Aporta un inicio limpio, ligeramente amargo y elegante, muy usado en notas de salida masculinas y unisex.',
             ],
+            // ... (I'll keep the rest of the array exactly as is, I just want to replace the top part and imports)
             [
                 'name' => 'Pimienta negra',
                 'slug' => 'pimienta-negra',
@@ -125,14 +121,12 @@ class NoteSeeder extends Seeder
             $extension = $imageExtensions[$note['slug']] ?? 'png';
             $imagePath = '/resources/img/notes/' . $note['slug'] . '.' . $extension;
 
-            DB::table('notes')->updateOrInsert(
-                ['name' => $note['name']],
+            Note::updateOrCreate(
+                ['slug' => $note['slug']],
                 [
-                    'slug' => $note['slug'],
+                    'name' => $note['name'],
                     'description' => $note['description'],
                     'image' => $imagePath,
-                    'created_at' => $now,
-                    'updated_at' => $now,
                 ]
             );
         }
