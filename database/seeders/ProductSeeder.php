@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Brand;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
@@ -12,7 +13,7 @@ class ProductSeeder extends Seeder
     {
         $now = now();
 
-        $brandIds = DB::table('brands')->pluck('id', 'name');
+        $brands = Brand::pluck('id', 'name');
 
         $products = [
             [
@@ -228,7 +229,7 @@ class ProductSeeder extends Seeder
         $products = array_merge($products, $extraProducts);
 
         foreach ($products as $product) {
-            $brandId = $brandIds[$product['brand_name']] ?? null;
+            $brandId = $brands[$product['brand_name']] ?? null;
 
             if (!$brandId) {
                 continue;
@@ -253,36 +254,22 @@ class ProductSeeder extends Seeder
                 'meta_keywords' => implode(', ', [$product['name'], $product['brand_name'], $product['gender'], 'perfume']),
             ];
 
-            $existingId = DB::table('products')->where('sku', $product['sku'])->value('id');
-
-            if ($existingId) {
-                DB::table('products')->where('id', $existingId)->update([
-                    ...$payload,
-                    'updated_at' => $now,
-                ]);
-                continue;
-            }
-
-            $insertPayload = [
-                ...$payload,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ];
-
             if (isset($product['id'])) {
-                $insertPayload['id'] = $product['id'];
+                $payload['id'] = $product['id'];
             }
 
-            DB::table('products')->insert($insertPayload);
+            Product::updateOrCreate(
+                ['sku' => $product['sku']],
+                $payload
+            );
         }
 
-        $productIds = DB::table('products')
-            ->whereIn('sku', array_column($products, 'sku'))
+        $productIds = Product::whereIn('sku', array_column($products, 'sku'))
             ->pluck('id', 'sku');
 
-        DB::table('product_variants')->whereIn('product_id', $productIds->values())->delete();
-        DB::table('product_notes')->whereIn('product_id', $productIds->values())->delete();
-        DB::table('product_tags')->whereIn('product_id', $productIds->values())->delete();
+        \Illuminate\Support\Facades\DB::table('product_variants')->whereIn('product_id', $productIds->values())->delete();
+        \Illuminate\Support\Facades\DB::table('product_notes')->whereIn('product_id', $productIds->values())->delete();
+        \Illuminate\Support\Facades\DB::table('product_tags')->whereIn('product_id', $productIds->values())->delete();
 
         $variants = [];
         foreach ($products as $index => $product) {
